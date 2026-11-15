@@ -119,7 +119,7 @@
     const granted = data.granted === true;
     const active = granted && musicText(data.title,'') !== '' &&
       data.title !== 'Sin música activa' && data.title !== 'Conecta tu música';
-    const playing = active && data.playing === true;
+    const playing = !preview && active && data.playing === true;
     const permission = $('#musicPermission');
     permission.hidden = !window.G2Android || granted;
     $('#songName').textContent = preview ? musicText(data.title,'Pista de prueba') :

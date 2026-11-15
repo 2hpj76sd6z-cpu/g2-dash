@@ -82,7 +82,8 @@ try {
   const label=await page.locator('#musicStatus').textContent();
   const source=await page.locator('#musicSource').textContent();
   const disabled=await page.locator('[data-action="demo-shuffle"]').isDisabled();
-  if(label!=='EJEMPLO VISUAL' || source!=='NO ES AUDIO REAL' || !disabled) {
+  const playIcon=await page.locator('#play .icon use').getAttribute('href');
+  if(label!=='EJEMPLO VISUAL' || source!=='NO ES AUDIO REAL' || !disabled || playIcon!=='#i-play') {
     throw new Error('La prueba visual de música no tiene los indicadores correctos');
   }
   await capture('13-musica-detallada-ejemplo', '.musicPanel');
