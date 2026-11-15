@@ -2,23 +2,40 @@
 
 # G² Dash
 
-**Smart Car Interface · Prototipo web y Android v0.4.1**
+**Interfaz automotriz personalizable · Web y Android · v0.4.1**
 
-Interfaz automotriz minimalista con paneles translúcidos, personalización de fondos y un espacio dedicado al vehículo.
+Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados configurables y acceso a las funciones Android del estéreo.
 
-![Vista previa de G² Dash v0.2](vista_previa.png)
+![Encabezado actual de G² Dash](docs/capturas/actual/02-encabezado.png)
+
+[Galería visual por sección](docs/capturas/README.md) · [Estado y hoja de ruta](ROADMAP.md)
 
 </div>
 
-## Estado del proyecto
+## Cómo va el proyecto
 
-**En desarrollo.** El sitio es una **demostración web interactiva**. También existe un **APK Android de prueba compilado**, pero todavía no sustituye el launcher principal. La meta es crear una aplicación Android propia optimizada para pantallas horizontales, especialmente 1280 × 720.
+**Versión actual: v0.4.1.** La demo web y el APK Android de prueba ya están disponibles. El APK integra acceso a apps instaladas, GPS opcional y música local mediante MediaSession; todavía no sustituye el launcher principal ni se ha validado en el estéreo físico.
+
+### Ya está implementado
+
+- Tres estilos de logotipo G² DASH: APEX, PULSE y ORBIT.
+- Widgets ahumados con cuatro tonalidades, opacidad y difuminado ajustables.
+- Ajustes visuales guardados localmente.
+- Sesión de música Android local con título, artista, portada y controles disponibles; requiere permiso explícito.
+- Capturas automáticas por sección después de cada subida de código a `main`.
+
+### Lo siguiente
+
+- Afinar el recorte del Ibiza con la imagen aprobada; el acabado actual sigue en revisión.
+- Validar el APK en el estéreo Gearelec y medir fluidez con sus 2 GB de RAM.
+- Definir una solución para música desde el teléfono por Wi-Fi: el punto de acceso no comparte por sí solo sus metadatos.
+- Mantener pendientes el mapa real, la conexión OBD y el launcher predeterminado.
 
 ### Funciones disponibles en la web
 
 - Diseño con distribución de reloj, reproductor de demostración, mapa ilustrativo y panel del auto.
 - Reloj y fecha con el horario del dispositivo.
-- Panel «Mi Ibiza» con **recorte transparente de la fotografía original del vehículo**, además de sus dos fotos originales. El recorte es una silueta fotográfica aproximada (no modelo 3D ni giro 360°). Permite cargar un PNG/WebP personal desde Ajustes sin cambiar el fondo de pantalla.
+- Panel «Mi Ibiza» con el recorte transparente y las dos fotografías originales. El recorte sigue en revisión para ajustar su acabado a la imagen aprobada; no es un modelo 3D ni un giro 360°. Permite cargar un PNG/WebP desde Ajustes sin modificar el fondo.
 - Fondos predefinidos o imagen seleccionada por el usuario.
 - Widgets de cristal ahumado con **cuatro tonalidades** (grafito, azul humo, verde humo y negro), **opacidad 20–88%** y difuminado independiente (0–16 px), además del color de acento y el fondo personalizable.
 - Tres estilos de logotipo (APEX, PULSE y ORBIT) configurables. Los ajustes visuales se guardan en el navegador.
@@ -30,7 +47,7 @@ Interfaz automotriz minimalista con paneles translúcidos, personalización de f
 
 - Configuración del launcher Android como pantalla de inicio predeterminada. El APK de prueba ya incluye acceso a aplicaciones instaladas.
 - Controles de música remotos por Wi-Fi (pendiente; distinto a MediaSession local).
-- Música local Android con permiso opcional a MediaSession: [ver detalles](android/MUSICA.md).
+
 - Integración opcional con OBD para parámetros reales del vehículo.
 - Mapa integrado con proveedor cartográfico.
 - Modelo 360° coherente del Ibiza; actualmente solo existen dos fotografías, no un modelo giratorio.
@@ -40,12 +57,10 @@ Interfaz automotriz minimalista con paneles translúcidos, personalización de f
 ## Aplicación Android (v0.4.1 — prueba instalable)
 
 El código de la primera aplicación Android está en [android/](android/README.md).
-Conserva la apariencia de la demostración y las fotografías originales del Ibiza.
-Ofrece acceso nativo a aplicaciones instaladas, teléfono, Bluetooth, selección de fondos,
-y permite solicitar velocidad GPS con autorización del usuario. Es un APK de prueba,
-**no** sustituye todavía el launcher principal. La música MediaSession local
-puede mostrar datos reales con autorización del usuario; OBD y música remota por
-Wi-Fi continúan pendientes.
+Reutiliza el tablero y las fotografías del Ibiza. El APK permite abrir apps instaladas,
+solicitar GPS y mostrar metadatos y portada de la sesión musical local con autorización.
+Es una versión de prueba: aún no reemplaza el launcher principal. El control remoto
+de música por Wi-Fi, OBD y mapa real continúan pendientes.
 
 El flujo [Android APK](.github/workflows/android-apk.yml) compila un APK de depuración
 en GitHub Actions. Los artefactos aparecen en la pestaña **Actions** cuando el flujo termina correctamente.
