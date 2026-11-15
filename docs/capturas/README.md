@@ -52,6 +52,14 @@ La secuencia dura aproximadamente 4.6 segundos y se reproduce al abrir G² Dash;
 |---|---|---|
 | ![Coche en tamaño original](actual/24-ibiza-tamano-original.png) | ![Coche ampliado opcionalmente](actual/25-ibiza-modo-ampliado.png) | ![Vista tras deslizar](actual/26-ibiza-deslizamiento-90.png) |
 
+## Mi Ibiza — foto auténtica y concepto (v0.5.3)
+
+[**Comparación de los dos visores, con fotos de la app**](COMPARADOR_IBIZA_v0.5.3.md)
+
+| Concepto con foto auténtica | Foto original | Regreso al concepto |
+|---|---|---|
+| ![Visor con miniatura real](actual/35-ibiza-conceptual-y-real.png) | ![Foto auténtica](actual/36-ibiza-fotografia-autentica.png) | ![Vuelta a concepto](actual/37-ibiza-retorno-conceptual.png) |
+
 ## Mi Ibiza — 12 vistas conceptuales (v0.5.0)
 
 Imágenes de la galería real ejecutada en Chromium (los automóviles ilustrados proceden de la propuesta, no son fotografías del vehículo desde esos ángulos).

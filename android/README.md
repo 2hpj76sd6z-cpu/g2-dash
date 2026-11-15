@@ -73,3 +73,7 @@ Se añadió un modo 1:1 para conservar la nitidez de los WebP aprobados (500×31
 El panel **Música** abre una vista amplia con portada, título, artista, avance y controles. Android recibe estos datos de la MediaSession del reproductor activo en el estéreo. El botón de avance solo se habilita si esa sesión anuncia `ACTION_SEEK_TO`; las órdenes de reproducción también dependen de las capacidades de cada app.
 
 La demo web etiqueta el contenido como ejemplo y mantiene deshabilitados los controles. **La música del iPhone por Wi‑Fi no está implementada**; consulta [MUSICA.md](MUSICA.md) para la prueba de CarLink y las opciones de conexión.
+
+## Acceso entre foto real e ilustraciones
+
+G² Dash incorpora **FOTOS REALES** en el visor de 12 vistas y **12 VISTAS** en las fotos auténticas. No se superponen los paneles al alternar. La app usa los archivos WebP existentes sin cambios, y mantiene las placas protegidas y el fondo original.

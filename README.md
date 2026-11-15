@@ -25,6 +25,12 @@ La apertura de la app (web o APK Android) muestra tres momentos: emblema **SEAT 
 
 El saludo aparece **al abrir la aplicación**. Para verlo al encender el vehículo, Android debe elegir G² Dash como HOME y el estéreo debe ejecutarlo al inicio; la elección es manual, no automática. Algunos estéreos reanudan desde suspensión sin reiniciar la aplicación y, en ese caso, puede no repetirse. Esta conducta requiere validación en el Gearelec.
 
+### Mi Ibiza real y conceptual — acceso directo
+
+El visor de ilustraciones incluye ahora el botón **FOTOS REALES** y una miniatura del Ibiza auténtico. La ventana de fotos originales tiene **12 VISTAS** para volver al concepto sin ventanas superpuestas. El ángulo seleccionado se conserva; las fotos, la matrícula protegida y el fondo permanecen sin alteraciones.
+
+[Ver la comparación visual verificable](docs/capturas/COMPARADOR_IBIZA_v0.5.3.md).
+
 ### Ibiza — 12 vistas conceptuales
 
 **Detalle visual v0.5.1:** modo **1:1** que respeta los 500×314 píxeles originales y opción **1.3×** para ver el auto más grande; también gestos multitramo y precarga limitada. [Comparación real de ambos modos](docs/capturas/MEJORA_IBIZA_v0.5.1.md).

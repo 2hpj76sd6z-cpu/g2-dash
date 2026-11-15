@@ -194,6 +194,23 @@ try {
   await page.locator('#conceptHero').evaluate(img => img.decode());
   await capture('19-ibiza-conceptual-trasera-180');
 
+  // Navegación bidireccional entre el Ibiza real y el concepto ilustrado.
+  await page.locator('#conceptThumbs button').nth(1).click();
+  await page.locator('#conceptHero').evaluate(img=>img.decode());
+  if(!await page.locator('#conceptRealPreview img').evaluate(img=>img.complete && img.naturalWidth>200))
+    throw new Error('La fotografía auténtica del Ibiza no cargó');
+  await capture('35-ibiza-conceptual-y-real');
+  await page.locator('#conceptRealPreview').click();
+  if(!await page.locator('#conceptVeil').isHidden() || !await page.locator('#vehicleVeil').isVisible())
+    throw new Error('No abrió el visor de fotos reales');
+  await page.locator('#modalCar').evaluate(img=>img.decode());
+  await capture('36-ibiza-fotografia-autentica');
+  await page.locator('#vehicleVeil [data-action="concept-360"]').click();
+  if(!await page.locator('#vehicleVeil').isHidden() || !await page.locator('#conceptVeil').isVisible())
+    throw new Error('No volvió a las 12 vistas sin superposición');
+  if(await page.locator('#conceptAngle').textContent()!=='30°')throw new Error('Se perdió el ángulo 30 grados');
+  await capture('37-ibiza-retorno-conceptual');
+
   // v0.5.1: true native 500×314 dimensions vs optional expanded view.
   await page.locator('#conceptThumbs button').nth(1).click();
   await page.locator('#conceptHero').evaluate(img=>img.decode());
@@ -283,6 +300,7 @@ try {
       '21-apps-panel-demo-1280x720.png','22-apps-buscador-1280x720.png',
       '23-apps-compacto-960x540.png',
       '27-musica-ampliada-ejemplo-1280x720.png','28-musica-ampliada-compacta-960x540.png',
+      '35-ibiza-conceptual-y-real.png','36-ibiza-fotografia-autentica.png','37-ibiza-retorno-conceptual.png',
       '29-airplay-configuracion-1280x720.png','30-airplay-compacto-960x540.png',
        '24-ibiza-tamano-original.png','25-ibiza-modo-ampliado.png','26-ibiza-deslizamiento-90.png'
     ]

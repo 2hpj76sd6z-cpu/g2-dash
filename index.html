@@ -163,12 +163,12 @@
   </div>
 </aside></div>
 
-<div class="screenveil" id="vehicleVeil" hidden><div class="vehicleModal glass" role="dialog" aria-modal="true" aria-label="Fotos de mi Ibiza"><header><div><h2>Mi Ibiza original</h2><p>Dos fotos reales + recorte opcional · placas protegidas</p></div><button class="closeBtn" data-action="close-vehicle" aria-label="Cerrar"><svg class="icon"><use href="#i-x"/></svg></button></header><div class="modalPhoto"><img id="modalCar" src="assets/ibiza_frente_original.webp" alt="Fotografía frontal real del SEAT Ibiza"/></div><div class="modalActions"><button data-action="car-prev">‹ Vista anterior</button><span id="modalLabel">Frontal</span><button data-action="car-next">Vista siguiente ›</button></div><div class="disclaimer">Giro 360° pendiente de modelo 3D correcto. No se simula un giro falso.</div></div></div>
+<div class="screenveil" id="vehicleVeil" hidden><div class="vehicleModal glass" role="dialog" aria-modal="true" aria-label="Fotos de mi Ibiza"><header><div><h2>Mi Ibiza original</h2><p>Dos fotos reales + recorte opcional · placas protegidas</p></div><div class="vehTools"><button type="button" class="conceptToGallery" data-action="concept-360" aria-label="Abrir las doce vistas conceptuales">12 VISTAS</button><button class="closeBtn" data-action="close-vehicle" aria-label="Cerrar"><svg class="icon"><use href="#i-x"/></svg></button></div></header><div class="modalPhoto"><img id="modalCar" src="assets/ibiza_frente_original.webp" alt="Fotografía frontal real del SEAT Ibiza"/></div><div class="modalActions"><button data-action="car-prev">‹ Vista anterior</button><span id="modalLabel">Frontal</span><button data-action="car-next">Vista siguiente ›</button></div><div class="disclaimer">Giro 360° pendiente de modelo 3D correcto. No se simula un giro falso.</div></div></div>
 <div class="screenveil" id="conceptVeil" hidden>
 <section class="conceptModal" role="dialog" aria-modal="true" aria-label="Ibiza: doce vistas conceptuales">
   <header class="conceptModalHeader">
     <div><h2>Mi Ibiza · 12 vistas conceptuales</h2><p>SEAT Ibiza 6J · blanco y negro · propuesta visual aprobada</p></div>
-    <div class="vehTools"><span class="conceptTag">NO ES MODELO 3D</span><button type="button" class="closeBtn" id="conceptClose" aria-label="Cerrar galería"><svg class="icon"><use href="#i-x"/></svg></button></div>
+    <div class="vehTools"><button type="button" class="conceptToReal" data-action="vehicle" title="Abrir fotografía real del Ibiza">FOTOS REALES</button><span class="conceptTag">NO ES MODELO 3D</span><button type="button" class="closeBtn" id="conceptClose" aria-label="Cerrar galería"><svg class="icon"><use href="#i-x"/></svg></button></div>
   </header>
   <div class="conceptStageArea">
     <div id="conceptStage" class="conceptStage" role="group" aria-label="Vista conceptual: desliza para cambiar">
@@ -179,7 +179,11 @@
     <aside class="conceptAside">
       <h3>Identidad aprobada</h3>
       <dl><dt>Carrocería</dt><dd>Blanco · 5 puertas</dd><dt>Techo</dt><dd>Negro</dd><dt>Rines</dt><dd>Negros</dd><dt>Retrovisores</dt><dd>Negros</dd><dt>Manijas</dt><dd>Negras</dd><dt>Cristales</dt><dd>Polarizados</dd></dl>
-      <p>Desliza sobre el auto o toca un ángulo. Se trata de imágenes conceptuales, no de un modelo tridimensional validado.</p>
+      <button id="conceptRealPreview" type="button" data-action="vehicle" class="conceptRealPreview" aria-label="Abrir las fotografías auténticas del Ibiza">
+        <img src="assets/ibiza_frente_original.webp" loading="lazy" alt="Fotografía auténtica del Ibiza" width="180" height="103"/>
+        <span><strong>ESTE SÍ ES TU IBIZA</strong><small>Foto real · matrícula protegida</small></span>
+      </button>
+      <p>Desliza sobre el auto o toca un ángulo. Son ilustraciones, no un modelo 3D real.</p>
     </aside>
   </div>
   <div class="conceptControls">

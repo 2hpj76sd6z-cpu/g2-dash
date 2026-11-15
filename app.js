@@ -176,8 +176,8 @@
         else showToast('Disponible únicamente en el APK Android');
         break;
       case 'close-settings':closeScreen('#settingsVeil');break;
-      case 'vehicle':openScreen('#vehicleVeil');break;
-      case 'concept-360':window.G2Concept?.open();break;
+      case 'vehicle':window.G2Concept?.close();openScreen('#vehicleVeil');break;
+      case 'concept-360':closeScreen('#vehicleVeil');window.G2Concept?.open();break;
       case 'close-vehicle':closeScreen('#vehicleVeil');break;
       case 'car-front':photoChange(0);break;
       case 'car-rear':photoChange(1);break;
