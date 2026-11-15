@@ -119,3 +119,8 @@ body[data-mode="night"] #performanceNote {color:#aabbcd}
 .lifecyclePanel small{font-size:11px;line-height:1.45;color:#607484}
 body[data-mode="night"] .lifecyclePanel strong{color:#9cefc0}
 body[data-mode="night"] .lifecyclePanel small{color:#b4c6d7}
+
+.clockDisplay{display:flex;align-items:flex-end;gap:9px;min-width:0}
+.clockPeriod{margin-bottom:clamp(5px,.8vh,9px);color:var(--muted);font-size:clamp(10px,1.05vw,13px);font-weight:750;letter-spacing:.1em;white-space:nowrap}
+.clockPeriod[hidden]{display:none!important}
+@media(max-height:650px){.clockPeriod{margin-bottom:5px}}

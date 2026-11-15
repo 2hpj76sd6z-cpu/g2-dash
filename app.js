@@ -4,7 +4,7 @@
   const $ = (q) => document.querySelector(q);
   const $$ = (q) => [...document.querySelectorAll(q)];
   const KEY = 'g2dash.v02.preferences';
-  const defaults = { theme:'auto', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', widgetBlur:8, performance:'normal', customWallpaper:null };
+  const defaults = { theme:'auto', timeFormat:'24h', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', widgetBlur:8, performance:'normal', customWallpaper:null };
   const pictures = [
     {path:'assets/ibiza_frente_original.webp',name:'Frontal — foto original',alt:'Fotografía frontal real del SEAT Ibiza blanco con boca negra y placa protegida'},
     {path:'assets/ibiza_trasera_original.webp',name:'Trasera — foto original',alt:'Fotografía trasera real del SEAT Ibiza blanco con placa protegida'},
@@ -17,8 +17,14 @@
   function showToast(message){const el=$('#toast');if(!el)return;el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3200)}
   function updateClock(){
     const now = new Date();
-    $('#clock').textContent = new Intl.DateTimeFormat('es-MX',{hour:'2-digit',minute:'2-digit',hour12:false}).format(now);
+    const format12h=settings.timeFormat==='12h';
+    const timeParts=new Intl.DateTimeFormat('es-MX',{hour:'2-digit',minute:'2-digit',hour12:format12h}).formatToParts(now);
+    $('#clock').textContent=timeParts.filter(part=>part.type!=='dayPeriod').map(part=>part.value).join('').trim();
+    const period=timeParts.find(part=>part.type==='dayPeriod')?.value||'';
+    $('#clockPeriod').textContent=period.replace(/[\s.]/g,'').toLocaleUpperCase('es-MX');
+    $('#clockPeriod').hidden=!format12h;
     const localDate = [now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');
+    $('#clock').dateTime=localDate+'T'+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
     const fullDate = new Intl.DateTimeFormat('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(now);
     const compactDate = new Intl.DateTimeFormat('es-MX',{weekday:'short',day:'numeric',month:'short'}).format(now);
     $('#dateLong').textContent=compactDate;
@@ -62,11 +68,21 @@
       ? 'Ligero: elimina desenfoques de fondo y vidrio; conserva tus fotos, colores y preferencias para el modo normal.'
       : 'Visual normal: conserva los desenfoques y los ajustes elegidos.';
   }
+  function applyClockFormat(){
+    const format=settings.timeFormat==='12h'?'12h':'24h';
+    settings.timeFormat=format;
+    $('[data-time-format]').forEach(button=>{
+      const selected=button.dataset.timeFormat===format;
+      button.classList.toggle('selected',selected);
+      button.setAttribute('aria-pressed',String(selected));
+    });
+  }
   function applySettings(){
     document.documentElement.style.setProperty('--accent',accents[settings.accent]||accents.steel);
     document.documentElement.style.setProperty('--wallBlur',`${Number(settings.blur)||0}px`);
     applyWidgetSettings();
     applyPerformanceMode();
+    applyClockFormat();
     $('#blur').value=settings.blur;$('#blurValue').textContent=`${settings.blur} px`;
     $$('[data-accent]').forEach(b=>b.classList.toggle('selected',b.dataset.accent===settings.accent));
     $$('[data-wall]').forEach(b=>b.classList.toggle('selected',b.dataset.wall===settings.wall));
@@ -237,7 +253,7 @@
       case 'demo-prev':mediaAction('previous');break;
       case 'demo-next':mediaAction('next');break;
       case 'demo-shuffle':case 'demo-repeat':showToast('Aleatorio y repetir: integración pendiente');break;
-      case 'reset-settings':settings={...defaults};applySettings();save();showToast('Ajustes restablecidos');break;
+      case 'reset-settings':settings={...defaults};applySettings();updateClock();save();showToast('Ajustes restablecidos');break;
       case 'fullscreen':if(document.fullscreenElement){document.exitFullscreen?.()}else{document.documentElement.requestFullscreen?.().catch(()=>showToast('Pantalla completa no disponible'))}break;
       case 'apps':window.G2Apps?.open();break;
       case 'phone':case 'bluetooth':case 'radio':case 'music':if(window.G2Android)window.G2Android.openTarget(action);else showToast('Acceso pendiente de integración nativa en Android');break;
@@ -250,6 +266,10 @@
     if(event.target.matches('.screenveil'))event.target.hidden=true;
   });
   $$('[data-theme]').forEach(button=>button.addEventListener('click',()=>{settings.theme=button.dataset.theme;applyTheme();}));
+  $('[data-time-format]').forEach(button=>button.addEventListener('click',()=>{
+    settings.timeFormat=button.dataset.timeFormat;
+    applyClockFormat();updateClock();save();
+  }));
   $$('[data-wall]').forEach(button=>button.addEventListener('click',()=>{settings.wall=button.dataset.wall;settings.customWallpaper=null;applySettings();save()}));
   $$('[data-accent]').forEach(button=>button.addEventListener('click',()=>{settings.accent=button.dataset.accent;applySettings();save()}));
   $$('[data-tint]').forEach(button=>button.addEventListener('click',()=>{settings.widgetTint=button.dataset.tint;applyWidgetSettings();save()}));
