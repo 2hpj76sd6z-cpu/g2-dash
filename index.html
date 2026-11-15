@@ -113,11 +113,11 @@
 
     <section class="vehiclePanel glass" aria-label="Mi Ibiza">
       <div class="vehHeading"><div><strong>Mi Ibiza</strong><small>SEAT 6J · 5 puertas</small></div><div class="vehTools"><button class="conceptEntry" type="button" data-action="concept-360" aria-label="Abrir doce vistas conceptuales del Ibiza">12 VISTAS</button><button class="smallAction" data-action="vehicle" title="Ver fotografías reales" aria-label="Ver fotografías reales"><svg class="icon"><use href="#i-expand"/></svg></button></div></div>
-      <button class="carView" id="vehicleView" data-action="vehicle" title="Ver mi Ibiza" aria-label="Ver fotografías originales del Ibiza">
-        <img src="assets/ibiza_frente_original.webp" id="vehiclePhoto" alt="Fotografía frontal real del SEAT Ibiza blanco con boca negra y placa protegida"/>
-        <span class="carChip" id="carChip">FRENTE · FOTO ORIGINAL</span>
+      <button class="carView isCutout" id="vehicleView" data-action="vehicle" title="Ver mi Ibiza" aria-label="Ver el SEAT Ibiza blanco recortado sin fondo">
+        <img src="assets/ibiza_frente_sin_fondo.webp" id="vehiclePhoto" alt="SEAT Ibiza blanco de cinco puertas aislado, sin fondo, vista frontal en tres cuartos"/>
+        <span class="carChip" id="carChip">RECORTE TRANSPARENTE · FRENTE</span>
       </button>
-      <div class="photoDots"><button class="on" id="carDot0" data-action="car-front" title="Frente" aria-label="Ver foto frontal original"></button><button id="carDot1" data-action="car-rear" title="Trasera" aria-label="Ver foto trasera original"></button><button id="carDot2" data-action="car-cutout" title="Recorte opcional" aria-label="Ver recorte transparente opcional"></button><span>2 fotos + recorte · no 360°</span></div>
+      <div class="photoDots"><button class="on" id="carDot0" data-action="car-cutout" title="Recorte sin fondo" aria-label="Ver recorte del Ibiza sin fondo"></button><button id="carDot1" data-action="car-front" title="Frente original" aria-label="Ver foto frontal original"></button><button id="carDot2" data-action="car-rear" title="Trasera original" aria-label="Ver foto trasera original"></button><span>Recorte + 2 fotos · no 360°</span></div>
       <div class="vehicleStats">
         <div><svg class="icon"><use href="#i-fuel"/></svg><strong>—</strong><span>Autonomía*</span></div>
         <div><svg class="icon"><use href="#i-speed"/></svg><strong id="speed">— <small>km/h</small></strong><span id="speedLabel">Velocidad GPS</span></div>
