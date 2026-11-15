@@ -60,6 +60,7 @@ g2-dash/
 │   └── ibiza_trasera_original.webp
 ├── vista_previa.png      # Captura de la demo
 ├── README.md
+├── LICENSE              # Aviso de licencia propietaria
 ├── ROADMAP.md
 └── .gitignore
 ```
@@ -69,7 +70,8 @@ g2-dash/
 - Las matrículas se difuminaron únicamente en las copias destinadas a este repositorio público; la carrocería y sus detalles permanecen intactos.
 - Las fotografías no incluyen permiso de reutilización por terceros.
 - La aplicación no envía las fotografías ni los fondos seleccionados a ningún servidor propio.
-- El código fuente fue preparado específicamente para el proyecto G² Dash. **No se ha seleccionado una licencia de código abierto**; antes de autorizar la reutilización por terceros se deberá decidir la licencia.
+- **Licencia propietaria — Todos los derechos reservados.** El código fuente, el diseño y la documentación originales de G² Dash no están disponibles bajo una licencia de código abierto. Consulta [LICENSE](LICENSE) para conocer el alcance y las condiciones.
+- Los nombres, logotipos y marcas de terceros (incluidos SEAT e Ibiza) pertenecen a sus respectivos titulares; su presencia no implica afiliación.
 
 ---
 
