@@ -1,0 +1,18 @@
+/* Mi Ibiza recortado: el fondo de la app permanece intacto. */
+.carView.isCutout {
+  background:transparent;
+  isolation:isolate;
+}
+.carView.isCutout img{
+  object-fit:contain;
+  object-position:center center;
+  filter:drop-shadow(0 8px 9px rgba(0,0,0,.31));
+}
+.carView.isCutout .carChip{
+  background:rgba(8,17,24,.5);
+  border:1px solid rgba(235,245,255,.15);
+  color:#dbe9e5;
+  letter-spacing:.055em;
+}
+.modalPhoto.isCutout{background:rgba(5,11,19,.12)}
+.modalPhoto.isCutout img{filter:drop-shadow(0 12px 14px rgba(0,0,0,.24))}
