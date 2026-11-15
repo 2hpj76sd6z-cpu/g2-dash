@@ -4,7 +4,7 @@
   const $ = (q) => document.querySelector(q);
   const $$ = (q) => [...document.querySelectorAll(q)];
   const KEY = 'g2dash.v02.preferences';
-  const defaults = { theme:'auto', wall:'dusk', blur:14, opacity:68, accent:'steel', customWallpaper:null };
+  const defaults = { theme:'auto', wall:'dusk', blur:14, opacity:68, accent:'steel', logo:'apex', customWallpaper:null };
   const pictures = [
     {path:'assets/ibiza_frente_original.webp',name:'Frontal — fotografía real'},
     {path:'assets/ibiza_trasera_original.webp',name:'Trasera — fotografía real'},
@@ -42,7 +42,10 @@
     $('#blur').value=settings.blur;$('#blurValue').textContent=`${settings.blur} px`;
     $('#opacity').value=settings.opacity;$('#opacityValue').textContent=`${settings.opacity}%`;
     $$('[data-accent]').forEach(b=>b.classList.toggle('selected',b.dataset.accent===settings.accent));
-    $$('[data-wall]').forEach(b=>b.classList.toggle('selected',b.dataset.wall===settings.wall));
+    $('[data-wall]').forEach(b=>b.classList.toggle('selected',b.dataset.wall===settings.wall));
+    const activeLogo=['apex','pulse','orbit'].includes(settings.logo)?settings.logo:'apex';
+    $('#brandLogo').dataset.logo=activeLogo;
+    $('.logoChoices button[data-logo]').forEach(b=>{const selected=b.dataset.logo===activeLogo;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected));});
     $('#wallpaper').style.backgroundImage=settings.customWallpaper?`url(${JSON.stringify(settings.customWallpaper)})`:walls[settings.wall]||walls.dusk;
     applyTheme(false);
   }
@@ -107,7 +110,8 @@
   });
   $$('[data-theme]').forEach(button=>button.addEventListener('click',()=>{settings.theme=button.dataset.theme;applyTheme();}));
   $$('[data-wall]').forEach(button=>button.addEventListener('click',()=>{settings.wall=button.dataset.wall;settings.customWallpaper=null;applySettings();save()}));
-  $$('[data-accent]').forEach(button=>button.addEventListener('click',()=>{settings.accent=button.dataset.accent;applySettings();save()}));
+  $('[data-accent]').forEach(button=>button.addEventListener('click',()=>{settings.accent=button.dataset.accent;applySettings();save()}));
+  $('.logoChoices button[data-logo]').forEach(button=>button.addEventListener('click',()=>{settings.logo=button.dataset.logo;applySettings();save()}));
   $('#blur').addEventListener('input',(e)=>{settings.blur=Number(e.target.value);document.documentElement.style.setProperty('--wallBlur',`${settings.blur}px`);$('#blurValue').textContent=`${settings.blur} px`;save()});
   $('#opacity').addEventListener('input',(e)=>{settings.opacity=Number(e.target.value);document.documentElement.style.setProperty('--glassOpacity',settings.opacity/100);$('#opacityValue').textContent=`${settings.opacity}%`;save()});
   $('#chooseWall').addEventListener('change',(event)=>{
