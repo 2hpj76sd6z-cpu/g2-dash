@@ -6,6 +6,7 @@
   const KEY = 'g2dash.v02.preferences';
   const defaults = { theme:'auto', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', widgetBlur:8, customWallpaper:null };
   const pictures = [
+    {path:'assets/ibiza_real_recortado.svg',name:'Recorte transparente — fotografía real',cutout:true},
     {path:'assets/ibiza_frente_original.webp',name:'Frontal — fotografía real'},
     {path:'assets/ibiza_trasera_original.webp',name:'Trasera — fotografía real'},
   ];
@@ -64,10 +65,13 @@
   function photoChange(index){
     currentPhoto=(index+pictures.length)%pictures.length;
     const pic=pictures[currentPhoto];
-    $('#vehiclePhoto').src=pic.path;$('#modalCar').src=pic.path;
-    $('#carChip').textContent=`Foto ${currentPhoto===0?'frontal':'trasera'} · placa protegida`;
-    $('#modalLabel').textContent=pic.name;
-    $$('#carDot0, #carDot1').forEach((b,i)=>b.classList.toggle('on',i===currentPhoto));
+    const path=currentPhoto===0&&settings.personalCar?settings.personalCar:pic.path;
+    $('#vehiclePhoto').src=path;$('#modalCar').src=path;
+    $('#vehicleView').classList.toggle('isCutout',currentPhoto===0);
+    $('.modalPhoto').classList.toggle('isCutout',currentPhoto===0);
+    $('#carChip').textContent=currentPhoto===0?'MI IBIZA · SIN FONDO':currentPhoto===1?'Fotografía frontal · placa protegida':'Fotografía trasera · placa protegida';
+    $('#modalLabel').textContent=currentPhoto===0&&settings.personalCar?'PNG personal — fondo transparente':pic.name;
+    $('#carDot0, #carDot1, #carDot2').forEach((b,i)=>b.classList.toggle('on',i===currentPhoto));
   }
   function openScreen(selector){$(selector).hidden=false}
   function closeScreen(selector){$(selector).hidden=true}
@@ -137,8 +141,9 @@
       case 'close-settings':closeScreen('#settingsVeil');break;
       case 'vehicle':openScreen('#vehicleVeil');break;
       case 'close-vehicle':closeScreen('#vehicleVeil');break;
-      case 'car-front':photoChange(0);break;
-      case 'car-rear':photoChange(1);break;
+      case 'car-cutout':photoChange(0);break;
+      case 'car-front':photoChange(1);break;
+      case 'car-rear':photoChange(2);break;
       case 'car-prev':photoChange(currentPhoto-1);break;
       case 'car-next':photoChange(currentPhoto+1);break;
       case 'gps':activateGps();break;
@@ -168,6 +173,27 @@
   $('#blur').addEventListener('input',(e)=>{settings.blur=Number(e.target.value);document.documentElement.style.setProperty('--wallBlur',`${settings.blur}px`);$('#blurValue').textContent=`${settings.blur} px`;save()});
   $('#opacity').addEventListener('input',(e)=>{settings.opacity=Number(e.target.value);applyWidgetSettings();save()});
   $('#widgetBlur').addEventListener('input',(e)=>{settings.widgetBlur=Number(e.target.value);applyWidgetSettings();save()});
+  $('#chooseCar').addEventListener('change',event=>{
+    const file=event.target.files?.[0];if(!file)return;
+    if(!['image/png','image/webp'].includes(file.type)){showToast('Selecciona un PNG o WebP');return}
+    if(file.size>8000000){showToast('Selecciona una imagen menor a 8 MB');return}
+    const reader=new FileReader();
+    reader.onload=()=>{
+      const img=new Image();
+      img.onload=()=>{
+        const ratio=Math.min(1,900/img.naturalWidth,500/img.naturalHeight);
+        const canvas=document.createElement('canvas');
+        canvas.width=Math.round(img.naturalWidth*ratio);
+        canvas.height=Math.round(img.naturalHeight*ratio);
+        canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+        settings.personalCar=canvas.toDataURL('image/png');
+        photoChange(0);save();showToast('Imagen del Ibiza aplicada sin cambiar el fondo');
+      };
+      img.onerror=()=>showToast('No se pudo abrir la imagen');
+      img.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
   $('#chooseWall').addEventListener('change',(event)=>{
     const file=event.target.files?.[0];if(!file)return;
     if(!file.type.startsWith('image/')){showToast('Elige una imagen compatible');return}
