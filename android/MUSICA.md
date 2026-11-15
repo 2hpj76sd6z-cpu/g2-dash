@@ -45,3 +45,12 @@ de reproducción real.
 - Portadas reducidas a 180 píxeles en memoria, sin almacenamiento en disco.
 - Sin cambios a los fondos, fotografías de Ibiza o distribución del tablero.
 - Los botones Aleatorio/Repetir no están integrados todavía.
+
+## Detalles del widget v0.4.1
+
+- Estado independiente: `Permiso pendiente`, `Sin reproducción`, `Reproduciendo` y `En pausa`.
+- Identificación visual del reproductor local cuando el paquete está reconocido.
+- Metadatos truncados dentro de su tarjeta para pantallas pequeñas, sin modificar el fondo.
+- Aleatorio/repetir permanecen desactivados mientras no exista integración real.
+- El sitio web **no simula que esté sonando música** al pulsar reproducir.
+- El ejemplo de la galería está marcado `EJEMPLO VISUAL` / `NO ES AUDIO REAL`.

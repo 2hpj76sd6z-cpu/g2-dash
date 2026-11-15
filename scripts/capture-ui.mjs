@@ -79,6 +79,13 @@ try {
     albumArt:''
   }));
   await capture('12-musica-integracion-prueba', '.musicPanel');
+  const label=await page.locator('#musicStatus').textContent();
+  const source=await page.locator('#musicSource').textContent();
+  const disabled=await page.locator('[data-action="demo-shuffle"]').isDisabled();
+  if(label!=='EJEMPLO VISUAL' || source!=='NO ES AUDIO REAL' || !disabled) {
+    throw new Error('La prueba visual de música no tiene los indicadores correctos');
+  }
+  await capture('13-musica-detallada-ejemplo', '.musicPanel');
 
   const meta = {
     project: 'G² Dash',
@@ -91,7 +98,8 @@ try {
       '04-musica.png', '05-mapa-ilustrativo.png', '06-mi-ibiza.png',
       '07-iconos-accesos.png', '08-personalizacion.png',
       '09-modo-dia-1280x720.png', '10-ibiza-detalle.png',
-      '11-ibiza-trasera.png', '12-musica-integracion-prueba.png'
+      '11-ibiza-trasera.png', '12-musica-integracion-prueba.png',
+      '13-musica-detallada-ejemplo.png'
     ]
   };
   await writeFile(path.join(root, 'meta.json'), JSON.stringify(meta, null, 2) + '\n');

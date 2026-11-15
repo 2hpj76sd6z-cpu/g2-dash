@@ -23,3 +23,32 @@
 .musicPanel .trackText span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .musicPanel .musicControls button.unsupported {opacity:.36}
 .musicPanel .trackTimes span{font-variant-numeric:tabular-nums}
+
+/* Detalle v0.4.1: jerarquía compacta, estados auténticos, sin mover el tablero. */
+.musicPanel .trackRow {gap:10px}
+.musicPanel .trackText {display:flex;flex-direction:column;justify-content:center;min-width:0}
+.musicPanel .trackText strong {font-size:clamp(12px,1.22vw,16px);font-weight:700;letter-spacing:-.015em;line-height:1.25}
+.musicPanel .trackText > span {font-size:11px;line-height:1.4;color:#aebdd1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.musicPanel .album {box-shadow:inset 0 1px 0 rgba(238,250,255,.08),0 7px 16px rgba(0,0,0,.18)}
+.musicPanel .album:has(.albumArtImage:not([hidden])) {border-color:rgba(232,246,255,.46)}
+.musicPanel .songMeta {min-width:0}
+.mediaStatusRow {display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:9px;min-height:15px}
+.mediaStatus {display:flex;align-items:center;gap:6px;min-width:0;color:#b3c1d4;font-size:10px;letter-spacing:.01em;white-space:nowrap}
+.mediaDot {display:inline-block;flex:none;width:6px;height:6px;border-radius:50%;background:#8495a9}
+.mediaSource {font-size:9px;letter-spacing:.04em;font-weight:700;color:#92a4b9;max-width:49%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
+.musicPanel[data-media="playing"] .mediaDot {background:#58d49c;box-shadow:0 0 0 3px rgba(88,212,156,.14)}
+.musicPanel[data-media="playing"] .mediaStatus {color:#b9f2d9}
+.musicPanel[data-media="preview"] .mediaDot {background:#afbdcc}
+.musicPanel[data-media="preview"] .mediaSource {color:#c1cbd8}
+.musicPanel .timelineBar {height:4px;overflow:hidden}
+.musicPanel #trackProgress {transition:width .28s ease}
+.musicPanel .musicControls button:disabled {opacity:.28;cursor:not-allowed}
+.musicPanel .musicControls button:disabled:active {transform:none}
+.musicPanel .playButton {box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
+.musicPanel .playButton:focus-visible {outline-offset:3px}
+@media (max-height:650px) {
+  .musicPanel .trackText strong {font-size:12px}
+  .musicPanel .trackText > span {font-size:10px}
+  .mediaStatusRow {margin-bottom:5px}
+  .musicPanel .album {width:50px}
+}

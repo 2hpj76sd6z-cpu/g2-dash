@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"/>
 <meta name="theme-color" content="#111826"/>
-<title>G² Dash · v0.4</title>
+<title>G² Dash · v0.4.1</title>
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="brand.css"/>
 <link rel="stylesheet" href="widgets.css"/>
@@ -44,14 +44,14 @@
         <div class="underLine"></div>
       </div>
       <div class="musicPanel glass">
-        <div class="trackRow"><div class="album"><svg class="icon"><use href="#i-music"/></svg><img class="albumArtImage" id="albumArt" alt="Portada del álbum" hidden/></div><div class="trackText"><strong id="songName">Sin reproducir</strong><span id="songArtist">Abre tu aplicación de música</span><button id="musicPermission" class="musicPermission" data-action="music-access" hidden>Activar acceso a música</button></div><button class="smallAction" data-action="music" title="Abrir aplicación de música" aria-label="Abrir aplicación de música"><svg class="icon"><use href="#i-external"/></svg></button></div>
-        <div class="songMeta"><div class="timelineBar"><span id="trackProgress"></span></div><div class="trackTimes"><span id="musicCurrent">00:00</span><span id="musicDuration">00:00</span></div></div>
+        <div class="trackRow"><div class="album"><svg class="icon"><use href="#i-music"/></svg><img class="albumArtImage" id="albumArt" alt="Portada del álbum" hidden/></div><div class="trackText"><strong id="songName">Sin música activa</strong><span id="songArtist">Abre tu reproductor</span><button id="musicPermission" class="musicPermission" data-action="music-access" hidden>Activar acceso a música</button></div><button class="smallAction" data-action="music" title="Abrir aplicación de música" aria-label="Abrir aplicación de música"><svg class="icon"><use href="#i-external"/></svg></button></div>
+        <div class="songMeta"><div class="mediaStatusRow"><span class="mediaStatus"><i class="mediaDot" aria-hidden="true"></i><span id="musicStatus">Sin conectar</span></span><span class="mediaSource" id="musicSource">MODO DEMO</span></div><div class="timelineBar"><span id="trackProgress"></span></div><div class="trackTimes"><span id="musicCurrent">00:00</span><span id="musicDuration">00:00</span></div></div>
         <div class="musicControls">
-          <button data-action="demo-shuffle" aria-label="Aleatorio"><svg class="icon"><use href="#i-shuffle"/></svg></button>
+          <button data-action="demo-shuffle" disabled aria-label="Aleatorio (pendiente)" title="Aleatorio: función pendiente"><svg class="icon"><use href="#i-shuffle"/></svg></button>
           <button data-action="demo-prev" aria-label="Anterior"><svg class="icon"><use href="#i-prev"/></svg></button>
           <button class="playButton" id="play" data-action="demo-play" aria-label="Reproducir o pausar"><svg class="icon"><use href="#i-play"/></svg></button>
           <button data-action="demo-next" aria-label="Siguiente"><svg class="icon"><use href="#i-next"/></svg></button>
-          <button data-action="demo-repeat" aria-label="Repetir"><svg class="icon"><use href="#i-repeat"/></svg></button>
+          <button data-action="demo-repeat" disabled aria-label="Repetir (pendiente)" title="Repetir: función pendiente"><svg class="icon"><use href="#i-repeat"/></svg></button>
         </div>
       </div>
     </section>
@@ -90,7 +90,7 @@
     <button data-action="radio"><svg class="icon"><use href="#i-radio"/></svg><span>Radio</span></button>
     <button data-action="open-settings"><svg class="icon"><use href="#i-settings"/></svg><span>Ajustes</span></button>
   </nav>
-  <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.4</span></footer>
+  <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.4.1</span></footer>
 </div>
 
 <div class="screenveil" id="settingsVeil" hidden><aside class="settings glass" role="dialog" aria-modal="true" aria-label="Personalización"><header><div><h2>Personalización</h2><p>G² Dash · ajustes visuales</p></div><button class="closeBtn" data-action="close-settings" aria-label="Cerrar ajustes"><svg class="icon"><use href="#i-x"/></svg></button></header>

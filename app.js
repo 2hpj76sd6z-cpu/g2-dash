@@ -12,7 +12,7 @@
   ];
   let settings = {...defaults};
   try {settings={...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')}} catch(_){}
-  let currentPhoto=0, isDemoPlaying=false, zoom=1, toastTimer=null;
+  let currentPhoto=0, zoom=1, toastTimer=null;
   function save(){try{localStorage.setItem(KEY,JSON.stringify(settings))}catch(_){showToast('No fue posible guardar los ajustes en este navegador')}}
   function showToast(message){const el=$('#toast');if(!el)return;el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3200)}
   function updateClock(){
@@ -98,28 +98,54 @@
     const s = Math.max(0, Math.floor((Number(ms)||0) / 1000));
     return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
   }
+  // Etiquetas locales: nunca se descargan metadatos de servicios externos.
+  const musicApps = {
+    'com.spotify.music':'SPOTIFY',
+    'com.google.android.apps.youtube.music':'YOUTUBE MUSIC',
+    'com.apple.android.music':'APPLE MUSIC',
+    'com.aspiro.tidal':'TIDAL',
+    'deezer.android.app':'DEEZER',
+    'org.videolan.vlc':'VLC',
+    'com.maxmpz.audioplayer':'POWERAMP',
+    'in.krosbits.musicolet':'MUSICOLET'
+  };
+  function musicText(value, fallback, max=160) {
+    if (typeof value !== 'string' || !value.trim()) return fallback;
+    return value.trim().slice(0,max);
+  }
   window.G2MusicUpdate = function(data) {
     if (!data || typeof data !== 'object') return;
     const preview = data.preview === true;
     const granted = data.granted === true;
-    const active = granted && !!(data.title && data.title !== 'Sin música activa');
-    const access = $('#musicPermission');
-    access.hidden = !window.G2Android || granted;
-    $('#songName').textContent = String(data.title || (granted?'Sin música activa':'Conecta tu música'));
-    $('#songArtist').textContent = preview ? 'VISTA DE PRUEBA · SIN REPRODUCCIÓN REAL' :
-      String(data.artist || (granted?'Abre tu reproductor':'Activa el permiso Android'));
-    const art=$('#albumArt');
-    if (typeof data.albumArt==='string' && data.albumArt.startsWith('data:image/jpeg;base64,')
-       && data.albumArt.length < 400000) { art.src=data.albumArt; art.hidden=false; }
-    else { art.hidden=true;art.removeAttribute('src'); }
-    const duration = Math.max(0, Number(data.durationMs)||0);
-    const position = Math.min(duration || Infinity, Math.max(0, Number(data.positionMs)||0));
+    const active = granted && musicText(data.title,'') !== '' &&
+      data.title !== 'Sin música activa' && data.title !== 'Conecta tu música';
+    const playing = active && data.playing === true;
+    const permission = $('#musicPermission');
+    permission.hidden = !window.G2Android || granted;
+    $('#songName').textContent = preview ? musicText(data.title,'Pista de prueba') :
+      (active ? musicText(data.title,'Sin título') : (granted?'Sin música activa':'Conecta tu música'));
+    $('#songArtist').textContent = preview ? 'EJEMPLO VISUAL · NO REPRODUCE AUDIO' :
+      (active ? musicText(data.artist,'Artista desconocido') :
+       (granted?'Abre una app de música':'Autoriza música en Ajustes'));
+    const art = $('#albumArt');
+    if (active && !preview && typeof data.albumArt === 'string' &&
+        data.albumArt.startsWith('data:image/jpeg;base64,') && data.albumArt.length < 400000) {
+      art.src = data.albumArt; art.hidden = false;
+    } else {
+      art.hidden = true; art.removeAttribute('src');
+    }
+    const duration = active || preview ? Math.max(0,Number(data.durationMs)||0) : 0;
+    const position = Math.min(duration,Math.max(0,Number(data.positionMs)||0));
     $('#musicCurrent').textContent=mmss(position);
     $('#musicDuration').textContent=mmss(duration);
-    $('#trackProgress').style.width= duration>0 ? Math.min(100,position/duration*100)+'%' : '0%';
-    $('#play .icon use').setAttribute('href',data.playing?'#i-pause':'#i-play');
-    $('#deviceStatus').textContent = preview ? 'VISTA DE PRUEBA' : (granted?'ANDROID · MÚSICA':'ANDROID · v0.4');
-    document.querySelector('.musicPanel').dataset.media = preview?'preview':(active?'connected':(granted?'idle':'permission'));
+    $('#trackProgress').style.width=duration > 0 ? Math.min(100,position/duration*100)+'%' : '0%';
+    $('#play .icon use').setAttribute('href',playing?'#i-pause':'#i-play');
+    $('#play').setAttribute('aria-label',playing?'Pausar música':'Reproducir música');
+    const status = preview?'EJEMPLO VISUAL' : !granted?'Permiso pendiente' : !active?'Sin reproducción' : playing?'Reproduciendo':'En pausa';
+    $('#musicStatus').textContent=status;
+    $('#musicSource').textContent=preview?'NO ES AUDIO REAL' : (active ? (musicApps[data.package]||'ANDROID AUDIO') : (granted?'ANDROID':'SIN CONECTAR'));
+    $('#deviceStatus').textContent = preview ? 'VISTA DE PRUEBA' : (granted?'ANDROID · MÚSICA':'ANDROID · v0.4.1');
+    $('.musicPanel').dataset.media=preview?'preview':(!granted?'permission':(!active?'idle':(playing?'playing':'paused')));
   };
   function mediaAction(action) {
     if (!window.G2Android) {
@@ -130,9 +156,8 @@
     window.G2Android.musicControl(action);
   }
   function demoPlay(){
-    isDemoPlaying=!isDemoPlaying;
-    $('#play .icon use').setAttribute('href',isDemoPlaying?'#i-pause':'#i-play');
-    showToast(isDemoPlaying?'Vista demo: no reproduce audio real':'Vista demo: control detenido');
+    // El prototipo web no reproduce audio: no modificar el icono de pausa.
+    showToast('Demo visual: instala el APK y conecta una app musical de Android');
   }
   function handleAction(action){
     switch(action){
@@ -210,6 +235,6 @@
   });
   $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();openMap()}});
   document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil')}});
-  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.4';$('#musicPermission').hidden=false;}
+  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.4.1';$('#musicPermission').hidden=false;}
   photoChange(0);applySettings();updateClock();setInterval(updateClock,20000);
 })();

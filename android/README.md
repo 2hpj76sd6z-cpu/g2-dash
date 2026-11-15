@@ -1,4 +1,4 @@
-# G² Dash para Android — v0.4 (integración de música)
+# G² Dash para Android — v0.4.1 (música detallada)
 
 Este módulo es una aplicación Android nativa que **reutiliza exactamente**
 el diseño web aprobado (archivos del directorio principal). No contiene un

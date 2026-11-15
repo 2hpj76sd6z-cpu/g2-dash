@@ -10,6 +10,8 @@ interfaz real en Chromium** a 1280 × 720 y crea capturas por sección.
 
 ## Comparación antes y después
 
+**[Detalle Música v0.4.1 — comparación antes y después](DETALLE_MUSICA_v0.4.1.md)**
+
 **[Ver cambios visuales v0.4 — Música, Ibiza y pantalla completa](CAMBIOS_v0.4.md)**
 
 ![Pantalla principal de G² Dash](actual/01-inicio-1280x720.png)
@@ -40,6 +42,7 @@ interfaz real en Chromium** a 1280 × 720 y crea capturas por sección.
 | Fotografía frontal ampliada | [10 — Ibiza frontal](actual/10-ibiza-detalle.png) |
 | Fotografía trasera ampliada | [11 — Ibiza trasera](actual/11-ibiza-trasera.png) |
 | Música Android con metadatos de prueba (no reproducción real) | [12 — Vista de integración](actual/12-musica-integracion-prueba.png) |
+| Música detallada v0.4.1 — ejemplo visual | [13 — Widget detallado](actual/13-musica-detallada-ejemplo.png) |
 
 ### Histórico de versiones
 

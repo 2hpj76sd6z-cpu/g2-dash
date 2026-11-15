@@ -2,7 +2,7 @@
 
 # G² Dash
 
-**Smart Car Interface · Prototipo web y Android v0.4**
+**Smart Car Interface · Prototipo web y Android v0.4.1**
 
 Interfaz automotriz minimalista con paneles translúcidos, personalización de fondos y un espacio dedicado al vehículo.
 
@@ -37,7 +37,7 @@ Interfaz automotriz minimalista con paneles translúcidos, personalización de f
 
 > **Aviso:** el mapa es una ilustración, no un mapa en tiempo real. Los campos de autonomía y voltaje permanecen vacíos hasta que exista una conexión real; no se inventan valores del vehículo. Los iconos de Wi-Fi y Bluetooth son decorativos en esta demostración web.
 
-## Aplicación Android (v0.4 — prueba instalable)
+## Aplicación Android (v0.4.1 — prueba instalable)
 
 El código de la primera aplicación Android está en [android/](android/README.md).
 Conserva la apariencia de la demostración y las fotografías originales del Ibiza.
