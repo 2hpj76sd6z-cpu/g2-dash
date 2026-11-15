@@ -129,7 +129,9 @@ try {
   await capture('13-musica-detallada-ejemplo', '.musicPanel');
   // Recorte real, mismo WebP con la máscara revisada.
   await page.locator('[data-action="car-cutout"]').click();
-  await page.locator('#vehiclePhoto').evaluate(img=>{if(!img.complete||img.naturalWidth<200)throw new Error('SVG Ibiza no cargado');});
+  // La vista recortada ahora se carga bajo demanda, así que esperar su decodificación antes de capturar.
+  await page.locator('#vehiclePhoto').evaluate(img=>img.decode());
+  await page.locator('#vehiclePhoto').evaluate(img=>{if(img.naturalWidth<200)throw new Error('SVG Ibiza no cargado');});
   await capture('14-ibiza-mascara-corregida', '.vehiclePanel');
   await page.locator('[data-action="vehicle"]').first().click();
   await capture('15-ibiza-mascara-ampliada');
