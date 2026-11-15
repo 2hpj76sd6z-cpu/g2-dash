@@ -31,8 +31,10 @@
 }
 .startupSeatMark{
   width:clamp(94px,12vw,156px);height:auto;
+  aspect-ratio:1;
   margin:0 0 3px;
-  filter:drop-shadow(0 8px 24px rgba(255,255,255,.09));
+  /* Monocromo blanco sobre fondo oscuro sin alterar la geometría original. */
+  filter:brightness(0) invert(1) drop-shadow(0 8px 24px rgba(255,255,255,.09));
 }
 .startupSeatName{
   font-family:Arial,'Segoe UI',sans-serif;
