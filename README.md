@@ -2,7 +2,7 @@
 
 # G² Dash
 
-**Interfaz automotriz personalizable · Web y Android · v0.4.2**
+**Interfaz automotriz personalizable · Web y Android · v0.4.3**
 
 Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados configurables y acceso a las funciones Android del estéreo.
 
@@ -14,10 +14,17 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 ## Cómo va el proyecto
 
-**Versión actual: v0.4.2.** La demo web y el APK Android de prueba ya están disponibles. El APK integra acceso a apps instaladas, GPS opcional y música local mediante MediaSession; todavía no sustituye el launcher principal ni se ha validado en el estéreo físico.
+**Versión actual: v0.4.3.** La demo web y el APK Android de prueba ya están disponibles. El APK integra acceso a apps instaladas, GPS opcional y música local mediante MediaSession; todavía no sustituye el launcher principal ni se ha validado en el estéreo físico.
+
+### Bienvenida al iniciar G² Dash
+
+La apertura de la app (web o APK Android) muestra el emblema **SEAT** estilizado y **G² DASH**; después, mediante un fundido, aparece el saludo «**Buenas Noches Doble G, ¿A dónde iremos hoy?**». Según la hora del dispositivo puede decir «Buenos Días» o «Buenas Tardes». Tras otro fundido aparece el tablero de siempre. Dura aproximadamente **4.6 segundos**, incluye **Omitir** y un botón **Ajustes → Ver bienvenida**.
+
+El saludo aparece **al abrir la aplicación**. Para verlo al encender el vehículo, Android debe elegir G² Dash como HOME y el estéreo debe ejecutarlo al inicio; la elección es manual, no automática. Algunos estéreos reanudan desde suspensión sin reiniciar la aplicación y, en ese caso, puede no repetirse. Esta conducta requiere validación en el Gearelec.
 
 ### Ya está implementado
 
+- Bienvenida SEAT / G² DASH, saludo dinámico a Doble G y fundidos ligeros.
 - Tres estilos de logotipo G² DASH: APEX, PULSE y ORBIT.
 - Widgets ahumados con cuatro tonalidades, opacidad y difuminado ajustables.
 - Ajustes visuales guardados localmente.
