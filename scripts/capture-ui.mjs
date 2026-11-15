@@ -41,7 +41,16 @@ try {
   await page.reload({ waitUntil: 'networkidle' });
   await page.locator('#vehiclePhoto').waitFor({ state: 'visible' });
   await page.evaluate(() => document.fonts.ready);
-  await page.waitForTimeout(350);
+  // Capturar las dos pantallas reales ANTES del tablero: nunca una ilustración.
+  await page.waitForFunction(() => document.querySelector('#startup')?.dataset.stage === 'logo', {timeout:2500});
+  await capture('00-arranque-seat-logo');
+  await page.waitForFunction(() => document.querySelector('#startup')?.dataset.stage === 'greeting', {timeout:4500});
+  const actualGreeting = await page.locator('#startupTimeGreeting').textContent();
+  const question = await page.locator('.startupGreeting .question').textContent();
+  if (!['Buenos Días','Buenas Tardes','Buenas Noches'].includes(actualGreeting) ||
+      question!=='¿A dónde iremos hoy?') throw new Error('Saludo de encendido incorrecto');
+  await capture('00b-arranque-saludo-doble-g');
+  await page.locator('#startup').waitFor({state:'hidden',timeout:8000});
 
   // Revisión geométrica: no ocultar secciones fuera del área útil.
   // No se confunde un screenshot correcto con una prueba de rendimiento del estéreo.
@@ -129,13 +138,13 @@ try {
   // La misma interfaz en pantallas menos espaciosas para evitar cortes.
   await page.setViewportSize({width:1024,height:600});
   await page.reload({waitUntil:'networkidle'});
-  await page.waitForTimeout(150);
+  await page.locator('#startup').waitFor({state:'hidden',timeout:8000});
   await inspectViewport('1024×600');
   await capture('14-compacto-1024x600');
   await capture('15-ibiza-1024x600','.vehiclePanel');
   await page.setViewportSize({width:960,height:540});
   await page.reload({waitUntil:'networkidle'});
-  await page.waitForTimeout(150);
+  await page.locator('#startup').waitFor({state:'hidden',timeout:8000});
   await inspectViewport('960×540');
   await capture('16-compacto-960x540');
   await writeFile(path.join(root,'qa-layout.json'),JSON.stringify({source_commit:process.env.G2_COMMIT||'local',checked:qa},null,2)+'\n');
@@ -147,6 +156,7 @@ try {
     source_commit: process.env.G2_COMMIT || 'local',
     generated_at: new Date().toISOString(),
     shots: [
+      '00-arranque-seat-logo.png', '00b-arranque-saludo-doble-g.png',
       '01-inicio-1280x720.png', '02-encabezado.png', '03-reloj.png',
       '04-musica.png', '05-mapa-ilustrativo.png', '06-mi-ibiza.png',
       '07-iconos-accesos.png', '08-personalizacion.png',
