@@ -4,7 +4,7 @@
   const $ = (q) => document.querySelector(q);
   const $$ = (q) => [...document.querySelectorAll(q)];
   const KEY = 'g2dash.v02.preferences';
-  const defaults = { theme:'auto', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', widgetBlur:8, customWallpaper:null };
+  const defaults = { theme:'auto', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', widgetBlur:8, performance:'normal', customWallpaper:null };
   const pictures = [
     {path:'assets/ibiza_frente_original.webp',name:'Frontal — foto original',alt:'Fotografía frontal real del SEAT Ibiza blanco con boca negra y placa protegida'},
     {path:'assets/ibiza_trasera_original.webp',name:'Trasera — foto original',alt:'Fotografía trasera real del SEAT Ibiza blanco con placa protegida'},
@@ -49,10 +49,24 @@
     $('#widgetBlur').value=widgetBlur;$('#widgetBlurValue').textContent=`${widgetBlur} px`;
     $$('[data-tint]').forEach(b=>{const chosen=b.dataset.tint===tint;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});
   }
+  function applyPerformanceMode(){
+    const mode=settings.performance==='light'?'light':'normal';
+    document.body.dataset.performance=mode;
+    $$('[data-performance]').forEach(button=>{
+      const selected=button.dataset.performance===mode;
+      button.classList.toggle('selected',selected);
+      button.setAttribute('aria-pressed',String(selected));
+    });
+    const note=$('#performanceNote');
+    if(note)note.textContent=mode==='light'
+      ? 'Ligero: elimina desenfoques de fondo y vidrio; conserva tus fotos, colores y preferencias para el modo normal.'
+      : 'Visual normal: conserva los desenfoques y los ajustes elegidos.';
+  }
   function applySettings(){
     document.documentElement.style.setProperty('--accent',accents[settings.accent]||accents.steel);
     document.documentElement.style.setProperty('--wallBlur',`${Number(settings.blur)||0}px`);
     applyWidgetSettings();
+    applyPerformanceMode();
     $('#blur').value=settings.blur;$('#blurValue').textContent=`${settings.blur} px`;
     $$('[data-accent]').forEach(b=>b.classList.toggle('selected',b.dataset.accent===settings.accent));
     $$('[data-wall]').forEach(b=>b.classList.toggle('selected',b.dataset.wall===settings.wall));
@@ -211,6 +225,10 @@
   $$('[data-wall]').forEach(button=>button.addEventListener('click',()=>{settings.wall=button.dataset.wall;settings.customWallpaper=null;applySettings();save()}));
   $$('[data-accent]').forEach(button=>button.addEventListener('click',()=>{settings.accent=button.dataset.accent;applySettings();save()}));
   $$('[data-tint]').forEach(button=>button.addEventListener('click',()=>{settings.widgetTint=button.dataset.tint;applyWidgetSettings();save()}));
+  $$('[data-performance]').forEach(button=>button.addEventListener('click',()=>{
+    settings.performance=button.dataset.performance==='light'?'light':'normal';
+    applyPerformanceMode();save();
+  }));
   $$('.logoChoices button[data-logo]').forEach(button=>button.addEventListener('click',()=>{settings.logo=button.dataset.logo;applySettings();save()}));
   $('#blur').addEventListener('input',(e)=>{settings.blur=Number(e.target.value);document.documentElement.style.setProperty('--wallBlur',`${settings.blur}px`);$('#blurValue').textContent=`${settings.blur} px`;save()});
   $('#opacity').addEventListener('input',(e)=>{settings.opacity=Number(e.target.value);applyWidgetSettings();save()});
@@ -252,6 +270,6 @@
   });
   $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();openMap()}});
   document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close();window.G2Apps?.close();window.G2MusicDetail?.close();window.G2AirPlay?.close()}});
-  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.3';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
+  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.4';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
   photoChange(0);applySettings();updateClock();setInterval(updateClock,20000);
 })();

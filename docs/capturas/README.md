@@ -8,6 +8,16 @@ interfaz real en Chromium** a 1280 × 720 y crea capturas por sección.
 > No son imágenes generadas, ni funciones simuladas como si fueran operativas.
 > El mapa y OBD siguen pendientes. La música MediaSession local se integra opcionalmente en Android; las capturas musicales de ejemplo son únicamente pruebas visuales.
 
+## Rendimiento gráfico opcional — v0.5.4
+
+[**Comparación visual Normal vs. Ligero y panel de ajustes**](RENDIMIENTO_v0.5.4.md).
+
+| Visual normal | Modo ligero | Ajustes del modo ligero |
+|---|---|---|
+| ![Tablero normal](actual/41-rendimiento-normal-1280x720.png) | ![Tablero ligero](actual/42-rendimiento-ligero-1280x720.png) | ![Ajustes ligeros](actual/43-ajustes-rendimiento-ligero.png) |
+
+Estas capturas son del mismo HTML ejecutado en Chromium, no imágenes generadas. Las mejoras de rendimiento reales requieren pruebas físicas.
+
 ## Apps — v0.5.1
 
 El panel de aplicaciones se probó en Chromium horizontal. En estas capturas aparecen **solo iconos ilustrativos de demostración**, no datos de apps instaladas. En Android se consulta el listado local real.

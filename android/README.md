@@ -77,3 +77,7 @@ La demo web etiqueta el contenido como ejemplo y mantiene deshabilitados los con
 ## Acceso entre foto real e ilustraciones
 
 G² Dash incorpora **FOTOS REALES** en el visor de 12 vistas y **12 VISTAS** en las fotos auténticas. No se superponen los paneles al alternar. La app usa los archivos WebP existentes sin cambios, y mantiene las placas protegidas y el fondo original.
+
+## v0.5.4 — Rendimiento gráfico opcional
+
+En **Ajustes → Rendimiento gráfico**, el modo ligero elimina filtros CSS `backdrop-filter` y `filter:blur` de superficies de vidrio y fondo, y transiciones puramente decorativas. Mantiene colores, widgets y fotografías originales; el ajuste se almacena localmente. Al volver a Visual normal se restauran los desenfoques configurados. No se garantiza ahorro específico de RAM/FPS sin medir en el Gearelec físico.

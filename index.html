@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"/>
 <meta name="theme-color" content="#111826"/>
-<title>G² Dash · v0.5.3</title>
+<title>G² Dash · v0.5.4</title>
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="brand.css"/>
 <link rel="stylesheet" href="widgets.css"/>
@@ -34,7 +34,7 @@
     <div class="startupStatusCard">
       <div class="startupStatusTop">
         <span class="startupStatusEyebrow"><i></i> G² DASH · ESTADO DEL PROYECTO</span>
-        <span class="startupStatusVersion">v0.5.3</span>
+        <span class="startupStatusVersion">v0.5.4</span>
       </div>
       <h1>Tu tablero va así.</h1>
       <p class="startupStatusLead">Lo que ya está listo y lo que sigue para tu Ibiza.</p>
@@ -135,7 +135,7 @@
     <button data-action="radio"><svg class="icon"><use href="#i-radio"/></svg><span>Radio</span></button>
     <button data-action="open-settings"><svg class="icon"><use href="#i-settings"/></svg><span>Ajustes</span></button>
   </nav>
-  <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.5.3</span></footer>
+  <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.5.4</span></footer>
 </div>
 
 <div class="screenveil" id="settingsVeil" hidden><aside class="settings glass" role="dialog" aria-modal="true" aria-label="Personalización"><header><div><h2>Personalización</h2><p>G² Dash · ajustes visuales</p></div><button class="closeBtn" data-action="close-settings" aria-label="Cerrar ajustes"><svg class="icon"><use href="#i-x"/></svg></button></header>
@@ -146,6 +146,12 @@
     <label>Fondo de pantalla</label><div class="wallChoices"><button data-wall="dusk" class="selected"><span class="p-dusk"></span>Atardecer</button><button data-wall="blue"><span class="p-blue"></span>Azul humo</button><button data-wall="gray"><span class="p-gray"></span>Grafito</button></div>
     <label for="chooseWall">Tu propia imagen</label><input type="file" id="chooseWall" accept="image/*"/><p class="hint">La imagen se procesa localmente para ahorrar memoria y se guarda solo en este dispositivo.</p>
     <label for="blur">Difuminado del fondo <output id="blurValue">14 px</output></label><input id="blur" type="range" min="0" max="32" step="1" value="14"/>
+    <label>Rendimiento gráfico · estéreo Android de 2 GB</label>
+    <div class="performancePicker" role="group" aria-label="Rendimiento gráfico del tablero">
+      <button type="button" data-performance="normal" aria-pressed="true" class="selected">Visual normal</button>
+      <button type="button" data-performance="light" aria-pressed="false">Modo ligero</button>
+    </div>
+    <p id="performanceNote" class="hint" aria-live="polite">Visual normal: conserva los desenfoques y los ajustes elegidos.</p>
     <label>Acabado ahumado de los widgets</label>
     <div class="tintPicker" role="group" aria-label="Tonalidad de los widgets">
       <button type="button" data-tint="graphite" class="selected" aria-pressed="true"><span class="tintSwatch" aria-hidden="true"></span>Grafito</button>

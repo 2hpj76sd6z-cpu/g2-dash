@@ -61,3 +61,42 @@ body[data-mode="day"] .tintPicker button.selected {color:#19382b}
   body[data-mode] .sidebar.glass,
   body[data-mode] .bottomDock button { background:rgba(var(--widgetTintRgb),.83) }
 }
+
+/* G² Dash v0.5.4: optional low-effects profile for Android car displays.
+ * Same photos, wallpaper artwork, colors and layout; only expensive filters
+ * are removed. Performance on a Gearelec 2GB must be measured on-device. */
+.performancePicker{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.performancePicker button{
+ display:flex;align-items:center;justify-content:center;min-height:42px;
+ padding:8px 9px;border:1px solid rgba(227,239,251,.24);border-radius:10px;
+ background:rgba(231,242,255,.045);color:#dce7f6;font-size:11px;font-weight:700;
+}
+.performancePicker button.selected{
+ color:#bef4d4;border-color:rgba(91,221,147,.78);background:rgba(60,142,95,.14);
+ box-shadow:inset 0 0 0 1px rgba(91,221,147,.12);
+}
+body[data-mode="day"] .performancePicker button:not(.selected){color:#293a4d}
+body[data-performance="light"] .wallpaper{
+ filter:none!important;
+ transform:none!important;
+ inset:0!important;
+}
+body[data-performance="light"] .glass,
+body[data-performance="light"] .bottomDock button{
+ -webkit-backdrop-filter:none!important;
+ backdrop-filter:none!important;
+}
+/* The lightweight mode remains translucent while strengthening contrast. */
+body[data-performance="light"] .dashboard .glass,
+body[data-performance="light"] .sidebar.glass,
+body[data-performance="light"] .bottomDock button{
+ background:rgba(var(--widgetTintRgb),max(.74,var(--glassOpacity)))!important;
+}
+body[data-performance="light"] .glass{
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 4px 11px rgba(0,0,0,.13);
+}
+body[data-performance="light"] button,
+body[data-performance="light"] svg {
+ transition:none!important;
+}
+@media(max-height:650px){.performancePicker button{min-height:36px;padding:6px}}

@@ -113,6 +113,31 @@ try {
 
   await page.locator('[data-action="open-settings"]').first().click();
   await capture('08-personalizacion');
+
+  // v0.5.4: compare exact original dashboard with optional low-effects mode.
+  await page.locator('[data-action="close-settings"]').click();
+  const actualCar=await page.locator('#vehiclePhoto').getAttribute('src');
+  const actualWallpaper=await page.locator('#wallpaper').evaluate(el=>el.style.backgroundImage);
+  await capture('41-rendimiento-normal-1280x720');
+
+  await page.locator('[data-action="open-settings"]').first().click();
+  await page.locator('[data-performance="light"]').click();
+  const selected=await page.locator('body').getAttribute('data-performance');
+  const backdrop=await page.locator('.dashboard .glass').first().evaluate(el=>getComputedStyle(el).backdropFilter);
+  if(selected!=='light'||backdrop!=='none')throw new Error('Modo ligero no desactiva los filtros de vidrio');
+  const savedPerformance=await page.evaluate(()=>JSON.parse(localStorage.getItem('g2dash.v02.preferences')||'{}').performance);
+  if(savedPerformance!=='light')throw new Error('La preferencia de rendimiento no se guardó');
+  await capture('43-ajustes-rendimiento-ligero');
+  await page.locator('[data-action="close-settings"]').click();
+  if(await page.locator('#vehiclePhoto').getAttribute('src')!==actualCar
+     ||await page.locator('#wallpaper').evaluate(el=>el.style.backgroundImage)!==actualWallpaper)
+    throw new Error('Modo ligero alteró la fotografía o el fondo');
+  await capture('42-rendimiento-ligero-1280x720');
+  await page.locator('[data-action="open-settings"]').first().click();
+  await page.locator('[data-performance="normal"]').click();
+  if(await page.locator('body').getAttribute('data-performance')!=='normal'
+     ||await page.locator('.dashboard .glass').first().evaluate(el=>getComputedStyle(el).backdropFilter)==='none')
+    throw new Error('No restauró los desenfoques normales');
   await page.locator('[data-theme="day"]').click();
   await page.locator('[data-action="close-settings"]').click();
   await capture('09-modo-dia-1280x720');
@@ -293,6 +318,7 @@ try {
       '04-musica.png', '05-mapa-ilustrativo.png', '06-mi-ibiza.png',
       '07-iconos-accesos.png', '08-personalizacion.png',
       '09-modo-dia-1280x720.png', '10-ibiza-detalle.png',
+      '41-rendimiento-normal-1280x720.png','42-rendimiento-ligero-1280x720.png','43-ajustes-rendimiento-ligero.png',
       '11-ibiza-trasera.png', '12-musica-integracion-prueba.png',
       '13-musica-detallada-ejemplo.png', '14-compacto-1024x600.png',
       '15-ibiza-1024x600.png', '16-compacto-960x540.png',
