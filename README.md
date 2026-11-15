@@ -33,39 +33,34 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 ### Funciones disponibles en la web
 
-- Diseño con distribución de reloj, reproductor de demostración, mapa ilustrativo y panel del auto.
-- Reloj y fecha con el horario del dispositivo.
-- Panel «Mi Ibiza» con el recorte transparente y las dos fotografías originales. El recorte sigue en revisión para ajustar su acabado a la imagen aprobada; no es un modelo 3D ni un giro 360°. Permite cargar un PNG/WebP desde Ajustes sin modificar el fondo.
-- Fondos predefinidos o imagen seleccionada por el usuario.
-- Widgets de cristal ahumado con **cuatro tonalidades** (grafito, azul humo, verde humo y negro), **opacidad 20–88%** y difuminado independiente (0–16 px), además del color de acento y el fondo personalizable.
-- Tres estilos de logotipo (APEX, PULSE y ORBIT) configurables. Los ajustes visuales se guardan en el navegador.
-- Modos automático, día y noche; ajustes guardados localmente cuando el navegador lo permite.
-- Opción de solicitar velocidad GPS **si el navegador proporciona esos datos y el usuario autoriza su ubicación**.
-- Búsqueda de destinos que abre Google Maps en una pestaña nueva.
+- Tablero con reloj, fecha, mapa ilustrativo, panel del Ibiza y accesos.
+- Logotipo seleccionable entre APEX, PULSE y ORBIT.
+- Widgets ahumados con cuatro tonalidades, opacidad de 20–88% y difuminado de 0–16 px.
+- Apariencia automática, día y noche; fondos y preferencias guardados en el navegador.
+- Mi Ibiza: máscara sobre la fotografía real y dos vistas fotográficas. La máscara sigue en revisión; no es un modelo 3D.
+- Selección opcional de una imagen personal en formato PNG o WebP.
+- GPS del navegador con permiso y HTTPS; búsqueda que abre Google Maps fuera del panel.
+- El reproductor web es una demostración visual; no reproduce audio real.
 
 ### Funciones pendientes
 
-- Configuración del launcher Android como pantalla de inicio predeterminada. El APK de prueba ya incluye acceso a aplicaciones instaladas.
-- Controles de música remotos por Wi-Fi (pendiente; distinto a MediaSession local).
-
-- Integración opcional con OBD para parámetros reales del vehículo.
-- Mapa integrado con proveedor cartográfico.
-- Modelo 360° coherente del Ibiza; actualmente solo existen dos fotografías, no un modelo giratorio.
+- Configurar G² Dash como pantalla HOME predeterminada de Android.
+- Recibir música del teléfono por Wi-Fi. El punto de acceso por sí solo no comparte canción ni portada; se requiere un protocolo compatible o una app complementaria.
+- Integrar mapa en tiempo real y datos OBD del vehículo.
+- Crear un modelo 360° coherente del Ibiza.
 
 > **Aviso:** el mapa es una ilustración, no un mapa en tiempo real. Los campos de autonomía y voltaje permanecen vacíos hasta que exista una conexión real; no se inventan valores del vehículo. Los iconos de Wi-Fi y Bluetooth son decorativos en esta demostración web.
 
-## Aplicación Android (v0.4.2 — prueba instalable)
+## Aplicación Android (v0.4.2 — APK de prueba)
 
-El código de la primera aplicación Android está en [android/](android/README.md).
-Reutiliza el tablero y las fotografías del Ibiza. El APK permite abrir apps instaladas,
-solicitar GPS y mostrar metadatos y portada de la sesión musical local con autorización.
-Es una versión de prueba: aún no reemplaza el launcher principal. El control remoto
-de música por Wi-Fi, OBD y mapa real continúan pendientes.
+El APK reutiliza la interfaz y los recursos del proyecto. Incluye acceso a aplicaciones instaladas y GPS opcional.
 
-El flujo [Android APK](.github/workflows/android-apk.yml) compila un APK de depuración
-en GitHub Actions. Los artefactos aparecen en la pestaña **Actions** cuando el flujo termina correctamente.
+La música local funciona mediante la sesión multimedia del reproductor abierto en el estéreo: puede mostrar título, artista, portada y los controles que esa app permita. Requiere habilitar el acceso multimedia en Android. La conexión remota desde el teléfono por Wi-Fi todavía no está implementada; [aquí está el detalle](android/MUSICA.md).
 
-[**Mi Ibiza: comparación del recorte anterior y la máscara corregida**](docs/capturas/RECORTE_IBIZA_v0.4.2.md)
+El APK no sustituye todavía el launcher HOME y falta validarlo en el estéreo Gearelec. GitHub Actions compila el APK de depuración en el flujo [Android APK](.github/workflows/android-apk.yml); consulta los artefactos en la pestaña **Actions**.
+
+[Ver comparación de la máscara del Ibiza v0.4.2](docs/capturas/RECORTE_IBIZA_v0.4.2.md)
+
 
 ## Registro visual por cada actualización
 
@@ -96,20 +91,21 @@ En **Settings → Pages**, selecciona **Deploy from a branch → main → /(root
 
 ```text
 g2-dash/
-├── index.html            # Interfaz
-├── style.css             # Diseño y estructura base
-├── brand.css             # Estilos configurables del logotipo
-├── widgets.css           # Widgets ahumados y tonalidades
-├── app.js                # Interacciones y preferencias
-├── assets/
-│   ├── ibiza_real_recortado.svg # Recorte transparente basado en foto original
-│   ├── ibiza_frente_original.webp
-│   └── ibiza_trasera_original.webp
-├── vista_previa.png      # Captura de la demo
+├── index.html                # Interfaz
+├── style.css                 # Distribución base
+├── adaptive.css              # Ajustes para pantallas compactas
+├── brand.css                 # Variantes del logotipo
+├── widgets.css               # Tonalidad y transparencia de widgets
+├── ibiza-cutout.css          # Presentación del recorte
+├── media.css                 # Widget de música
+├── app.js                    # Interacciones y preferencias
+├── android/                  # APK de prueba y código Android
+├── assets/                   # Fotos originales y máscara del Ibiza
+├── docs/capturas/            # Evidencia visual por sección y versión
+├── .github/workflows/        # APK y capturas automáticas
 ├── README.md
-├── LICENSE              # Aviso de licencia propietaria
 ├── ROADMAP.md
-└── .gitignore
+└── LICENSE
 ```
 
 ## Privacidad y créditos
