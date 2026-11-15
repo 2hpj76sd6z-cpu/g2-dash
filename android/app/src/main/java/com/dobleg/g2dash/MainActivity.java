@@ -18,6 +18,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashSet;
 import java.util.Set;
 import android.os.Bundle;
+import android.os.Build;
 import android.provider.Settings;
 import android.view.View;
 import android.webkit.GeolocationPermissions;
@@ -45,6 +46,7 @@ public class MainActivity extends Activity {
     private static final String HOME_URL = LOCAL_ORIGIN + "/assets/www/index.html";
     private static final int LOCATION_REQUEST = 20;
     private static final int FILE_REQUEST = 21;
+    private static final String AIRPLAY_PACKAGE = "io.github.jqssun.airplay";
 
     private WebView webView;
     private G2MediaBridge mediaBridge;
@@ -289,7 +291,59 @@ public class MainActivity extends Activity {
         Toast.makeText(this, "Aplicación no disponible", Toast.LENGTH_SHORT).show();
     }
 
+    // El receptor AirPlay es un APK independiente. La instalación y su activación
+    // siempre las decide el usuario: nunca lo inicia en segundo plano.
+    private boolean isAirPlayInstalled() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return false;
+        try {
+            return getPackageManager().getLaunchIntentForPackage(AIRPLAY_PACKAGE) != null;
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
+    private String getAirPlaySupportJson() {
+        JSONObject info = new JSONObject();
+        try {
+            info.put("supported", Build.VERSION.SDK_INT >= Build.VERSION_CODES.N);
+            info.put("installed", isAirPlayInstalled());
+            info.put("androidVersion", Build.VERSION.RELEASE);
+        } catch (org.json.JSONException ignored) { /* Solo se envían datos locales. */ }
+        return info.toString();
+    }
+
+    private void openAirPlayReceiver() {
+        if (!isAirPlayInstalled()) {
+            Toast.makeText(this, "Primero instala un receptor AirPlay", Toast.LENGTH_LONG).show();
+            return;
+        }
+        Intent launch = getPackageManager().getLaunchIntentForPackage(AIRPLAY_PACKAGE);
+        if (launch != null) openExternal(launch);
+    }
+
+    private void openAirPlayInstall() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            Toast.makeText(this, "AirPlay Receiver requiere Android 7 o posterior", Toast.LENGTH_LONG).show();
+            return;
+        }
+        // Se abre la ficha oficial, NO se descarga ni instala el APK de manera automática.
+        openExternal(new Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=" + AIRPLAY_PACKAGE)));
+    }
+
     private class AndroidBridge {
+        @JavascriptInterface
+        public String getAirPlaySupport() {
+            return getAirPlaySupportJson();
+        }
+        @JavascriptInterface
+        public void openAirPlayReceiver() {
+            runOnUiThread(() -> MainActivity.this.openAirPlayReceiver());
+        }
+        @JavascriptInterface
+        public void openAirPlayInstall() {
+            runOnUiThread(() -> MainActivity.this.openAirPlayInstall());
+        }
         @JavascriptInterface
         public String getInstalledApps() {
             return listInstalledAppsJson();
@@ -350,6 +404,8 @@ public class MainActivity extends Activity {
         webView.evaluateJavascript("(function(){const s=document.querySelector('#settingsVeil');" +
                 "const v=document.querySelector('#vehicleVeil');" +
                 "const c=document.querySelector('#conceptVeil');" +
+                "const ap=document.querySelector('#airplayVeil');" +
+                "if(ap&&!ap.hidden){ap.hidden=true;return true;}" +
                 "const m=document.querySelector('#musicDetailVeil');" +
                 "if(m&&!m.hidden){m.hidden=true;return true;}" +
                 "const a=document.querySelector('#appsVeil');" +
