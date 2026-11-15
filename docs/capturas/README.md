@@ -8,6 +8,16 @@ interfaz real en Chromium** a 1280 × 720 y crea capturas por sección.
 > No son imágenes generadas, ni funciones simuladas como si fueran operativas.
 > El mapa y OBD siguen pendientes. La música MediaSession local se integra opcionalmente en Android; las capturas musicales de ejemplo son únicamente pruebas visuales.
 
+## Bienvenida de encendido — v0.4.3
+
+Capturas obtenidas del HTML/CSS/JS real en Chromium horizontal.
+
+| Logo SEAT + G² DASH | Saludo personalizado |
+|---|---|
+| ![Logo inicial](actual/00-arranque-seat-logo.png) | ![Saludo Doble G](actual/00b-arranque-saludo-doble-g.png) |
+
+La secuencia se reproduce al abrir G² Dash. El encendido automático del estéreo solo podrá verificarse en el dispositivo, tras seleccionar la app HOME si el fabricante lo permite.
+
 ## Comparación antes y después
 
 [**Mi Ibiza: recorte corregido con la foto original (v0.4.2)**](RECORTE_IBIZA_v0.4.2.md)
