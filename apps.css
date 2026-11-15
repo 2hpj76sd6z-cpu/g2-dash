@@ -1,0 +1,80 @@
+/* G² Dash — Centro de aplicaciones v0.5.1. Aislado del tablero y su wallpaper. */
+.appsVeil {z-index:14}
+.appsModal {
+  width:min(980px,96vw); height:min(610px,93vh);
+  padding:18px 20px; display:flex;flex-direction:column;min-height:0;
+  border:1px solid rgba(195,222,240,.27);
+  background:linear-gradient(145deg,rgba(19,32,44,.97),rgba(10,18,29,.98));
+  border-radius:23px; box-shadow:0 22px 65px rgba(0,0,0,.40);
+  color:#eaf4fa;
+}
+.appsHeader{display:flex;align-items:center;gap:12px;min-height:55px}
+.appsHeaderBrand{display:grid;place-items:center;width:48px;height:48px;flex:0 0 48px;
+  border-radius:14px;background:rgba(78,210,140,.10);border:1px solid rgba(80,220,140,.2);color:#5cdf99}
+.appsHeaderBrand .icon {width:25px;height:25px}
+.appsHeaderText{flex:1;min-width:0}
+.appsHeaderText h2{font-weight:750;font-size:23px;letter-spacing:-.035em;margin:0}
+.appsHeaderText p{font-size:11px;color:#98aec1;margin:3px 0 0}
+.appsTopBar{display:flex;gap:10px;align-items:center;margin-top:13px;margin-bottom:11px;flex-shrink:0}
+.appsSearch{flex:1;min-width:0;border:1px solid rgba(182,207,230,.2);
+  background:rgba(0,0,0,.16);display:flex;align-items:center;gap:8px;
+  border-radius:12px;padding:0 13px;height:43px}
+.appsSearch .icon{width:19px;height:19px;color:#a3b7ca}
+.appsSearch input{border:0;outline:0;background:transparent;color:#f1f6fb;
+  min-width:0;width:100%;font-size:13px}
+.appsSearch input::placeholder{color:#879bae}
+.appsTabs{display:flex;gap:3px;border-radius:11px;border:1px solid rgba(192,214,235,.14);
+  padding:4px;background:rgba(0,0,0,.14)}
+.appsTabs button{background:transparent;border:0;color:#9eafc0;min-height:34px;
+  border-radius:8px;padding:0 12px;font-size:12px}
+.appsTabs button.selected{background:rgba(92,220,153,.17);color:#b9f6d4}
+.appsSummary{display:flex;justify-content:space-between;align-items:center;
+  gap:10px;font-size:11px;min-height:23px;color:#9dafc1}
+.appsSummary strong{color:#61dc99;font-size:11px}
+.appsGrid{
+  overflow-y:auto;overscroll-behavior:contain;min-height:0;flex:1;
+  display:grid;grid-template-columns:repeat(6,minmax(0,1fr));
+  align-content:start;gap:10px;padding:8px 3px 12px;
+  scrollbar-color:#516579 transparent;scrollbar-width:thin
+}
+.appsCard{position:relative;border:1px solid rgba(194,213,232,.14);
+  background:linear-gradient(145deg,rgba(236,251,255,.075),rgba(216,235,248,.025));
+  border-radius:15px;min-width:0;min-height:116px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:12px 6px 10px;gap:8px;
+  cursor:pointer}
+.appsCard:hover,.appsCard:focus-visible{border-color:rgba(95,220,150,.51);background:rgba(92,220,146,.09)}
+.appsCard .appsIcon{width:48px;height:48px;object-fit:contain;border-radius:12px;
+  background:rgba(229,243,255,.045);display:grid;place-items:center;flex:none;
+  font-size:27px}
+.appsCard .appsIcon > img{width:48px;height:48px;object-fit:contain}
+.appsCard .appsName{max-width:100%;font-size:11px;line-height:1.25;color:#edf4f9;
+  text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appsStar{position:absolute;right:5px;top:5px;border:0;border-radius:8px;
+  display:grid;place-items:center;width:28px;height:28px;background:rgba(13,25,36,.72);
+  color:#7c92a2;font-size:19px;line-height:1}
+.appsStar.on{color:#72e0a5}
+.appsStar:hover{background:rgba(48,89,73,.55)}
+.appsEmpty{grid-column:1/-1;min-height:210px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:9px;text-align:center;color:#9fb5c6;padding:20px}
+.appsEmpty strong{font-size:17px;color:#e7f1f7;font-weight:600}
+.appsEmpty .icon{width:36px;height:36px;color:#65d79d}
+.appsEmpty span{font-size:12px;max-width:390px;line-height:1.55}
+.appsFooter{display:flex;align-items:center;justify-content:space-between;gap:14px;
+  border-top:1px solid rgba(214,234,248,.11);padding-top:10px;min-height:39px}
+.appsFooter span{font-size:10px;color:#8ea5b6;line-height:1.3}
+.appsRefresh{border:1px solid rgba(200,220,235,.2);background:rgba(255,255,255,.055);
+  color:#b8dccc;padding:7px 13px;border-radius:10px;font-size:11px;flex-shrink:0}
+.appsDemo{color:#f2ca8c!important}
+@media(max-width:1080px){.appsGrid{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+ .appsModal{padding:14px 16px}.appsCard{min-height:106px}}
+@media(max-width:980px){.appsGrid{grid-template-columns:repeat(5,minmax(0,1fr))}
+ .appsCard{min-height:95px;padding:8px 4px}.appsCard .appsIcon,.appsCard .appsIcon > img{width:41px;height:41px}
+ .appsHeaderBrand{width:39px;height:39px;flex-basis:39px}.appsHeaderText h2{font-size:20px}}
+@media(max-height:590px){
+ .appsModal{height:min(510px,96vh);padding:10px 15px;border-radius:17px}
+ .appsHeader{min-height:37px}.appsTopBar{margin-top:7px;margin-bottom:5px}
+ .appsSearch{height:36px}.appsTabs button{min-height:29px}
+ .appsCard{min-height:86px;gap:3px}
+ .appsGrid{gap:6px;padding-top:4px}.appsFooter{min-height:30px;padding-top:5px}
+}
