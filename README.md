@@ -2,7 +2,7 @@
 
 # G² Dash
 
-**Interfaz automotriz personalizable · Web y Android · v0.5.2**
+**Interfaz automotriz personalizable · Web y Android · v0.5.3**
 
 Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados configurables y acceso a las funciones Android del estéreo.
 
@@ -14,7 +14,7 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 ## Cómo va el proyecto
 
-**Versión actual: v0.5.2 (desarrollo).** Integra la galería conceptual, el centro de Apps y un reproductor ampliado para la sesión musical local de Android. Falta validar en el Gearelec; la música desde el teléfono por Wi‑Fi sigue pendiente.
+**Versión actual: v0.5.3 (desarrollo).** Integra la galería conceptual, el centro de Apps y un reproductor ampliado para la sesión musical local de Android. Falta validar en el Gearelec; la música desde el teléfono por Wi‑Fi sigue pendiente.
 
 ### Bienvenida al iniciar G² Dash
 
@@ -47,9 +47,20 @@ La barra de progreso permite adelantar/retroceder únicamente cuando la app musi
 
 La conexión musical desde un iPhone/Android por el punto de acceso Wi-Fi **no está implementada**; se requiere un canal de transmisión de metadatos compatible o una aplicación complementaria. No afecta las fotografías ni el fondo del launcher.
 
+### iPhone por Wi-Fi / AirPlay — v0.5.3
+
+Se añadió **Música → AIRPLAY** con un asistente para conectar el iPhone al punto de acceso del estéreo y reproducir a través de [AirPlay Receiver & Server](https://github.com/jqssun/android-airplay-server), un **receptor externo independiente** (Android 7.0+). Este receptor recibe audio desde AirPlay e integra una MediaSession de Android con información de canción, carátula y controles cuando el emisor los proporciona.
+
+G² Dash verifica la versión de Android, detecta si el paquete `io.github.jqssun.airplay` está instalado y permite abrirlo o visitar su página oficial de instalación desde el estéreo, siempre **por decisión del usuario**. Si el receptor publica una sesión multimedia, G² Dash podrá mostrar su información y enviar los controles permitidos por la sesión.
+
+**Estado: integración en código; todavía no verificada físicamente en el Gearelec.** No se puede afirmar que el hotspot del fabricante anuncie AirPlay por mDNS, que el receptor siga activo en segundo plano o que cada servicio musical permita compartir carátula/controles. El iPhone y Android deben estar en una red local que permita comunicación entre ambos; la música en línea puede usar datos móviles del iPhone. Android 6 o anterior no es compatible con este receptor.
+
+El sitio web no realiza una conexión AirPlay: el asistente muestra de forma explícita «VISTA WEB» y oculta los botones nativos de instalar/abrir. No se ha incorporado código de terceros con licencia GPL al proyecto G² Dash; el receptor se instala como app separada.
+
 ### Ya está implementado
 
 - Bienvenida SEAT / G² DASH con saludo a Doble G y resumen del estado v0.5.2.
+- Asistente para iPhone por Wi-Fi/AirPlay, con consulta del receptor instalado y conexión a la MediaSession que publique (pendiente prueba física).
 - Reproductor musical ampliado con carátula y barra de avance condicionada a las capacidades de MediaSession.
 - Centro de Apps con iconos de Android, búsqueda, favoritos y apertura segura (en web, demostración marcada).
 - Visor conceptual del Ibiza con 12 vistas y controles de ángulo, separado de las fotos reales.
