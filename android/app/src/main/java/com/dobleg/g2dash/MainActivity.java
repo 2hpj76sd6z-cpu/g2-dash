@@ -454,7 +454,10 @@ public class MainActivity extends Activity {
         super.onResume();
         showImmersive();
         if (webView != null) webView.onResume();
-        if (updateManager != null) updateManager.checkForUpdate();
+        if (updateManager != null) {
+            updateManager.onResume();
+            updateManager.checkForUpdate();
+        }
         if (wasPaused) {
             wasPaused = false;
             resumeCount++;
