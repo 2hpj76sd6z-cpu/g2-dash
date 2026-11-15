@@ -127,6 +127,7 @@ try {
     throw new Error('No se intercambiaron las métricas');
   await capture('47-v058-ajustes-distribucion-1280x720');
   await page.reload({waitUntil:'networkidle'});
+  await page.locator('#startup').waitFor({state:'hidden',timeout:9000});
   const persistent = await page.locator('.vehicleStats > div').evaluateAll(els=>els.map(el=>el.dataset.metric));
   if(JSON.stringify(persistent) !== JSON.stringify(reordered) ||
      await page.locator('.dashboard').getAttribute('data-map-side') !== 'right')
