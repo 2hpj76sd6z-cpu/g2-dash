@@ -2,7 +2,7 @@
 
 # G² Dash
 
-**Interfaz automotriz personalizable · Web y Android · v0.5.1**
+**Interfaz automotriz personalizable · Web y Android · v0.5.2**
 
 Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados configurables y acceso a las funciones Android del estéreo.
 
@@ -14,7 +14,7 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 ## Cómo va el proyecto
 
-**Versión actual: v0.5.1 (desarrollo).** La galería conceptual de 12 ángulos ya está integrada en la web y el APK de prueba. El APK también incluye acceso a apps instaladas, GPS opcional y música local mediante MediaSession. Falta validarlo en el estéreo Gearelec; la música remota del teléfono por Wi‑Fi sigue pendiente.
+**Versión actual: v0.5.2 (desarrollo).** La galería conceptual de 12 ángulos ya está integrada en la web y el APK de prueba. El APK también incluye acceso a apps instaladas, GPS opcional y música local mediante MediaSession. Falta validarlo en el estéreo Gearelec; la música remota del teléfono por Wi‑Fi sigue pendiente.
 
 ### Bienvenida al iniciar G² Dash
 
@@ -39,9 +39,18 @@ El botón **Apps** abre un panel visual con iconos de las aplicaciones realmente
 
 En **la demo web** se muestran seis iconos de muestra con la advertencia **EJEMPLO VISUAL — NO SON APPS INSTALADAS**. No se inventa qué aplicaciones tiene el estéreo. Al instalar el APK, Android presenta su lista real. El diseño se adapta a 1280×720 y pantallas compactas.
 
+### Música — reproductor ampliado v0.5.2
+
+El icono de ampliar en el widget musical abre una pantalla con portada, título, artista, servicio de origen, estado, tiempo transcurrido y controles grandes. En Android, recibe datos de **MediaSession** del reproductor que está sonando **en ese mismo estéreo**, con autorización del usuario.
+
+La barra de progreso permite adelantar/retroceder únicamente cuando la app musical publica `ACTION_SEEK_TO`; de otro modo permanece bloqueada. Los controles de anterior/siguiente/reproducir respetan las acciones disponibles. La web no reproduce audio: su captura de ejemplo indica expresamente **EJEMPLO VISUAL** y mantiene los controles desactivados.
+
+La conexión musical desde un iPhone/Android por el punto de acceso Wi-Fi **no está implementada**; se requiere un canal de transmisión de metadatos compatible o una aplicación complementaria. No afecta las fotografías ni el fondo del launcher.
+
 ### Ya está implementado
 
 - Bienvenida SEAT / G² DASH con saludo a Doble G y resumen del estado v0.5.0.
+- Reproductor musical ampliado con carátula y barra de avance condicionada a las capacidades de MediaSession.
 - Centro de Apps con iconos de Android, búsqueda, favoritos y apertura segura (en web, demostración marcada).
 - Visor conceptual del Ibiza con 12 vistas y controles de ángulo, separado de las fotos reales.
 - Tres estilos de logotipo G² DASH: APEX, PULSE y ORBIT.
