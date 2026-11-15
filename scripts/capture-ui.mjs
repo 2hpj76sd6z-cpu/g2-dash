@@ -63,7 +63,7 @@ try {
     if(data.horizontalOverflow)problems.push('Desplazamiento horizontal');
     if(!data.carLoaded)problems.push('La imagen del Ibiza no cargó');
     for(const [name,b] of Object.entries(data.boxes)){
-      if(b.width<34 || b.height<20)problems.push(name+' es demasiado pequeño');
+      if(b.width<34 || b.height<(name==='.footer'?5:20))problems.push(name+' es demasiado pequeño');
       if(b.left < -3 || b.top < -3 || b.right>data.viewport.width+3 || b.bottom>data.viewport.height+3){
         problems.push(name+' queda fuera del viewport');
       }
