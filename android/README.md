@@ -14,6 +14,7 @@ modelo 360° del Ibiza: mantiene las fotografías originales del vehículo.
 - El mapa dentro del panel sigue siendo ilustrativo.
 - Música: autorización opcional a sesiones multimedia locales, título, artista,
   portada, progreso y controles disponibles. Consulta [MÚSICA](MUSICA.md).
+- Actualizaciones: revisión cada 12 horas con descarga e instalación confirmada por Android. Consulta [ACTUALIZACIONES.md](ACTUALIZACIONES.md) para configurar la firma estable y conocer la migración inicial.
 - Pantalla de bienvenida SEAT → G² DASH → «Buenas Noches Doble G, ¿A dónde iremos hoy?» → tablero. Saludo dinámico y botón Omitir.
 - Ajustes → Ver bienvenida para repetirla.
 - G² Dash es una **opción HOME**, pero la selección es manual y reversible; nunca se activa automáticamente.

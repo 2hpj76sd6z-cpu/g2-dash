@@ -50,6 +50,7 @@ public class MainActivity extends Activity {
 
     private WebView webView;
     private G2MediaBridge mediaBridge;
+    private G2UpdateManager updateManager;
     // Activity lifecycle, NOT the vehicle ignition/ACC signal.
     private boolean pageReady = false;
     private boolean restoredInstance = false;
@@ -109,6 +110,7 @@ public class MainActivity extends Activity {
                 super.onPageFinished(view, url);
                 if (!HOME_URL.equals(url)) return;
                 pageReady = true;
+                if (updateManager != null) updateManager.start();
                 emitLifecycle(restoredInstance ? "restored" : "cold_start");
                 restoredInstance = false;
             }
@@ -152,6 +154,7 @@ public class MainActivity extends Activity {
             }
         });
         mediaBridge = new G2MediaBridge(this, webView);
+        updateManager = new G2UpdateManager(this, webView);
         webView.loadUrl(HOME_URL);
     }
 
@@ -399,6 +402,14 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> MainActivity.this.openExternal(
                     new Intent(Settings.ACTION_HOME_SETTINGS)));
         }
+        @JavascriptInterface
+        public void checkForUpdates() {
+            runOnUiThread(() -> { if (updateManager != null) updateManager.checkForUpdates(true); });
+        }
+        @JavascriptInterface
+        public void installUpdate() {
+            runOnUiThread(() -> { if (updateManager != null) updateManager.installAvailableUpdate(); });
+        }
     }
 
     @Override
@@ -451,6 +462,7 @@ public class MainActivity extends Activity {
         super.onResume();
         showImmersive();
         if (webView != null) webView.onResume();
+        if (updateManager != null) updateManager.onResume();
         if (wasPaused) {
             wasPaused = false;
             resumeCount++;
@@ -488,6 +500,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         if (mediaBridge != null) mediaBridge.destroy();
+        if (updateManager != null) updateManager.destroy();
         if (webView != null) {
             webView.removeJavascriptInterface("G2Android");
             webView.destroy();
