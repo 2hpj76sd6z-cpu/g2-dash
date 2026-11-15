@@ -1,4 +1,4 @@
-# G² Dash para Android — v0.5.1 (panel Apps y favoritos)
+# G² Dash para Android — v0.5.2 (Apps y reproductor ampliado)
 
 Este módulo es una aplicación Android nativa que **reutiliza exactamente**
 el diseño web aprobado (archivos del directorio principal). No contiene un
@@ -66,3 +66,10 @@ La tarjeta Mi Ibiza incluye el botón **12 VISTAS**, con imágenes conceptuales 
 ## Detallado del Ibiza v0.5.1
 
 Se añadió un modo 1:1 para conservar la nitidez de los WebP aprobados (500×314), ampliación opcional 1.3×, navegación por gestos de hasta tres pasos y precarga acotada a dos vistas vecinas. La secuencia automática se detiene al cerrar o perder visibilidad. Las fotos reales, el panel Apps y el fondo permanecen sin modificar. El rendimiento de la Gearelec todavía requiere validación física.
+
+
+## Reproductor ampliado local v0.5.2
+
+El panel **Música** abre una vista amplia con portada, título, artista, avance y controles. Android recibe estos datos de la MediaSession del reproductor activo en el estéreo. El botón de avance solo se habilita si esa sesión anuncia `ACTION_SEEK_TO`; las órdenes de reproducción también dependen de las capacidades de cada app.
+
+La demo web etiqueta el contenido como ejemplo y mantiene deshabilitados los controles. **La música del iPhone por Wi‑Fi no está implementada**; consulta [MUSICA.md](MUSICA.md) para la prueba de CarLink y las opciones de conexión.
