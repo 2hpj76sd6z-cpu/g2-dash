@@ -2,7 +2,7 @@
 
 # G² Dash
 
-**Smart Car Interface · Prototipo v0.2**
+**Smart Car Interface · Prototipo web y Android v0.4**
 
 Interfaz automotriz minimalista con paneles translúcidos, personalización de fondos y un espacio dedicado al vehículo.
 
@@ -12,9 +12,9 @@ Interfaz automotriz minimalista con paneles translúcidos, personalización de f
 
 ## Estado del proyecto
 
-**En desarrollo.** Esta versión es una **demostración web interactiva**, no un APK ni un launcher Android instalado. La meta es crear una aplicación Android propia optimizada para pantallas horizontales, especialmente 1280 × 720.
+**En desarrollo.** El sitio es una **demostración web interactiva**. También existe un **APK Android de prueba compilado**, pero todavía no sustituye el launcher principal. La meta es crear una aplicación Android propia optimizada para pantallas horizontales, especialmente 1280 × 720.
 
-### Funciones disponibles en v0.2
+### Funciones disponibles en la web
 
 - Diseño con distribución de reloj, reproductor de demostración, mapa ilustrativo y panel del auto.
 - Reloj y fecha con el horario del dispositivo.
@@ -28,8 +28,7 @@ Interfaz automotriz minimalista con paneles translúcidos, personalización de f
 
 ### Funciones pendientes
 
-- APK y launcher Android nativo.
-- Accesos al listado real de aplicaciones instaladas.
+- Configuración del launcher Android como pantalla de inicio predeterminada. El APK de prueba ya incluye acceso a aplicaciones instaladas.
 - Controles de música remotos por Wi-Fi (pendiente; distinto a MediaSession local).
 - Música local Android con permiso opcional a MediaSession: [ver detalles](android/MUSICA.md).
 - Integración opcional con OBD para parámetros reales del vehículo.
@@ -38,7 +37,7 @@ Interfaz automotriz minimalista con paneles translúcidos, personalización de f
 
 > **Aviso:** el mapa es una ilustración, no un mapa en tiempo real. Los campos de autonomía y voltaje permanecen vacíos hasta que exista una conexión real; no se inventan valores del vehículo. Los iconos de Wi-Fi y Bluetooth son decorativos en esta demostración web.
 
-## Aplicación Android (v0.3 — primera prueba)
+## Aplicación Android (v0.4 — prueba instalable)
 
 El código de la primera aplicación Android está en [android/](android/README.md).
 Conserva la apariencia de la demostración y las fotografías originales del Ibiza.
@@ -52,6 +51,10 @@ El flujo [Android APK](.github/workflows/android-apk.yml) compila un APK de depu
 en GitHub Actions. Los artefactos aparecen en la pestaña **Actions** cuando el flujo termina correctamente.
 
 ## Registro visual por cada actualización
+
+![Vista actual de G² Dash](docs/capturas/actual/01-inicio-1280x720.png)
+
+[**Ver comparación visual v0.4: Música y Mi Ibiza**](docs/capturas/CAMBIOS_v0.4.md) · [Galería de todas las secciones](docs/capturas/README.md)
 
 Las capturas automáticas de **cada sección real de la interfaz** se publican
 en [docs/capturas/](docs/capturas/README.md). El flujo

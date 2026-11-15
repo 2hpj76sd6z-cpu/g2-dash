@@ -6,7 +6,23 @@ interfaz real en Chromium** a 1280 × 720 y crea capturas por sección.
 
 > Importante: estas capturas representan el código real en GitHub.
 > No son imágenes generadas, ni funciones simuladas como si fueran operativas.
-> El mapa sigue siendo ilustrativo, y la música/OBD están pendientes.
+> El mapa y OBD siguen pendientes. La música MediaSession local se integra opcionalmente en Android; las capturas musicales de ejemplo son únicamente pruebas visuales.
+
+## Comparación antes y después
+
+**[Ver cambios visuales v0.4 — Música, Ibiza y pantalla completa](CAMBIOS_v0.4.md)**
+
+![Pantalla principal de G² Dash](actual/01-inicio-1280x720.png)
+
+### Vista rápida de los paneles
+
+| Música | Mi Ibiza |
+|---|---|
+| ![Música sin reproducción real en web](actual/04-musica.png) | ![Mi Ibiza original](actual/06-mi-ibiza.png) |
+
+| Ajustes | Modo día |
+|---|---|
+| ![Panel de ajustes](actual/08-personalizacion.png) | ![Modo día](actual/09-modo-dia-1280x720.png) |
 
 ## Galería visual actual
 
