@@ -6,9 +6,9 @@
   const KEY = 'g2dash.v02.preferences';
   const defaults = { theme:'auto', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', widgetBlur:8, performance:'normal', customWallpaper:null };
   const pictures = [
+    {path:'assets/ibiza_frente_sin_fondo.webp',name:'Frontal — recorte sin fondo',alt:'SEAT Ibiza blanco de cinco puertas aislado, sin fondo, vista frontal en tres cuartos',cutout:true},
     {path:'assets/ibiza_frente_original.webp',name:'Frontal — foto original',alt:'Fotografía frontal real del SEAT Ibiza blanco con boca negra y placa protegida'},
     {path:'assets/ibiza_trasera_original.webp',name:'Trasera — foto original',alt:'Fotografía trasera real del SEAT Ibiza blanco con placa protegida'},
-    {path:'assets/ibiza_real_recortado.svg',name:'Recorte transparente — fotografía real',alt:'Recorte opcional del SEAT Ibiza basado en la fotografía frontal real',cutout:true},
   ];
   let settings = {...defaults};
   try {settings={...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')}} catch(_){}
@@ -79,7 +79,7 @@
   function photoChange(index){
     currentPhoto=(index+pictures.length)%pictures.length;
     const pic=pictures[currentPhoto];
-    const isPersonal=currentPhoto===0&&Boolean(settings.personalCar);
+    const isPersonal=currentPhoto===1&&Boolean(settings.personalCar);
     const path=isPersonal?settings.personalCar:pic.path;
     const isCutout=Boolean(pic.cutout||isPersonal);
     $('#vehiclePhoto').src=path;$('#modalCar').src=path;
@@ -87,7 +87,7 @@
     $('#modalCar').alt=isPersonal?'Imagen personal del SEAT Ibiza':pic.alt;
     $('#vehicleView').classList.toggle('isCutout',isCutout);
     $('.modalPhoto').classList.toggle('isCutout',isCutout);
-    $('#carChip').textContent=isPersonal?'IMAGEN PERSONAL':pic.cutout?'RECORTE · OPCIONAL':currentPhoto===0?'FRENTE · FOTO ORIGINAL':'TRASERA · FOTO ORIGINAL';
+    $('#carChip').textContent=isPersonal?'IMAGEN PERSONAL':pic.cutout?'RECORTE TRANSPARENTE · FRENTE':currentPhoto===1?'FRENTE · FOTO ORIGINAL':'TRASERA · FOTO ORIGINAL';
     $('#modalLabel').textContent=isPersonal?'Imagen personal — guardada en este dispositivo':pic.name;
     document.querySelectorAll('#carDot0, #carDot1, #carDot2').forEach((b,i)=>b.classList.toggle('on',i===currentPhoto));
   }
@@ -219,12 +219,12 @@
         break;
       case 'close-settings':closeScreen('#settingsVeil');break;
       case 'vehicle':window.G2Concept?.close();openScreen('#vehicleVeil');break;
-      case 'vehicle-real':window.G2Concept?.close();photoChange(0);openScreen('#vehicleVeil');break;
+      case 'vehicle-real':window.G2Concept?.close();photoChange(1);openScreen('#vehicleVeil');break;
       case 'concept-360':closeScreen('#vehicleVeil');window.G2Concept?.open();break;
       case 'close-vehicle':closeScreen('#vehicleVeil');break;
-      case 'car-front':photoChange(0);break;
+      case 'car-front':photoChange(1);break;
       case 'car-rear':photoChange(1);break;
-      case 'car-cutout':photoChange(2);break;
+      case 'car-cutout':photoChange(0);break;
       case 'car-prev':photoChange(currentPhoto-1);break;
       case 'car-next':photoChange(currentPhoto+1);break;
       case 'gps':activateGps();break;
@@ -275,7 +275,7 @@
         canvas.height=Math.round(img.naturalHeight*ratio);
         canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
         settings.personalCar=canvas.toDataURL('image/png');
-        photoChange(0);save();showToast('Imagen del Ibiza aplicada sin cambiar el fondo');
+        photoChange(1);save();showToast('Imagen del Ibiza aplicada sin cambiar el fondo');
       };
       img.onerror=()=>showToast('No se pudo abrir la imagen');
       img.src=reader.result;
