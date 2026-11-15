@@ -55,3 +55,6 @@
 .musicPanel .trackText span{margin-top:2px}
 @media(max-height:650px){.musicPanel .album{height:clamp(65px,12vh,90px)}}
 @media(max-width:980px){.musicPanel .album{height:clamp(65px,13vh,100px)}.musicPanel .trackRow{gap:5px 3px}}
+
+.mapPanel .mapsLaunch{position:absolute;top:83px;left:17px;z-index:2;min-height:39px;padding:8px 13px;border:1px solid rgba(110,224,157,.65);border-radius:11px;background:rgba(13,64,43,.87);color:#e4fff0;font-size:11px;font-weight:750;letter-spacing:.035em;box-shadow:0 8px 17px rgba(0,0,0,.2)}
+@media(max-width:1149px){.mapPanel .mapsLaunch{top:60px;left:10px;min-height:34px;font-size:10px;padding:6px 9px}}
