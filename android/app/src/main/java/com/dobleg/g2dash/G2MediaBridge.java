@@ -159,6 +159,25 @@ final class G2MediaBridge {
         handler.postDelayed(this::emit, 350);
     }
 
+    /** Adelantar/retroceder solo cuando la MediaSession expone ACTION_SEEK_TO. */
+    void seekTo(long positionMs) {
+        if (!accessGranted() || positionMs < 0) return;
+        MediaController item = preferredSession();
+        if (item == null) return;
+        PlaybackState state = item.getPlaybackState();
+        MediaMetadata meta = item.getMetadata();
+        long duration = meta == null ? 0 : Math.max(0,
+                meta.getLong(MediaMetadata.METADATA_KEY_DURATION));
+        if (state == null || duration == 0 ||
+                (state.getActions() & PlaybackState.ACTION_SEEK_TO) == 0) return;
+        try {
+            item.getTransportControls().seekTo(Math.min(positionMs, duration));
+            handler.postDelayed(this::emit, 300);
+        } catch (Exception ignored) {
+            Toast.makeText(activity,"Esta aplicación no permite adelantar",Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private static String safeText(CharSequence value, String fallback) {
         if (value == null || value.length() == 0) return fallback;
         return value.toString();
@@ -226,6 +245,16 @@ final class G2MediaBridge {
                     data.put("title", title);
                     data.put("artist", artist);
                     data.put("playing", playing);
+                    long actions = state == null ? 0 : state.getActions();
+                    data.put("canSeek", duration > 0 &&
+                            (actions & PlaybackState.ACTION_SEEK_TO) != 0);
+                    data.put("canPrevious",
+                            (actions & PlaybackState.ACTION_SKIP_TO_PREVIOUS) != 0);
+                    data.put("canNext",
+                            (actions & PlaybackState.ACTION_SKIP_TO_NEXT) != 0);
+                    data.put("canPlay", playing
+                            ? (actions & (PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_PLAY_PAUSE)) != 0
+                            : (actions & (PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE)) != 0);
                     data.put("package", current.getPackageName());
                     data.put("albumArt", albumArt(meta, current.getPackageName() + "|" + title + "|" + artist));
                     data.put("durationMs", duration);
