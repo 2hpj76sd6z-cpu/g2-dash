@@ -15,6 +15,30 @@
   let currentPhoto=0, zoom=1, toastTimer=null;
   function save(){try{localStorage.setItem(KEY,JSON.stringify(settings))}catch(_){showToast('No fue posible guardar los ajustes en este navegador')}}
   function showToast(message){const el=$('#toast');if(!el)return;el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3200)}
+  window.G2AndroidUpdateResult=function(result){
+    const status=$('#updateStatus'),install=$('#installUpdateBtn');
+    if(!status||!install||!result)return;
+    install.hidden=result.state!=='available';
+    switch(result.state){
+      case 'checking':status.textContent='Buscando versiones…';break;
+      case 'current':status.textContent=`G² Dash está actualizado (${result.currentVersion}).`;break;
+      case 'available':
+        status.textContent=`Hay una versión nueva: ${result.version}.`;
+        try{
+          if(localStorage.getItem('g2dash.update.notified')!==result.version){
+            localStorage.setItem('g2dash.update.notified',result.version);
+            showToast(`G² Dash ${result.version} está disponible. Abre Ajustes para actualizar.`);
+          }
+        }catch(_){}
+        break;
+      case 'no_release':status.textContent='Todavía no hay una versión publicada.';break;
+      case 'downloading':status.textContent=`Descargando G² Dash ${result.version}…`;break;
+      case 'permission_required':status.textContent='Permite a G² Dash instalar actualizaciones en los ajustes de Android.';break;
+      case 'install_prompt':status.textContent=`Confirma la actualización ${result.version} en Android.`;break;
+      case 'error':status.textContent=result.message||'No se pudo revisar la actualización. Intenta de nuevo con Internet.';break;
+      default:status.textContent='';
+    }
+  };
   function updateClock(){
     const now = new Date();
     $('#clock').textContent = new Intl.DateTimeFormat('es-MX',{hour:'2-digit',minute:'2-digit',hour12:false}).format(now);
@@ -216,6 +240,14 @@
       case 'home-settings':
         if(window.G2Android?.openHomeSettings)window.G2Android.openHomeSettings();
         else showToast('Disponible únicamente en el APK Android');
+        break;
+      case 'check-updates':
+        if(window.G2Android?.checkForUpdates){$('#updateStatus').textContent='Buscando versiones…';window.G2Android.checkForUpdates();}
+        else showToast('La búsqueda automática está disponible en el APK Android');
+        break;
+      case 'install-update':
+        if(window.G2Android?.installUpdate)window.G2Android.installUpdate();
+        else showToast('La instalación automática está disponible en el APK Android');
         break;
       case 'close-settings':closeScreen('#settingsVeil');break;
       case 'vehicle':window.G2Concept?.close();openScreen('#vehicleVeil');break;

@@ -14,6 +14,7 @@ modelo 360° del Ibiza: mantiene las fotografías originales del vehículo.
 - El mapa dentro del panel sigue siendo ilustrativo.
 - Música: autorización opcional a sesiones multimedia locales, título, artista,
   portada, progreso y controles disponibles. Consulta [MÚSICA](MUSICA.md).
+- Actualizaciones: revisión cada 12 horas con descarga e instalación confirmada por Android. Consulta [ACTUALIZACIONES.md](ACTUALIZACIONES.md) para configurar la firma estable y conocer la migración inicial.
 - Pantalla de bienvenida SEAT → G² DASH → «Buenas Noches Doble G, ¿A dónde iremos hoy?» → tablero. Saludo dinámico y botón Omitir.
 - Ajustes → Ver bienvenida para repetirla.
 - G² Dash es una **opción HOME**, pero la selección es manual y reversible; nunca se activa automáticamente.
@@ -29,10 +30,10 @@ Desde la raíz del repositorio:
 APK generado: android/app/build/outputs/apk/debug/app-debug.apk
 
 También se puede compilar en GitHub Actions desde el flujo "G² Dash · Android APK".
-Los APK de CI son de prueba, firmados automáticamente con clave de depuración.
-Si se descarga otra versión firmada con una clave diferente, Android puede
-exigir desinstalar la anterior (se perderían sus ajustes locales). Para
-distribuir actualizaciones estables se necesitará una clave de firma propia.
+Los APK del flujo de CI siguen siendo de prueba y usan una clave de depuración.
+La publicación estable usa una clave propia; consulta
+[ACTUALIZACIONES.md](ACTUALIZACIONES.md). Cambiar la firma puede exigir
+desinstalar el APK previo y borrar sus ajustes locales.
 
 ## Seguridad y privacidad
 - El contenido local se sirve con WebViewAssetLoader en un origen HTTPS interno.

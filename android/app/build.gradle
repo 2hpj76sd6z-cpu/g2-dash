@@ -2,6 +2,13 @@ plugins {
     id 'com.android.application'
 }
 
+def g2VersionCode = (project.findProperty('g2ReleaseVersionCode') ?: '15').toInteger()
+def g2VersionName = project.findProperty('g2ReleaseVersionName') ?: '0.5.5-dev'
+def g2SigningStoreFile = System.getenv('G2_SIGNING_STORE_FILE')
+def g2SigningStorePassword = System.getenv('G2_SIGNING_STORE_PASSWORD')
+def g2SigningKeyAlias = System.getenv('G2_SIGNING_KEY_ALIAS')
+def g2SigningKeyPassword = System.getenv('G2_SIGNING_KEY_PASSWORD')
+
 android {
     namespace 'com.dobleg.g2dash'
     compileSdk 35
@@ -10,13 +17,25 @@ android {
         applicationId 'com.dobleg.g2dash'
         minSdk 23
         targetSdk 35
-        versionCode 15
-        versionName '0.5.5-dev'
+        versionCode g2VersionCode
+        versionName g2VersionName
+    }
+
+    signingConfigs {
+        release {
+            if (g2SigningStoreFile) {
+                storeFile file(g2SigningStoreFile)
+                storePassword g2SigningStorePassword
+                keyAlias g2SigningKeyAlias
+                keyPassword g2SigningKeyPassword
+            }
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
         }
     }
 

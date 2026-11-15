@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <!-- Optional, requested from the user only when touching the GPS control. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -38,6 +41,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <receiver android:name=".G2InstallReceiver" android:exported="false" />
         <!-- Optional access to active music sessions; never reads notifications. -->
         <service
             android:name=".G2MediaListener"
