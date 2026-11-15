@@ -47,6 +47,16 @@ jobs:
           G2_DASH_URL: http://127.0.0.1:8765/
           G2_COMMIT: ${{ github.sha }}
         run: node scripts/capture-ui.mjs
+      - name: Subir capturas por versión — independientes de otros commits
+        uses: actions/upload-artifact@v4
+        with:
+          name: G2-Dash-capturas-${{ github.sha }}
+          path: |
+            docs/capturas/actual/*.png
+            docs/capturas/actual/meta.json
+            docs/capturas/actual/qa-layout.json
+          if-no-files-found: error
+          retention-days: 90
       - name: Adjuntar capturas al repositorio
         shell: bash
         run: |
