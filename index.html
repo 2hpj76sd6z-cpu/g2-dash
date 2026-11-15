@@ -4,13 +4,14 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"/>
 <meta name="theme-color" content="#111826"/>
-<title>G² Dash · v0.5.2</title>
+<title>G² Dash · v0.5.3</title>
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="brand.css"/>
 <link rel="stylesheet" href="widgets.css"/>
 <link rel="stylesheet" href="ibiza-cutout.css"/>
 <link rel="stylesheet" href="media.css"/>
 <link rel="stylesheet" href="music-detail.css"/>
+<link rel="stylesheet" href="airplay.css"/>
 <link rel="stylesheet" href="adaptive.css"/>
 <link rel="stylesheet" href="intro.css"/>
 <link rel="stylesheet" href="ibiza360.css"/>
@@ -33,7 +34,7 @@
     <div class="startupStatusCard">
       <div class="startupStatusTop">
         <span class="startupStatusEyebrow"><i></i> G² DASH · ESTADO DEL PROYECTO</span>
-        <span class="startupStatusVersion">v0.5.2</span>
+        <span class="startupStatusVersion">v0.5.3</span>
       </div>
       <h1>Tu tablero va así.</h1>
       <p class="startupStatusLead">Lo que ya está listo y lo que sigue para tu Ibiza.</p>
@@ -88,7 +89,7 @@
         <div class="underLine"></div>
       </div>
       <div class="musicPanel glass">
-        <div class="trackRow"><div class="album"><svg class="icon"><use href="#i-music"/></svg><img class="albumArtImage" id="albumArt" alt="Portada del álbum" hidden/></div><div class="trackText"><strong id="songName">Sin música activa</strong><span id="songArtist">Abre tu reproductor</span><button id="musicPermission" class="musicPermission" data-action="music-access" hidden>Activar acceso a música</button></div><button class="musicExpand" data-action="music-detail" title="Ampliar reproductor" aria-label="Abrir reproductor ampliado"><svg class="icon"><use href="#i-expand"/></svg></button><button class="smallAction" data-action="music" title="Abrir aplicación de música" aria-label="Abrir aplicación de música"><svg class="icon"><use href="#i-external"/></svg></button></div>
+        <div class="trackRow"><div class="album"><svg class="icon"><use href="#i-music"/></svg><img class="albumArtImage" id="albumArt" alt="Portada del álbum" hidden/></div><div class="trackText"><strong id="songName">Sin música activa</strong><span id="songArtist">Abre tu reproductor</span><button id="musicPermission" class="musicPermission" data-action="music-access" hidden>Activar acceso a música</button></div><button type="button" class="airplayShortcut" data-action="airplay-setup" title="Conectar iPhone por AirPlay Wi-Fi">AIRPLAY</button><button class="musicExpand" data-action="music-detail" title="Ampliar reproductor" aria-label="Abrir reproductor ampliado"><svg class="icon"><use href="#i-expand"/></svg></button><button class="smallAction" data-action="music" title="Abrir aplicación de música" aria-label="Abrir aplicación de música"><svg class="icon"><use href="#i-external"/></svg></button></div>
         <div class="songMeta"><div class="mediaStatusRow"><span class="mediaStatus"><i class="mediaDot" aria-hidden="true"></i><span id="musicStatus">Sin conectar</span></span><span class="mediaSource" id="musicSource">MODO DEMO</span></div><div class="timelineBar"><span id="trackProgress"></span></div><div class="trackTimes"><span id="musicCurrent">00:00</span><span id="musicDuration">00:00</span></div></div>
         <div class="musicControls">
           <button data-action="demo-shuffle" disabled aria-label="Aleatorio (pendiente)" title="Aleatorio: función pendiente"><svg class="icon"><use href="#i-shuffle"/></svg></button>
@@ -134,7 +135,7 @@
     <button data-action="radio"><svg class="icon"><use href="#i-radio"/></svg><span>Radio</span></button>
     <button data-action="open-settings"><svg class="icon"><use href="#i-settings"/></svg><span>Ajustes</span></button>
   </nav>
-  <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.5.2</span></footer>
+  <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.5.3</span></footer>
 </div>
 
 <div class="screenveil" id="settingsVeil" hidden><aside class="settings glass" role="dialog" aria-modal="true" aria-label="Personalización"><header><div><h2>Personalización</h2><p>G² Dash · ajustes visuales</p></div><button class="closeBtn" data-action="close-settings" aria-label="Cerrar ajustes"><svg class="icon"><use href="#i-x"/></svg></button></header>
@@ -236,8 +237,33 @@
     <div id="musicDetailHint" class="musicDetailHint" aria-live="polite">No hay sesión musical activa</div>
    </div>
   </div>
-  <footer class="musicDetailFooter"><span>Se controla la música que reproduce este estéreo; Wi-Fi del teléfono pendiente</span><button type="button" id="musicDetailPermission" hidden>Activar acceso multimedia</button></footer>
+  <footer class="musicDetailFooter"><span>Audio local o recibido por un receptor AirPlay compatible · Requiere conexión real</span><button type="button" class="airplayShortcut" data-action="airplay-setup">Conectar iPhone</button><button type="button" id="musicDetailPermission" hidden>Activar acceso multimedia</button></footer>
  </section>
+</div>
+<div class="screenveil airplayVeil" id="airplayVeil" hidden>
+  <section class="airplayModal" role="dialog" aria-modal="true" aria-labelledby="airplayHeading">
+    <header class="airplayHeader">
+      <span class="airplayLogo" aria-hidden="true">◉</span>
+      <div class="airplayHeaderText"><h2 id="airplayHeading">Conectar música por Wi-Fi</h2><p>G² DASH · IPHONE / AIRPLAY · AUDIO REAL</p></div>
+      <button type="button" class="closeBtn" id="airplayClose" aria-label="Cerrar conexión AirPlay"><svg class="icon"><use href="#i-x"/></svg></button>
+    </header>
+    <div class="airplayStatus" id="airplayStatus" data-state="unsupported" aria-live="polite">
+      <span class="airplayStatusDot" aria-hidden="true"></span>
+      <div class="airplayStatusText"><strong id="airplayStatusTitle">Comprobando Android…</strong><span id="airplayStatusDetail">Necesitamos un receptor AirPlay instalado en el estéreo.</span></div>
+    </div>
+    <div class="airplaySteps" aria-label="Pasos de conexión">
+      <div class="airplayStep"><b>01</b><div><strong>Enciende el punto de acceso del estéreo</strong><p>Conecta tu iPhone a esa red Wi-Fi. Ambos dispositivos deben comunicarse dentro de la misma red.</p></div></div>
+      <div class="airplayStep"><b>02</b><div><strong>Abre el receptor AirPlay en Android</strong><p>Utilizamos AirPlay Receiver &amp; Server, de jqssun. Configúralo y activa el receptor; recomendamos habilitar PIN.</p></div></div>
+      <div class="airplayStep"><b>03</b><div><strong>Envía música desde tu iPhone</strong><p>En Música u otra app compatible, abre el selector de salida AirPlay y selecciona el nombre anunciado por el receptor.</p></div></div>
+      <div class="airplayStep"><b>04</b><div><strong>Regresa a G² Dash</strong><p>Activa acceso multimedia si aún no lo has autorizado. G² Dash mostrará título, carátula y controles que publique el receptor.</p></div></div>
+    </div>
+    <div class="airplayActions">
+      <button type="button" class="primary" id="airplayLaunch" hidden>Abrir receptor AirPlay</button>
+      <button type="button" class="primary" id="airplayInstall" hidden>Ver instalación oficial</button>
+      <button type="button" id="airplayCheck">Comprobar receptor</button>
+    </div>
+    <div class="airplayFoot">La app receptora es independiente de G² Dash y se instala solo si tú lo autorizas. AirPlay necesita comunicación local entre iPhone y estéreo; un punto de acceso que aísla dispositivos podría impedirlo. Para Spotify o Apple Music, el teléfono puede necesitar datos móviles. Esta integración no garantiza compatibilidad de contenido protegido ni carátulas en todos los reproductores.</div>
+  </section>
 </div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <!-- All icons are locally bundled, no external assets or icon fonts -->
@@ -247,6 +273,7 @@
 <script src="intro.js"></script>
 <script src="apps.js"></script>
 <script src="music-detail.js"></script>
+<script src="airplay.js"></script>
 <script src="app.js"></script>
 <script src="ibiza360.js"></script>
 </body>
