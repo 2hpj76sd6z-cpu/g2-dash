@@ -1,0 +1,46 @@
+/* G² Dash v0.5.8: layout inteligente sin sustituir recursos del Ibiza. */
+/* Mapa central más protagonista y controles legibles en 1280×720. */
+.dashboard[data-map-side="center"]{grid-template-columns:60px minmax(0,.94fr) minmax(0,1.85fr) minmax(0,1.03fr)}
+.dashboard[data-map-side="center"] .mapPanel{grid-column:3;grid-row:1}
+.dashboard[data-map-side="center"] .vehiclePanel{grid-column:4;grid-row:1}
+.dashboard[data-map-side="right"]{grid-template-columns:60px minmax(0,.94fr) minmax(0,1.03fr) minmax(0,1.85fr)}
+.dashboard[data-map-side="right"] .mapPanel{grid-column:4;grid-row:1}
+.dashboard[data-map-side="right"] .vehiclePanel{grid-column:3;grid-row:1}
+.dashboard[data-map-size="balanced"][data-map-side="center"]{grid-template-columns:60px minmax(0,1fr) minmax(0,1.42fr) minmax(0,1.1fr)}
+.dashboard[data-map-size="balanced"][data-map-side="right"]{grid-template-columns:60px minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.42fr)}
+.dashboard .leftStack{grid-column:2;grid-row:1}
+.mapPanel .destination{min-height:45px}
+.mapPanel .destination input{font-size:clamp(13px,1.3vw,16px)}
+/* Original album art retains its natural ratio: no forced square and no cropping. */
+.musicPanel .album{width:clamp(108px,11vw,160px);aspect-ratio:4/3;border-radius:17px;overflow:hidden}
+.musicPanel .album .albumArtImage{object-fit:contain;object-position:center;border-radius:inherit;background:rgba(8,16,25,.25)}
+.musicPanel .trackRow{align-items:center}
+.musicPanel .trackText strong{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.25}
+.musicDetailCover{max-width:370px;aspect-ratio:4/3}
+.musicDetailCover>img{object-fit:contain}
+.layoutEditor{display:flex;flex-direction:column;gap:10px;border:1px solid rgba(124,228,166,.25);border-radius:14px;padding:13px;background:rgba(12,37,30,.35)}
+.layoutEditor h3{font-size:14px;margin:0;color:#d5fbe5}
+.layoutEditor .hint{margin:0;font-size:11px}
+.layoutEditorGroup{display:flex;flex-direction:column;gap:7px}
+.layoutEditorGroup>strong{font-size:12px}
+.layoutEditorChoices,.layoutMetricChoices{display:flex;flex-wrap:wrap;gap:7px}
+.layoutEditor button{min-height:37px;border:1px solid rgba(200,236,218,.28);border-radius:10px;background:rgba(255,255,255,.055);padding:7px 10px;color:inherit;font-size:11px}
+.layoutEditor button.selected{border-color:#74dba7;background:rgba(48,149,98,.30);color:#e4ffed}
+.layoutMetricChoices button{flex:1 1 100px}
+.layoutReset{align-self:start}
+.layoutEditorStatus{line-height:1.4}
+@media(max-width:1149px){
+.dashboard[data-map-side="center"]{grid-template-columns:50px minmax(0,.94fr) minmax(0,1.75fr) minmax(0,1.03fr)}
+.dashboard[data-map-side="right"]{grid-template-columns:50px minmax(0,.94fr) minmax(0,1.03fr) minmax(0,1.75fr)}
+.dashboard[data-map-size="balanced"][data-map-side="center"]{grid-template-columns:50px minmax(0,1fr) minmax(0,1.40fr) minmax(0,1.1fr)}
+.dashboard[data-map-size="balanced"][data-map-side="right"]{grid-template-columns:50px minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.4fr)}
+.musicPanel .album{width:clamp(76px,9vw,110px);border-radius:13px}
+}
+@media(max-width:980px){
+.dashboard[data-map-side="center"]{grid-template-columns:44px minmax(0,.96fr) minmax(0,1.65fr) minmax(0,1.05fr)}
+.dashboard[data-map-side="right"]{grid-template-columns:44px minmax(0,.96fr) minmax(0,1.05fr) minmax(0,1.65fr)}
+.dashboard[data-map-size="balanced"][data-map-side="center"]{grid-template-columns:44px minmax(0,1fr) minmax(0,1.35fr) minmax(0,1.08fr)}
+.dashboard[data-map-size="balanced"][data-map-side="right"]{grid-template-columns:44px minmax(0,1fr) minmax(0,1.08fr) minmax(0,1.35fr)}
+.musicPanel .album{width:clamp(58px,8.5vw,85px)}
+}
+@media(max-height:620px){.musicPanel .album{width:min(100px,9vw)}.musicDetailCover{max-width:220px}}
