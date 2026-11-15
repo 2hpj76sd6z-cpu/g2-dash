@@ -177,7 +177,7 @@ final class G2UpdateManager {
         try {
             int status = connection.getResponseCode();
             if (status < 200 || status >= 300) throw new IllegalStateException("Download failed");
-            long declaredSize = connection.getContentLengthLong();
+            long declaredSize = connection.getContentLength();
             if (declaredSize > MAX_APK_BYTES) throw new IllegalStateException("APK too large");
 
             File directory = new File(activity.getCacheDir(), "updates");
