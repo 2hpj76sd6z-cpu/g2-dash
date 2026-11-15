@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"/>
+<meta name="theme-color" content="#111826"/>
+<title>G² Dash · v0.2</title>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body data-mode="night">
+<div class="wallpaper" id="wallpaper" aria-hidden="true"></div><div class="wallShade" aria-hidden="true"></div>
+<div id="app" class="app">
+  <header class="topline">
+    <button type="button" class="iconButton hamburger" data-action="open-settings" title="Abrir ajustes" aria-label="Abrir ajustes"><svg class="icon"><use href="#i-menu"/></svg></button>
+    <div class="brand" aria-label="G al cuadrado Dash"><span>G<sup>2</sup></span><em>DASH</em></div>
+    <span class="header-rule"></span>
+    <div class="header-date" id="dateShort">Fecha</div>
+    <div class="header-right">
+      <span class="deviceTag" id="deviceStatus">MODO DEMO</span>
+      <svg class="icon statusIcon"><use href="#i-wifi"/></svg><svg class="icon statusIcon"><use href="#i-bluetooth"/></svg>
+      <button class="iconButton" data-action="gps" aria-label="Activar GPS" title="Obtener velocidad por GPS"><svg class="icon"><use href="#i-map-pin"/></svg></button>
+      <button class="iconButton" data-action="open-settings" aria-label="Personalizar"><svg class="icon"><use href="#i-settings"/></svg></button>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <nav class="sidebar glass" aria-label="Menú lateral">
+      <button class="selected" data-action="home" title="Inicio" aria-label="Inicio"><svg class="icon"><use href="#i-home"/></svg></button>
+      <button data-action="navigation" title="Navegación" aria-label="Navegación"><svg class="icon"><use href="#i-compass"/></svg></button>
+      <button data-action="music" title="Música" aria-label="Música"><svg class="icon"><use href="#i-music"/></svg></button>
+      <button data-action="phone" title="Teléfono" aria-label="Teléfono"><svg class="icon"><use href="#i-phone"/></svg></button>
+      <button data-action="apps" title="Aplicaciones" aria-label="Aplicaciones"><svg class="icon"><use href="#i-apps"/></svg></button>
+      <button data-action="open-settings" title="Ajustes" aria-label="Ajustes"><svg class="icon"><use href="#i-settings"/></svg></button>
+    </nav>
+
+    <section class="leftStack" aria-label="Reloj y música">
+      <div class="clockPanel glass">
+        <div class="digitalClock" id="clock">--:--</div>
+        <div class="calendarRow"><svg class="icon"><use href="#i-calendar"/></svg><span id="dateLong">Fecha actual</span></div>
+        <div class="underLine"></div>
+      </div>
+      <div class="musicPanel glass">
+        <div class="trackRow"><div class="album"><svg class="icon"><use href="#i-music"/></svg></div><div class="trackText"><strong id="songName">Sin reproducir</strong><span id="songArtist">Abre tu aplicación de música</span></div><button class="smallAction" data-action="music" title="Abrir aplicación de música" aria-label="Abrir aplicación de música"><svg class="icon"><use href="#i-external"/></svg></button></div>
+        <div class="songMeta"><div class="timelineBar"><span id="trackProgress"></span></div><div class="trackTimes"><span>00:00</span><span>00:00</span></div></div>
+        <div class="musicControls">
+          <button data-action="demo-shuffle" aria-label="Aleatorio"><svg class="icon"><use href="#i-shuffle"/></svg></button>
+          <button data-action="demo-prev" aria-label="Anterior"><svg class="icon"><use href="#i-prev"/></svg></button>
+          <button class="playButton" id="play" data-action="demo-play" aria-label="Reproducir o pausar"><svg class="icon"><use href="#i-play"/></svg></button>
+          <button data-action="demo-next" aria-label="Siguiente"><svg class="icon"><use href="#i-next"/></svg></button>
+          <button data-action="demo-repeat" aria-label="Repetir"><svg class="icon"><use href="#i-repeat"/></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="mapPanel glass" aria-label="Vista preliminar del mapa">
+      <div class="mapArtwork" id="mapArtwork" aria-hidden="true">
+        <svg viewBox="0 0 620 540" preserveAspectRatio="xMidYMid slice" role="presentation"><defs><pattern id="blocks" x="0" y="0" width="85" height="65" patternUnits="userSpaceOnUse" patternTransform="rotate(-23)"><rect width="85" height="65" fill="#162334"/><path d="M0 0H85 M0 0V65 M0 65H85" fill="none" stroke="#35485f" stroke-width="8"/><path d="M18 9V50H65V8M10 30H75M44 8V55" stroke="#26394c" stroke-width="1.5" fill="none"/></pattern></defs><rect width="620" height="540" fill="url(#blocks)"/><g stroke="#43566b" stroke-width="7" opacity=".35"><path d="M-30 130 670 380 M-100 470 690 100 M175 -80 480 660"/></g><path d="M110 590 485 -50" stroke="#2760a6" stroke-width="17" fill="none" opacity=".62"/><path d="M110 590 485 -50" stroke="#5894e2" stroke-width="5" fill="none"/><path d="M308 226l-18 41 18-7 18 7z" fill="#84baff" stroke="#deedff" stroke-width="4"/></svg>
+      </div>
+      <div class="mapBar"><div class="destination"><svg class="icon"><use href="#i-search"/></svg><input id="destination" aria-label="Buscar destino" placeholder="Buscar destino..." autocomplete="off"/><button class="searchGo" data-action="navigation" title="Abrir en mapas" aria-label="Abrir en mapas"><svg class="icon"><use href="#i-arrow-right"/></svg></button></div><button class="mapCircle" data-action="navigation" title="Abrir navegación" aria-label="Abrir navegación"><svg class="icon"><use href="#i-compass"/></svg></button></div>
+      <div class="zoomStack"><button aria-label="Acercar mapa ilustrativo" data-action="zoom-in">+</button><button aria-label="Alejar mapa ilustrativo" data-action="zoom-out">−</button></div>
+      <div class="mapBottom"><div class="where"><svg class="icon pinIcon"><use href="#i-map-pin"/></svg><div><strong>Mapa de demostración</strong><span>Abre tu navegador para navegar</span></div></div><button class="mapCircle" data-action="gps" title="Activar GPS" aria-label="GPS"><svg class="icon"><use href="#i-target"/></svg></button></div>
+      <span class="demoStamp">MAPA ILUSTRATIVO · NO MUESTRA UBICACIÓN REAL</span>
+    </section>
+
+    <section class="vehiclePanel glass" aria-label="Mi Ibiza">
+      <div class="vehHeading"><div><strong>Mi Ibiza</strong><small>SEAT 6J · 5 puertas</small></div><button class="smallAction" data-action="vehicle" title="Ver fotografías" aria-label="Ver fotografías"><svg class="icon"><use href="#i-expand"/></svg></button></div>
+      <button class="carView" id="vehicleView" data-action="vehicle" title="Ver mi Ibiza" aria-label="Ver fotografías originales del Ibiza">
+        <img src="assets/ibiza_frente_original.webp" id="vehiclePhoto" alt="Fotografía original del SEAT Ibiza blanco con boca negra, rines negros y techo negro"/>
+        <span class="carChip" id="carChip">Fotografía real · frontal</span>
+      </button>
+      <div class="photoDots"><button class="on" id="carDot0" data-action="car-front" title="Frente" aria-label="Ver foto frontal"></button><button id="carDot1" data-action="car-rear" title="Trasera" aria-label="Ver foto trasera"></button><span>2 fotografías · no 360°</span></div>
+      <div class="vehicleStats">
+        <div><svg class="icon"><use href="#i-fuel"/></svg><strong>—</strong><span>Autonomía*</span></div>
+        <div><svg class="icon"><use href="#i-speed"/></svg><strong id="speed">— <small>km/h</small></strong><span id="speedLabel">Velocidad GPS</span></div>
+        <div><svg class="icon"><use href="#i-battery"/></svg><strong>—</strong><span>Voltaje OBD*</span></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottomDock" aria-label="Accesos directos">
+    <button data-action="navigation"><svg class="icon"><use href="#i-compass"/></svg><span>Navegación</span></button>
+    <button data-action="music"><svg class="icon"><use href="#i-music"/></svg><span>Música</span></button>
+    <button data-action="phone"><svg class="icon"><use href="#i-phone"/></svg><span>Teléfono</span></button>
+    <button data-action="apps"><svg class="icon"><use href="#i-apps"/></svg><span>Apps</span></button>
+    <button data-action="bluetooth"><svg class="icon"><use href="#i-bluetooth"/></svg><span>Bluetooth</span></button>
+    <button data-action="radio"><svg class="icon"><use href="#i-radio"/></svg><span>Radio</span></button>
+    <button data-action="open-settings"><svg class="icon"><use href="#i-settings"/></svg><span>Ajustes</span></button>
+  </nav>
+  <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.2</span></footer>
+</div>
+
+<div class="screenveil" id="settingsVeil" hidden><aside class="settings glass" role="dialog" aria-modal="true" aria-label="Personalización"><header><div><h2>Personalización</h2><p>G² Dash · ajustes visuales</p></div><button class="closeBtn" data-action="close-settings" aria-label="Cerrar ajustes"><svg class="icon"><use href="#i-x"/></svg></button></header>
+  <div class="settingsBody">
+    <label>Modo de apariencia</label><div class="segments"><button data-theme="auto" class="selected">Automático</button><button data-theme="night">Noche</button><button data-theme="day">Día</button></div>
+    <label>Fondo de pantalla</label><div class="wallChoices"><button data-wall="dusk" class="selected"><span class="p-dusk"></span>Atardecer</button><button data-wall="blue"><span class="p-blue"></span>Azul humo</button><button data-wall="gray"><span class="p-gray"></span>Grafito</button></div>
+    <label for="chooseWall">Tu propia imagen</label><input type="file" id="chooseWall" accept="image/*"/><p class="hint">La imagen se procesa localmente para ahorrar memoria y se guarda solo en este dispositivo.</p>
+    <label for="blur">Difuminado del fondo <output id="blurValue">14 px</output></label><input id="blur" type="range" min="0" max="32" step="1" value="14"/>
+    <label for="opacity">Opacidad de paneles <output id="opacityValue">68%</output></label><input id="opacity" type="range" min="28" max="94" step="1" value="68"/>
+    <label>Color de detalle</label><div class="accentPicker"><button data-accent="steel" class="selected" aria-label="Plata" title="Plata"></button><button data-accent="blue" aria-label="Azul frío" title="Azul frío"></button><button data-accent="warm" aria-label="Arena" title="Arena"></button></div>
+    <div class="settingActions"><button data-action="reset-settings">Restablecer diseño</button><button data-action="fullscreen">Pantalla completa</button></div>
+    <div class="disclaimer">El mapa es ilustrativo. La autonomía y el voltaje del coche requieren conexión OBD. Los controles de música son de demostración. El Ibiza utiliza fotografías reales; las placas se ocultan en la versión pública.</div>
+  </div>
+</aside></div>
+
+<div class="screenveil" id="vehicleVeil" hidden><div class="vehicleModal glass" role="dialog" aria-modal="true" aria-label="Fotos de mi Ibiza"><header><div><h2>Mi Ibiza original</h2><p>Fotografías reales · placas difuminadas para repositorio público</p></div><button class="closeBtn" data-action="close-vehicle" aria-label="Cerrar"><svg class="icon"><use href="#i-x"/></svg></button></header><div class="modalPhoto"><img id="modalCar" src="assets/ibiza_frente_original.webp" alt="Foto original del SEAT Ibiza"/></div><div class="modalActions"><button data-action="car-prev">‹ Vista anterior</button><span id="modalLabel">Frontal</span><button data-action="car-next">Vista siguiente ›</button></div><div class="disclaimer">Giro 360° pendiente de modelo 3D correcto. No se simula un giro falso.</div></div></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<!-- All icons are locally bundled, no external assets or icon fonts -->
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg"><defs>
+<symbol id="i-menu" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></symbol><symbol id="i-home" viewbox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></symbol><symbol id="i-compass" viewbox="0 0 24 24"><path d="m3 10 18-7-7 18-2.9-7.1z"></path></symbol><symbol id="i-music" viewbox="0 0 24 24"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></symbol><symbol id="i-phone" viewbox="0 0 24 24"><path d="M7 3H4a2 2 0 0 0-2 2c0 9.4 7.6 17 17 17a2 2 0 0 0 2-2v-3l-5-3-3 3a15 15 0 0 1-6-6l3-3z"></path></symbol><symbol id="i-apps" viewbox="0 0 24 24"><rect height="7" rx="1" width="7" x="3" y="3"></rect><rect height="7" rx="1" width="7" x="14" y="3"></rect><rect height="7" rx="1" width="7" x="3" y="14"></rect><rect height="7" rx="1" width="7" x="14" y="14"></rect></symbol><symbol id="i-settings" viewbox="0 0 24 24"><path d="M10 2h4l1 3 2 1 3-1 2 4-2 2v2l2 2-2 4-3-1-2 1-1 3h-4l-1-3-2-1-3 1-2-4 2-2v-2l-2-2 2-4 3 1 2-1z"></path><circle cx="12" cy="12" r="3"></circle></symbol><symbol id="i-bluetooth" viewbox="0 0 24 24"><path d="M6 7 18 17l-6 5V2l6 5L6 17"></path></symbol><symbol id="i-radio" viewbox="0 0 24 24"><rect height="12" rx="2" width="18" x="3" y="9"></rect><path d="m5 9 12-6M6 14h8M6 17h7"></path><circle cx="17" cy="16" r="2"></circle></symbol><symbol id="i-camera" viewbox="0 0 24 24"><path d="M5 7h4l2-3h4l2 3h2a2 2 0 0 1 2 2v10H3V9a2 2 0 0 1 2-2z"></path><circle cx="12" cy="13" r="4"></circle></symbol><symbol id="i-car" viewbox="0 0 24 24"><path d="m5 11 2-5h10l2 5 2 2v6h-3v-2H6v2H3v-6zM4 11h16M7 14h2M15 14h2"></path></symbol><symbol id="i-calendar" viewbox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="5"></rect><path d="M7 2v6M17 2v6M3 10h18M8 14h2M13 14h2"></path></symbol><symbol id="i-play" viewbox="0 0 24 24"><path d="m8 5 11 7-11 7z" fill="currentColor" stroke="none"></path></symbol><symbol id="i-pause" viewbox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke-width="4"></path></symbol><symbol id="i-next" viewbox="0 0 24 24"><path d="m4 6 10 6-10 6zM18 5v14"></path></symbol><symbol id="i-prev" viewbox="0 0 24 24"><path d="m20 6-10 6 10 6zM6 5v14"></path></symbol><symbol id="i-shuffle" viewbox="0 0 24 24"><path d="M3 6h4c5 0 6 12 11 12h3m-3-3 3 3-3 3M3 18h4c2 0 3-2 4-4M13 9c1-2 2-3 5-3h3m-3-3 3 3-3 3"></path></symbol><symbol id="i-repeat" viewbox="0 0 24 24"><path d="M3 11V9a4 4 0 0 1 4-4h13m-3-3 3 3-3 3M21 13v2a4 4 0 0 1-4 4H4m3-3-3 3 3 3"></path></symbol><symbol id="i-search" viewbox="0 0 24 24"><circle cx="10" cy="10" r="6"></circle><path d="m15 15 6 6"></path></symbol><symbol id="i-map-pin" viewbox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></symbol><symbol id="i-arrow" viewbox="0 0 24 24"><path d="m12 2 7 19-7-5-7 5z"></path></symbol><symbol id="i-wifi" viewbox="0 0 24 24"><path d="M2 8a16 16 0 0 1 20 0M5 12a11 11 0 0 1 14 0M8 16a6 6 0 0 1 8 0"></path><circle cx="12" cy="20" fill="currentColor" r="1"></circle></symbol><symbol id="i-fuel" viewbox="0 0 24 24"><rect height="17" rx="1" width="11" x="3" y="4"></rect><path d="M5 8h7M14 9l4 2 2 5v3a2 2 0 0 1-4 0v-4"></path></symbol><symbol id="i-speed" viewbox="0 0 24 24"><path d="M3 19a10 10 0 1 1 18 0M12 14l5-5"></path><circle cx="12" cy="15" r="1"></circle></symbol><symbol id="i-battery" viewbox="0 0 24 24"><rect height="12" rx="2" width="17" x="3" y="6"></rect><path d="M22 10v4M6 12h5"></path></symbol><symbol id="i-image" viewbox="0 0 24 24"><rect height="18" rx="2" width="18" x="3" y="3"></rect><circle cx="8" cy="9" r="2"></circle><path d="m3 18 6-5 4 3 3-5 5 6"></path></symbol>
+<symbol id="i-external" viewBox="0 0 24 24"><path d="M14 3h7v7M10 14 21 3M20 13v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></symbol><symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h16m-7-7 7 7-7 7"/></symbol><symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/></symbol><symbol id="i-expand" viewBox="0 0 24 24"><path d="M9 3H3v6M3 3l7 7M15 21h6v-6M21 21l-7-7"/></symbol></defs></svg>
+<script src="app.js"></script>
+</body>
+</html>
