@@ -2,8 +2,8 @@
   "project": "G² Dash",
   "note": "Capturas verificables de HTML/CSS/JS reales; mapa y música ilustrativos; velocidad GPS y OBD no simulados.",
   "viewport": "1280x720",
-  "source_commit": "ea6057e193164c975cb965eafc8afe1b5de87258",
-  "generated_at": "2026-11-15T17:26:01.107Z",
+  "source_commit": "a2b372ebbbea055aeb0df0b09e8a09cda820ad92",
+  "generated_at": "2026-11-15T23:20:31.103Z",
   "shots": [
     "00-arranque-seat-logo.png",
     "00b-arranque-saludo-doble-g.png",
