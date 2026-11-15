@@ -1,0 +1,50 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.dobleg.g2dash'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.dobleg.g2dash'
+        minSdk 23
+        targetSdk 35
+        versionCode 3
+        versionName '0.3.0-dev'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // Reuse the SAME approved dashboard files used by GitHub Pages.
+    // Generated in build/, without copying photos into Git history twice.
+    sourceSets {
+        main {
+            assets.srcDirs("$buildDir/generated/g2web")
+        }
+    }
+}
+
+tasks.register('bundleG2Web', Copy) {
+    from(rootProject.projectDir.parentFile) {
+        include 'index.html', 'style.css', 'app.js', 'assets/**'
+    }
+    into(layout.buildDirectory.dir('generated/g2web/www'))
+}
+
+tasks.named('preBuild').configure {
+    dependsOn(tasks.named('bundleG2Web'))
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.14.0'
+}

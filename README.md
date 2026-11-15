@@ -36,6 +36,17 @@ Interfaz automotriz minimalista con paneles translúcidos, personalización de f
 
 > **Aviso:** el mapa es una ilustración, no un mapa en tiempo real. Los campos de autonomía y voltaje permanecen vacíos hasta que exista una conexión real; no se inventan valores del vehículo. Los iconos de Wi-Fi y Bluetooth son decorativos en esta demostración web.
 
+## Aplicación Android (v0.3 — primera prueba)
+
+El código de la primera aplicación Android está en [android/](android/README.md).
+Conserva la apariencia de la demostración y las fotografías originales del Ibiza.
+Ofrece acceso nativo a aplicaciones instaladas, teléfono, Bluetooth, selección de fondos,
+y permite solicitar velocidad GPS con autorización del usuario. Es un APK de prueba,
+**no** sustituye todavía el launcher principal ni integra música/OBD en tiempo real.
+
+El flujo [Android APK](.github/workflows/android-apk.yml) compila un APK de depuración
+en GitHub Actions. Los artefactos aparecen en la pestaña **Actions** cuando el flujo termina correctamente.
+
 ## Probar localmente
 
 1. Descarga el repositorio como ZIP y descomprímelo.

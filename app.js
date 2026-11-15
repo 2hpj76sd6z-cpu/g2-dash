@@ -93,13 +93,13 @@
       case 'car-prev':photoChange(currentPhoto-1);break;
       case 'car-next':photoChange(currentPhoto+1);break;
       case 'gps':activateGps();break;
-      case 'navigation':openMap();break;
+      case 'navigation':if(window.G2Android)window.G2Android.openMap($('#destination').value.trim());else openMap();break;
       case 'zoom-in':case 'zoom-out':zoom=Math.max(.8,Math.min(1.8,zoom+(action==='zoom-in'?.1:-.1)));$('#mapArtwork').style.transform=`scale(${zoom})`;showToast('Zoom ilustrativo: no sustituye navegación real');break;
       case 'demo-play':demoPlay();break;
       case 'demo-shuffle':case 'demo-prev':case 'demo-next':case 'demo-repeat':showToast('Control musical de demostración; integración Android pendiente');break;
       case 'reset-settings':settings={...defaults};applySettings();save();showToast('Ajustes restablecidos');break;
       case 'fullscreen':if(document.fullscreenElement){document.exitFullscreen?.()}else{document.documentElement.requestFullscreen?.().catch(()=>showToast('Pantalla completa no disponible'))}break;
-      case 'phone':case 'apps':case 'bluetooth':case 'radio':case 'music':showToast('Acceso pendiente de integración nativa en Android');break;
+      case 'phone':case 'apps':case 'bluetooth':case 'radio':case 'music':if(window.G2Android)window.G2Android.openTarget(action);else showToast('Acceso pendiente de integración nativa en Android');break;
       default:showToast('Función en desarrollo');
     }
   }
@@ -130,5 +130,6 @@
   });
   $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();openMap()}});
   document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil')}});
+  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.3';}
   photoChange(0);applySettings();updateClock();setInterval(updateClock,20000);
 })();
