@@ -47,7 +47,7 @@ Wi-Fi remoto, OBD, launcher HOME y giro 360° se desarrollarán por separado.
 
 ## Paridad visual
 
-El paquete Android incluye `style.css`, `brand.css`, `widgets.css`, `ibiza-cutout.css`, `media.css`, el JavaScript y las imágenes de `assets/` para conservar los mismos ajustes y el Ibiza real que en GitHub Pages.
+El paquete Android incluye `style.css`, `brand.css`, `widgets.css`, `ibiza-cutout.css`, `media.css`, `adaptive.css`, el JavaScript y las imágenes de `assets/` para conservar los mismos ajustes y el Ibiza real que en GitHub Pages.
 
 ## Máscara real del Ibiza v0.4.2
 
