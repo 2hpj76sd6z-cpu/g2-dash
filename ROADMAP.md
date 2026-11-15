@@ -2,7 +2,7 @@
 
 ## Situación actual
 
-La versión **v0.4.5 (desarrollo)** actualiza la bienvenida con el estado real del proyecto: fotos del Ibiza y música local ya disponibles; conexión de música del teléfono por Wi‑Fi pendiente. La foto frontal completa sigue como vista inicial. La demo web y el APK siguen pendientes de validación en el estéreo físico. Ya están configurables el logotipo y el acabado ahumado de los widgets; Android puede leer la sesión musical local con permiso del usuario. Android permite elegir manualmente G² Dash como HOME, pero no lo configura por sí mismo. Falta validarlo en el estéreo físico.
+La versión **v0.5.0 (desarrollo)** ya integra el visor conceptual de 12 ángulos en web y APK. La foto frontal original permanece como vista principal, separada del concepto. Falta validar la aplicación en el Gearelec físico. La música del teléfono por Wi‑Fi, el mapa real, OBD y HOME definitivo siguen pendientes.
 
 | Versión | Objetivo | Estado |
 |---|---|---|
@@ -15,7 +15,8 @@ La versión **v0.4.5 (desarrollo)** actualiza la bienvenida con el estado real d
 | v0.4.3 | Emblema SEAT → saludo Doble G → tablero; selección HOME opcional | Implementado en código; probar encendido real |
 | v0.4.4 | Foto frontal completa por defecto; vista trasera y recorte transparente opcional | Implementada; comprobada en capturas; falta validar en el estéreo |
 | v0.4.5 | Bienvenida con saludo y resumen honesto de avances y siguientes pasos | Implementada en web y APK; captura real publicada |
-| v0.5 | Música desde el teléfono por Wi-Fi con protocolo o app complementaria | Pendiente de definir |
+| v0.5.0 | Galería conceptual del Ibiza: 12 vistas y controles táctiles | Integrada en web y APK; validar en Gearelec |
+| v0.5.1 | Música desde el teléfono por Wi-Fi con protocolo o app complementaria | Pendiente de definir |
 | v0.6 | Mapa real con proveedor seleccionado | Pendiente |
 | v0.7 | Integración OBD opcional para datos reales del vehículo | Pendiente |
 | v0.8 | Medir rendimiento en pantalla 1280 × 720 y estéreo con 2 GB de RAM | Pendiente |
@@ -26,6 +27,7 @@ La versión **v0.4.5 (desarrollo)** actualiza la bienvenida con el estado real d
 - **Marca:** G² verde, DASH blanco y línea verde; variantes APEX, PULSE y ORBIT.
 - **Widgets:** grafito, azul humo, verde humo o negro; opacidad y difuminado ajustables.
 - **Música local Android:** muestra metadatos y portada del reproductor que funciona en el estéreo, y envía reproducir/pausar, anterior y siguiente cuando el reproductor lo permite.
+- **Visor conceptual Ibiza:** 12 vistas WebP con flechas, miniaturas, selector por grados, deslizamiento y recorrido automático; marcado como propuesta visual, no modelo 3D.
 - **Capturas visuales:** el flujo de GitHub documenta la pantalla y cada sección después de cada subida a `main`.
 
 ## Revisión visual del Ibiza
@@ -34,13 +36,19 @@ La v0.4.4 abre el panel con la fotografía frontal completa del Ibiza, sin aplic
 
 ![Panel de Mi Ibiza con la foto frontal completa](docs/capturas/actual/06-mi-ibiza.png)
 
-### Bienvenida v0.4.5
+### Galería conceptual v0.5.0
 
-Al abrir G² Dash, la tercera pantalla resume el estado: fotos originales y música local están listas; la conexión musical del teléfono por Wi‑Fi sigue pendiente de definir. La secuencia dura aproximadamente 4.6 segundos y se puede omitir.
+El botón **12 VISTAS** abre la propuesta aprobada con miniaturas, selector, deslizamiento y recorrido opcional. Son ilustraciones; no son fotos reales del vehículo ni una reconstrucción geométrica.
 
-![Resumen v0.4.5 al abrir](docs/capturas/actual/00c-arranque-estado-v045.png)
+![Galería conceptual integrada](docs/capturas/actual/17-ibiza-conceptual-12-vistas.png)
 
-[Ver comparación v0.4.4](docs/capturas/CAMBIOS_v0.4.4.md) · [Ver recorte opcional ampliado](docs/capturas/actual/15-ibiza-mascara-ampliada.png) · [Consultar propuesta de 12 ángulos](docs/IBIZA_360_REFERENCIA_APROBADA.md)
+### Bienvenida y estado del proyecto v0.5.0
+
+Al abrir G² Dash, la tercera pantalla resume qué está listo y deja la música del teléfono por Wi‑Fi como siguiente etapa pendiente. La galería conceptual de 12 ángulos ya forma parte del tablero. La secuencia dura aproximadamente 4.6 segundos y se puede omitir.
+
+![Resumen v0.4.5 al abrir](docs/capturas/actual/00c-arranque-estado-v050.png)
+
+[Ver fotos reales v0.4.4](docs/capturas/CAMBIOS_v0.4.4.md) · [Ver visor conceptual v0.5.0](docs/capturas/CAMBIOS_v0.5.0.md) · [Referencia aprobada](docs/IBIZA_360_REFERENCIA_APROBADA.md)
 
 ## Decisiones visuales
 
@@ -54,5 +62,5 @@ Al abrir G² Dash, la tercera pantalla resume el estado: fotos originales y mús
 - MediaSession muestra música reproducida en el Android del estéreo. Conectar un teléfono al punto de acceso no comparte automáticamente canción ni portada; para eso hace falta un canal remoto compatible.
 - El mapa sigue siendo ilustrativo.
 - Autonomía y voltaje requieren conexión OBD compatible; no se inventan valores.
-- El concepto visual de 12 ángulos está aprobado y documentado, pero no es un modelo 3D ni una galería integrada; el giro real requiere un modelo 3D coherente o fotografías suficientes. [Consultar referencia](docs/IBIZA_360_REFERENCIA_APROBADA.md).
+- La galería conceptual de 12 ángulos ya está integrada; un giro 360° real sigue pendiente de un modelo 3D validado o fotografías verificadas y consistentes de todos los lados. [Consultar referencia](docs/IBIZA_360_REFERENCIA_APROBADA.md).
 - La memoria objetivo es de 2 GB; la fluidez se debe comprobar en el estéreo Gearelec antes de considerar estable el APK.

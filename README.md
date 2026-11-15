@@ -14,7 +14,7 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 ## Cómo va el proyecto
 
-**Versión actual: v0.5.0 (desarrollo).** La demo web y el APK Android de prueba están disponibles. Esta actualización agrega al inicio un resumen de lo listo y lo pendiente; el APK incluye acceso a apps instaladas, GPS opcional y música local mediante MediaSession. Falta validarlo en el estéreo Gearelec.
+**Versión actual: v0.5.0 (desarrollo).** La galería conceptual de 12 ángulos ya está integrada en la web y el APK de prueba. El APK también incluye acceso a apps instaladas, GPS opcional y música local mediante MediaSession. Falta validarlo en el estéreo Gearelec; la música remota del teléfono por Wi‑Fi sigue pendiente.
 
 ### Bienvenida al iniciar G² Dash
 
@@ -33,7 +33,8 @@ El botón **12 VISTAS** abre una galería de doce ilustraciones de la propuesta 
 
 ### Ya está implementado
 
-- Bienvenida SEAT / G² DASH con saludo a Doble G y resumen honesto del avance v0.5.0.
+- Bienvenida SEAT / G² DASH con saludo a Doble G y resumen del estado v0.5.0.
+- Visor conceptual del Ibiza con 12 vistas y controles de ángulo, separado de las fotos reales.
 - Tres estilos de logotipo G² DASH: APEX, PULSE y ORBIT.
 - Widgets ahumados con cuatro tonalidades, opacidad y difuminado ajustables.
 - Ajustes visuales guardados localmente.
@@ -45,7 +46,6 @@ El botón **12 VISTAS** abre una galería de doce ilustraciones de la propuesta 
 - Revisar el recorte transparente opcional del Ibiza; la vista inicial usa la fotografía frontal completa para evitar depender de un contorno aproximado.
 - Validar el APK en el estéreo Gearelec y medir fluidez con sus 2 GB de RAM.
 - Definir una solución para música desde el teléfono por Wi-Fi: el punto de acceso no comparte por sí solo sus metadatos.
-- Integrar más adelante la galería conceptual de 12 ángulos, claramente marcada como propuesta y separada de las fotos reales ([alcance aprobado](docs/IBIZA_360_REFERENCIA_APROBADA.md)).
 - Mantener pendientes el mapa real, la conexión OBD y el launcher predeterminado.
 
 ### Funciones disponibles en la web
@@ -64,7 +64,6 @@ El botón **12 VISTAS** abre una galería de doce ilustraciones de la propuesta 
 - Configurar G² Dash como pantalla HOME predeterminada de Android.
 - Recibir música del teléfono por Wi-Fi. El punto de acceso por sí solo no comparte canción ni portada; se requiere un protocolo compatible o una app complementaria.
 - Integrar mapa en tiempo real y datos OBD del vehículo.
-- Integrar el visor conceptual aprobado de 12 ángulos, etiquetado como propuesta visual ([detalle](docs/IBIZA_360_REFERENCIA_APROBADA.md)).
 - El giro 360° real sigue pendiente de un modelo 3D validado o fotografías consistentes de todos los lados.
 
 > **Aviso:** el mapa es una ilustración, no un mapa en tiempo real. Los campos de autonomía y voltaje permanecen vacíos hasta que exista una conexión real; no se inventan valores del vehículo. Los iconos de Wi-Fi y Bluetooth son decorativos en esta demostración web.
@@ -86,7 +85,7 @@ El APK no sustituye todavía el launcher HOME y falta validarlo en el estéreo G
 
 ![Vista actual de G² Dash](docs/capturas/actual/01-inicio-1280x720.png)
 
-[**Ver cambios de Mi Ibiza v0.4.5**](docs/capturas/CAMBIOS_v0.4.5.md) · [Comparación visual v0.4: Música y Mi Ibiza](docs/capturas/CAMBIOS_v0.4.md) · [Galería de todas las secciones](docs/capturas/README.md)
+[**Visor conceptual Ibiza 12 vistas v0.5.0**](docs/capturas/CAMBIOS_v0.5.0.md) · [Fotos reales del Ibiza v0.4.4](docs/capturas/CAMBIOS_v0.4.4.md) · [Galería de todas las secciones](docs/capturas/README.md)
 
 Las capturas automáticas de **cada sección real de la interfaz** se publican
 en [docs/capturas/](docs/capturas/README.md). El flujo

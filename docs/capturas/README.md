@@ -30,10 +30,7 @@ Imágenes de la galería real ejecutada en Chromium (los automóviles ilustrados
 
 ## Comparación antes y después
 
-[**Bienvenida y estado del proyecto v0.4.5**](CAMBIOS_v0.4.5.md) · [Mi Ibiza: foto completa por defecto y recorte opcional (v0.4.4)](CAMBIOS_v0.4.4.md)
-
-[**Mi Ibiza: foto completa por defecto y recorte opcional (v0.4.4)**](CAMBIOS_v0.4.4.md) · [Historial de la máscara v0.4.2](RECORTE_IBIZA_v0.4.2.md)
-
+[**Visor conceptual Ibiza 360 v0.5.0**](CAMBIOS_v0.5.0.md) · [Bienvenida y estado v0.4.5](CAMBIOS_v0.4.5.md) · [Mi Ibiza: fotos reales v0.4.4](CAMBIOS_v0.4.4.md) · [Historial de la máscara v0.4.2](RECORTE_IBIZA_v0.4.2.md)
 
 **[Detalle Música v0.4.1 — comparación antes y después](DETALLE_MUSICA_v0.4.1.md)**
 
