@@ -10,7 +10,7 @@ permissions:
 
 concurrency:
   group: g2-dash-visual-v051
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   captures:
