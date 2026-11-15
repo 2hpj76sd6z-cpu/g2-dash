@@ -7,9 +7,10 @@
  const $=id=>document.getElementById(id);
  const status=$('airplayStatus'), title=$('airplayStatusTitle'),
    detail=$('airplayStatusDetail'), launch=$('airplayLaunch'),
-   install=$('airplayInstall'), check=$('airplayCheck');
+   install=$('airplayInstall'), check=$('airplayCheck'),
+   mediaAccess=$('airplayMediaAccess');
  const receiver='io.github.jqssun.airplay';
- let playing=false, installed=false, supported=false;
+ let playing=false, installed=false, supported=false, mediaGranted=false;
  function setInfo(state,head,message){
    status.dataset.state=state;
    title.textContent=head;
@@ -19,11 +20,12 @@
    const bridge=window.G2Android;
    if(!bridge || typeof bridge.getAirPlaySupport!=='function'){
      supported=false;installed=false;
-     launch.hidden=true;install.hidden=true;check.disabled=true;
+     launch.hidden=true;install.hidden=true;mediaAccess.hidden=true;check.disabled=true;
      setInfo('unsupported','VISTA WEB · SIN RECEPTOR','Esta demostración no tiene acceso a las aplicaciones del estéreo. Instala el APK Android para configurar AirPlay.');
      return;
    }
    check.disabled=false;
+   mediaAccess.hidden=mediaGranted;
    try{
      const data=JSON.parse(bridge.getAirPlaySupport());
      supported=data.supported===true;
@@ -53,7 +55,9 @@
  function updateMedia(data){
    if(!data||data.preview)return;
    const pkg=data.package;
-   playing=data.granted===true&&pkg===receiver&&data.playing===true;
+   mediaGranted=data.granted===true;
+   mediaAccess.hidden=mediaGranted;
+   playing=mediaGranted&&pkg===receiver&&data.playing===true;
    if(!veil.hidden)scan();
  }
  function open(){veil.hidden=false;scan();$('airplayClose').focus()}
@@ -62,6 +66,9 @@
  veil.addEventListener('click',e=>{if(e.target===veil)close()});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!veil.hidden){e.stopPropagation();close()}});
  check.addEventListener('click',scan);
+ mediaAccess.addEventListener('click',()=>{
+   if(window.G2Android?.openMusicAccess)window.G2Android.openMusicAccess();
+ });
  launch.addEventListener('click',()=>{
    if(supported&&installed&&window.G2Android?.openAirPlayReceiver){
      window.G2Android.openAirPlayReceiver();
