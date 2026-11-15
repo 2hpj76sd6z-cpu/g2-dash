@@ -8,6 +8,14 @@ interfaz real en Chromium** a 1280 × 720 y crea capturas por sección.
 > No son imágenes generadas, ni funciones simuladas como si fueran operativas.
 > El mapa y OBD siguen pendientes. La música MediaSession local se integra opcionalmente en Android; las capturas musicales de ejemplo son únicamente pruebas visuales.
 
+## Apps — v0.5.1
+
+El panel de aplicaciones se probó en Chromium horizontal. En estas capturas aparecen **solo iconos ilustrativos de demostración**, no datos de apps instaladas. En Android se consulta el listado local real.
+
+| Panel Apps 1280×720 | Buscador | Vista compacta 960×540 |
+|---|---|---|
+| ![Apps de demostración](actual/21-apps-panel-demo-1280x720.png) | ![Filtrado en Apps](actual/22-apps-buscador-1280x720.png) | ![Apps compactas](actual/23-apps-compacto-960x540.png) |
+
 ## Bienvenida y estado del proyecto — v0.5.0
 
 Capturas obtenidas del HTML/CSS/JS real en Chromium horizontal.
