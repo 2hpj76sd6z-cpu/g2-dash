@@ -4,12 +4,13 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"/>
 <meta name="theme-color" content="#111826"/>
-<title>G² Dash · v0.5.1</title>
+<title>G² Dash · v0.5.2</title>
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="brand.css"/>
 <link rel="stylesheet" href="widgets.css"/>
 <link rel="stylesheet" href="ibiza-cutout.css"/>
 <link rel="stylesheet" href="media.css"/>
+<link rel="stylesheet" href="music-detail.css"/>
 <link rel="stylesheet" href="adaptive.css"/>
 <link rel="stylesheet" href="intro.css"/>
 <link rel="stylesheet" href="ibiza360.css"/>
@@ -32,7 +33,7 @@
     <div class="startupStatusCard">
       <div class="startupStatusTop">
         <span class="startupStatusEyebrow"><i></i> G² DASH · ESTADO DEL PROYECTO</span>
-        <span class="startupStatusVersion">v0.5.1</span>
+        <span class="startupStatusVersion">v0.5.2</span>
       </div>
       <h1>Tu tablero va así.</h1>
       <p class="startupStatusLead">Lo que ya está listo y lo que sigue para tu Ibiza.</p>
@@ -87,7 +88,7 @@
         <div class="underLine"></div>
       </div>
       <div class="musicPanel glass">
-        <div class="trackRow"><div class="album"><svg class="icon"><use href="#i-music"/></svg><img class="albumArtImage" id="albumArt" alt="Portada del álbum" hidden/></div><div class="trackText"><strong id="songName">Sin música activa</strong><span id="songArtist">Abre tu reproductor</span><button id="musicPermission" class="musicPermission" data-action="music-access" hidden>Activar acceso a música</button></div><button class="smallAction" data-action="music" title="Abrir aplicación de música" aria-label="Abrir aplicación de música"><svg class="icon"><use href="#i-external"/></svg></button></div>
+        <div class="trackRow"><div class="album"><svg class="icon"><use href="#i-music"/></svg><img class="albumArtImage" id="albumArt" alt="Portada del álbum" hidden/></div><div class="trackText"><strong id="songName">Sin música activa</strong><span id="songArtist">Abre tu reproductor</span><button id="musicPermission" class="musicPermission" data-action="music-access" hidden>Activar acceso a música</button></div><button class="musicExpand" data-action="music-detail" title="Ampliar reproductor" aria-label="Abrir reproductor ampliado"><svg class="icon"><use href="#i-expand"/></svg></button><button class="smallAction" data-action="music" title="Abrir aplicación de música" aria-label="Abrir aplicación de música"><svg class="icon"><use href="#i-external"/></svg></button></div>
         <div class="songMeta"><div class="mediaStatusRow"><span class="mediaStatus"><i class="mediaDot" aria-hidden="true"></i><span id="musicStatus">Sin conectar</span></span><span class="mediaSource" id="musicSource">MODO DEMO</span></div><div class="timelineBar"><span id="trackProgress"></span></div><div class="trackTimes"><span id="musicCurrent">00:00</span><span id="musicDuration">00:00</span></div></div>
         <div class="musicControls">
           <button data-action="demo-shuffle" disabled aria-label="Aleatorio (pendiente)" title="Aleatorio: función pendiente"><svg class="icon"><use href="#i-shuffle"/></svg></button>
@@ -133,7 +134,7 @@
     <button data-action="radio"><svg class="icon"><use href="#i-radio"/></svg><span>Radio</span></button>
     <button data-action="open-settings"><svg class="icon"><use href="#i-settings"/></svg><span>Ajustes</span></button>
   </nav>
-  <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.5.1</span></footer>
+  <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.5.2</span></footer>
 </div>
 
 <div class="screenveil" id="settingsVeil" hidden><aside class="settings glass" role="dialog" aria-modal="true" aria-label="Personalización"><header><div><h2>Personalización</h2><p>G² Dash · ajustes visuales</p></div><button class="closeBtn" data-action="close-settings" aria-label="Cerrar ajustes"><svg class="icon"><use href="#i-x"/></svg></button></header>
@@ -211,6 +212,33 @@
     <footer class="appsFooter"><span>Favoritos guardados únicamente en el estéreo · No se instala ni modifica ninguna aplicación</span><button type="button" class="appsRefresh" id="appsReload">Actualizar lista</button></footer>
   </section>
 </div>
+<div class="screenveil musicDetailVeil" id="musicDetailVeil" hidden>
+ <section class="musicDetailModal" role="dialog" aria-modal="true" aria-labelledby="musicDetailHeading">
+  <header class="musicDetailHeader">
+   <div><h2 id="musicDetailHeading">Reproductor</h2><p>G² DASH · AUDIO LOCAL ANDROID</p></div>
+   <button type="button" class="closeBtn" id="musicDetailClose" aria-label="Cerrar reproductor"><svg class="icon"><use href="#i-x"/></svg></button>
+  </header>
+  <div class="musicDetailBody">
+   <div class="musicDetailCover" aria-label="Portada de música"><span class="musicDetailCoverSymbol" aria-hidden="true">♫</span><img id="musicDetailCoverImage" alt="Portada de la canción actual" hidden/></div>
+   <div class="musicDetailContent">
+    <div class="musicDetailLabel"><span id="musicDetailSource">MÚSICA LOCAL</span><span class="musicDetailMode" id="musicDetailMode">SIN CONECTAR</span></div>
+    <div id="musicDetailTitle" class="musicDetailTitle">Conecta tu música</div>
+    <div id="musicDetailArtist" class="musicDetailArtist">Abre un reproductor en este Android</div>
+    <div class="musicSeek">
+     <input id="musicSeek" type="range" min="0" max="1" step="1000" value="0" aria-label="Posición de reproducción" disabled/>
+     <div class="musicSeekTimes"><span id="musicDetailCurrent">00:00</span><span id="musicDetailTotal">00:00</span></div>
+    </div>
+    <div class="musicDetailActions">
+      <button id="musicDetailPrev" type="button" aria-label="Canción anterior" disabled>Ⅰ◀</button>
+      <button id="musicDetailPlay" class="primary" type="button" aria-label="Reproducir" disabled>▶</button>
+      <button id="musicDetailNext" type="button" aria-label="Siguiente canción" disabled>▶Ⅰ</button>
+    </div>
+    <div id="musicDetailHint" class="musicDetailHint" aria-live="polite">No hay sesión musical activa</div>
+   </div>
+  </div>
+  <footer class="musicDetailFooter"><span>Se controla la música que reproduce este estéreo; Wi-Fi del teléfono pendiente</span><button type="button" id="musicDetailPermission" hidden>Activar acceso multimedia</button></footer>
+ </section>
+</div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <!-- All icons are locally bundled, no external assets or icon fonts -->
 <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg"><defs>
@@ -218,6 +246,7 @@
 <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 3h7v7M10 14 21 3M20 13v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></symbol><symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h16m-7-7 7 7-7 7"/></symbol><symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/></symbol><symbol id="i-expand" viewBox="0 0 24 24"><path d="M9 3H3v6M3 3l7 7M15 21h6v-6M21 21l-7-7"/></symbol></defs></svg>
 <script src="intro.js"></script>
 <script src="apps.js"></script>
+<script src="music-detail.js"></script>
 <script src="app.js"></script>
 <script src="ibiza360.js"></script>
 </body>
