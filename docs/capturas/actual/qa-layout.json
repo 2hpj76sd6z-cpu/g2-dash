@@ -1,5 +1,5 @@
 {
-  "source_commit": "a2b372ebbbea055aeb0df0b09e8a09cda820ad92",
+  "source_commit": "40bbb43f01d0803a8bece9514685436aed1f2eea",
   "checked": [
     {
       "label": "1280×720",
@@ -35,33 +35,117 @@
         ".leftStack": {
           "left": 86.1,
           "top": 78.1,
-          "right": 414.4,
+          "right": 370.5,
           "bottom": 576.7,
-          "width": 328.4,
+          "width": 284.4,
           "height": 498.7
         },
         ".musicPanel": {
           "left": 86.1,
           "top": 277.6,
-          "right": 414.4,
+          "right": 370.5,
           "bottom": 576.7,
-          "width": 328.4,
+          "width": 284.4,
           "height": 299.2
         },
         ".mapPanel": {
-          "left": 426.4,
+          "left": 382.5,
           "top": 78.1,
-          "right": 892.7,
+          "right": 942.3,
           "bottom": 576.7,
-          "width": 466.3,
+          "width": 559.8,
           "height": 498.7
         },
         ".vehiclePanel": {
-          "left": 904.7,
+          "left": 954.3,
           "top": 78.1,
           "right": 1265.9,
           "bottom": 576.7,
-          "width": 361.2,
+          "width": 311.7,
+          "height": 498.7
+        },
+        ".bottomDock": {
+          "left": 88.1,
+          "top": 586.7,
+          "right": 1265.9,
+          "bottom": 683.9,
+          "width": 1177.8,
+          "height": 97.2
+        },
+        ".footer": {
+          "left": 14.1,
+          "top": 693.9,
+          "right": 1265.9,
+          "bottom": 705.9,
+          "width": 1251.8,
+          "height": 12
+        }
+      },
+      "carLoaded": true,
+      "horizontalOverflow": false,
+      "problems": []
+    },
+    {
+      "label": "1280×720 · distribución restaurada",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "boxes": {
+        ".topline": {
+          "left": 14.1,
+          "top": 14.1,
+          "right": 1265.9,
+          "bottom": 68.1,
+          "width": 1251.8,
+          "height": 54
+        },
+        ".dashboard": {
+          "left": 14.1,
+          "top": 78.1,
+          "right": 1265.9,
+          "bottom": 576.7,
+          "width": 1251.8,
+          "height": 498.7
+        },
+        ".sidebar": {
+          "left": 14.1,
+          "top": 78.1,
+          "right": 74.1,
+          "bottom": 576.7,
+          "width": 60,
+          "height": 498.7
+        },
+        ".leftStack": {
+          "left": 86.1,
+          "top": 78.1,
+          "right": 370.5,
+          "bottom": 576.7,
+          "width": 284.4,
+          "height": 498.7
+        },
+        ".musicPanel": {
+          "left": 86.1,
+          "top": 277.6,
+          "right": 370.5,
+          "bottom": 576.7,
+          "width": 284.4,
+          "height": 299.2
+        },
+        ".mapPanel": {
+          "left": 382.5,
+          "top": 78.1,
+          "right": 942.3,
+          "bottom": 576.7,
+          "width": 559.8,
+          "height": 498.7
+        },
+        ".vehiclePanel": {
+          "left": 954.3,
+          "top": 78.1,
+          "right": 1265.9,
+          "bottom": 576.7,
+          "width": 311.7,
           "height": 498.7
         },
         ".bottomDock": {
@@ -119,33 +203,33 @@
         ".leftStack": {
           "left": 71,
           "top": 64,
-          "right": 334.7,
+          "right": 304.2,
           "bottom": 487,
-          "width": 263.7,
+          "width": 233.2,
           "height": 423
         },
         ".musicPanel": {
           "left": 71,
           "top": 221,
-          "right": 334.7,
+          "right": 304.2,
           "bottom": 487,
-          "width": 263.7,
+          "width": 233.2,
           "height": 266
         },
         ".mapPanel": {
-          "left": 343.7,
+          "left": 313.2,
           "top": 64,
-          "right": 712.9,
+          "right": 747.4,
           "bottom": 487,
-          "width": 369.2,
+          "width": 434.2,
           "height": 423
         },
         ".vehiclePanel": {
-          "left": 721.9,
+          "left": 756.4,
           "top": 64,
           "right": 1012,
           "bottom": 487,
-          "width": 290.1,
+          "width": 255.5,
           "height": 423
         },
         ".bottomDock": {
@@ -203,33 +287,33 @@
         ".leftStack": {
           "left": 59,
           "top": 50,
-          "right": 315.3,
+          "right": 289.5,
           "bottom": 455,
-          "width": 256.3,
+          "width": 230.5,
           "height": 405
         },
         ".musicPanel": {
           "left": 59,
           "top": 200.8,
-          "right": 315.3,
+          "right": 289.5,
           "bottom": 455,
-          "width": 256.3,
+          "width": 230.5,
           "height": 254.3
         },
         ".mapPanel": {
-          "left": 322.3,
+          "left": 296.5,
           "top": 50,
-          "right": 668.2,
+          "right": 692.8,
           "bottom": 455,
-          "width": 346,
+          "width": 396.3,
           "height": 405
         },
         ".vehiclePanel": {
-          "left": 675.2,
+          "left": 699.8,
           "top": 50,
           "right": 952,
           "bottom": 455,
-          "width": 276.8,
+          "width": 252.2,
           "height": 405
         },
         ".bottomDock": {
