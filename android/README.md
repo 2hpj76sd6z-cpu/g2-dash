@@ -62,3 +62,7 @@ Se refinó solo la máscara de transparencia del recorte; la fotografía origina
 ## Galería visual Ibiza v0.5.0
 
 La tarjeta Mi Ibiza incluye el botón **12 VISTAS**, con imágenes conceptuales aprobadas a 0°–330° en pasos de 30°. Se controla con miniaturas, deslizamiento, selector y flechas. Los WebP se incluyen localmente, sin WebGL ni Internet. **No es un modelo 3D**, y las fotos reales del usuario siguen intactas.
+
+## Detallado del Ibiza v0.5.1
+
+Se añadió un modo 1:1 para conservar la nitidez de los WebP aprobados (500×314), ampliación opcional 1.3×, navegación por gestos de hasta tres pasos y precarga acotada a dos vistas vecinas. La secuencia automática se detiene al cerrar o perder visibilidad. Las fotos reales, el panel Apps y el fondo permanecen sin modificar. El rendimiento de la Gearelec todavía requiere validación física.

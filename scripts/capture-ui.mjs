@@ -170,7 +170,32 @@ try {
   if(await page.locator('#conceptAngle').textContent() !== '180°') throw new Error('Miniatura trasera falló');
   await page.locator('#conceptHero').evaluate(img => img.decode());
   await capture('19-ibiza-conceptual-trasera-180');
+
+  // v0.5.1: true native 500×314 dimensions vs optional expanded view.
+  await page.locator('#conceptThumbs button').nth(1).click();
+  await page.locator('#conceptHero').evaluate(img=>img.decode());
+  const size=await page.locator('#conceptHero').evaluate(img=>({w:img.naturalWidth,h:img.naturalHeight,display:img.getBoundingClientRect().width}));
+  if(size.w!==500 || size.h!==314 || size.display>505)throw new Error('La imagen no respeta 500x314 sin ampliación');
+  await capture('24-ibiza-tamano-original');
+  await page.locator('#conceptScale').click();
+  const enlarged=await page.locator('#conceptHero').evaluate(img=>img.getBoundingClientRect().width);
+  if(enlarged<size.display+50 || await page.locator('#conceptScale').getAttribute('aria-pressed')!=='true')
+    throw new Error('El botón 1.3x no amplía correctamente');
+  await capture('25-ibiza-modo-ampliado');
+  await page.locator('#conceptScale').click();
+  if(await page.locator('#conceptScale').getAttribute('aria-pressed')!=='false')throw new Error('No se restauró 1:1');
+  const b=await page.locator('#conceptStage').boundingBox();
+  await page.mouse.move(b.x+b.width*.70,b.y+b.height*.53);
+  await page.mouse.down();
+  await page.mouse.move(b.x+b.width*.70-180,b.y+b.height*.53,{steps:5});
+  await page.mouse.up();
+  if(await page.locator('#conceptAngle').textContent()!=='90°')throw new Error('Deslizar dos pasos no funciona');
+  await page.locator('#conceptHero').evaluate(img=>img.decode());
+  await capture('26-ibiza-deslizamiento-90');
+  await page.locator('#conceptAuto').click();
+  if(await page.locator('#conceptAuto').getAttribute('aria-pressed')!=='true')throw new Error('No inicia reproducción automática');
   await page.locator('#conceptClose').click();
+  if(await page.evaluate(()=>window.G2Concept.isPlaying()))throw new Error('El recorrido no se detuvo al cerrar');
   if(!await page.locator('#conceptVeil').isHidden()) throw new Error('No cierra la galería');
 
   // La misma interfaz en pantallas menos espaciosas para evitar cortes.
@@ -217,7 +242,8 @@ try {
       '17-ibiza-conceptual-12-vistas.png','18-ibiza-conceptual-60-grados.png',
       '19-ibiza-conceptual-trasera-180.png','20-ibiza-conceptual-1024x600.png',
       '21-apps-panel-demo-1280x720.png','22-apps-buscador-1280x720.png',
-      '23-apps-compacto-960x540.png'
+      '23-apps-compacto-960x540.png',
+       '24-ibiza-tamano-original.png','25-ibiza-modo-ampliado.png','26-ibiza-deslizamiento-90.png'
     ]
   };
   await writeFile(path.join(root, 'meta.json'), JSON.stringify(meta, null, 2) + '\n');

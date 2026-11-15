@@ -33,3 +33,25 @@
 @media(max-width:1050px),(max-height:620px){.conceptModal{padding:9px 12px;gap:6px;height:min(95dvh,580px)}.conceptStageArea{grid-template-columns:minmax(0,1fr) 160px;gap:6px}.conceptAside{padding:8px;gap:4px}.conceptAside p{font-size:10px;line-height:1.22}.conceptAside dl{font-size:9px;gap:2px 5px}.conceptThumb img{height:29px}.conceptModalHeader h2{font-size:15px}.conceptStageLabel b{font-size:12px}.conceptAngle{font-size:23px}.conceptControls{gap:5px}.conceptButton{min-height:33px}}
 @media(max-width:850px){.conceptStageArea{grid-template-columns:1fr}.conceptAside{display:none}.conceptThumbs{grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}.conceptThumb img{height:27px}}
 @media(prefers-reduced-motion:reduce){.conceptModal *,.conceptEntry{transition:none!important}}
+
+/* v0.5.1: render at native 500px width unless user intentionally expands.
+   No upscaling is advertised as additional image detail. */
+.conceptStage[data-scale="native"] .conceptHeroImage{
+  width:min(100%,500px);height:auto;max-height:100%;
+  object-fit:contain;filter:contrast(1.045) saturate(1.015);
+}
+.conceptStage[data-scale="large"] .conceptHeroImage{
+  width:min(100%,640px);height:auto;max-height:100%;
+  object-fit:contain;filter:contrast(1.045) saturate(1.015);
+}
+.conceptStage{background:radial-gradient(ellipse at 54% 45%,#303b46 0%,#151f2b 62%,#0b121d 100%)}
+.conceptControls #conceptScale{min-width:52px;white-space:nowrap;font-size:12px;font-weight:750}
+.conceptThumb img{object-fit:contain;background:#101823}
+.conceptThumb{min-height:52px}
+.conceptButton{min-height:44px}
+.conceptFoot strong{color:#b6eed0;font-weight:650}
+@media(max-width:1050px),(max-height:620px){
+  .conceptButton{min-height:38px}
+  .conceptThumb{min-height:44px}
+  .conceptControls #conceptScale{min-width:45px;font-size:11px}
+}

@@ -35,3 +35,7 @@ El material puede presentar incoherencias entre ángulos porque corresponde a il
 
 **Licencia:** consultar [LICENSE](../LICENSE); los nombres y marcas de terceros
 siguen perteneciendo a sus respectivos titulares.
+
+## Actualización v0.5.1 — nitidez y control
+
+Los archivos conceptuales originales son de **500 × 314 píxeles**, por lo que ampliarlos no añade detalle. El modo predeterminado 1:1 evita reescalado adicional; 1.3× amplía la presentación cuando se prefiere mayor tamaño. El visor limita la precarga a dos vistas vecinas, permite varios ángulos por deslizamiento y detiene el recorrido al cerrarse. Ninguna fotografía o modelo del vehículo se sustituye. [Capturas comparativas](capturas/MEJORA_IBIZA_v0.5.1.md).

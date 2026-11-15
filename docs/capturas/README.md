@@ -26,6 +26,14 @@ Capturas obtenidas del HTML/CSS/JS real en Chromium horizontal.
 
 La secuencia dura aproximadamente 4.6 segundos y se reproduce al abrir G² Dash; la tercera vista aclara qué está listo y que la música remota por Wi‑Fi sigue pendiente. El encendido automático del estéreo solo podrá verificarse en el dispositivo, tras seleccionar la app HOME si el fabricante lo permite.
 
+## Ibiza — nitidez y controles v0.5.1
+
+[**Comparación real 1:1 frente a 1.3×, con prueba de deslizamiento**](MEJORA_IBIZA_v0.5.1.md)
+
+| Imagen nativa 1:1 | Ampliación 1.3× | Gesto táctil a 90° |
+|---|---|---|
+| ![Coche en tamaño original](actual/24-ibiza-tamano-original.png) | ![Coche ampliado opcionalmente](actual/25-ibiza-modo-ampliado.png) | ![Vista tras deslizar](actual/26-ibiza-deslizamiento-90.png) |
+
 ## Mi Ibiza — 12 vistas conceptuales (v0.5.0)
 
 Imágenes de la galería real ejecutada en Chromium (los automóviles ilustrados proceden de la propuesta, no son fotografías del vehículo desde esos ángulos).
