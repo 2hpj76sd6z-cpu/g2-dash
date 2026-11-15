@@ -7,6 +7,7 @@
 <title>G² Dash · v0.2</title>
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="brand.css"/>
+<link rel="stylesheet" href="widgets.css"/>
 </head>
 <body data-mode="night">
 <div class="wallpaper" id="wallpaper" aria-hidden="true"></div><div class="wallShade" aria-hidden="true"></div>
@@ -97,7 +98,15 @@
     <label>Fondo de pantalla</label><div class="wallChoices"><button data-wall="dusk" class="selected"><span class="p-dusk"></span>Atardecer</button><button data-wall="blue"><span class="p-blue"></span>Azul humo</button><button data-wall="gray"><span class="p-gray"></span>Grafito</button></div>
     <label for="chooseWall">Tu propia imagen</label><input type="file" id="chooseWall" accept="image/*"/><p class="hint">La imagen se procesa localmente para ahorrar memoria y se guarda solo en este dispositivo.</p>
     <label for="blur">Difuminado del fondo <output id="blurValue">14 px</output></label><input id="blur" type="range" min="0" max="32" step="1" value="14"/>
-    <label for="opacity">Opacidad de paneles <output id="opacityValue">68%</output></label><input id="opacity" type="range" min="28" max="94" step="1" value="68"/>
+    <label>Acabado ahumado de los widgets</label>
+    <div class="tintPicker" role="group" aria-label="Tonalidad de los widgets">
+      <button type="button" data-tint="graphite" class="selected" aria-pressed="true"><span class="tintSwatch" aria-hidden="true"></span>Grafito</button>
+      <button type="button" data-tint="blue" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Azul humo</button>
+      <button type="button" data-tint="green" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Verde humo</button>
+      <button type="button" data-tint="black" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Negro</button>
+    </div>
+    <label for="opacity">Opacidad de widgets <output id="opacityValue">54%</output></label><input id="opacity" type="range" min="20" max="88" step="1" value="54"/>
+    <label for="widgetBlur">Difuminado del vidrio <output id="widgetBlurValue">8 px</output></label><input id="widgetBlur" type="range" min="0" max="16" step="1" value="8"/>
     <label>Color de detalle</label><div class="accentPicker"><button data-accent="steel" class="selected" aria-label="Plata" title="Plata"></button><button data-accent="blue" aria-label="Azul frío" title="Azul frío"></button><button data-accent="warm" aria-label="Arena" title="Arena"></button></div>
     <div class="settingActions"><button data-action="reset-settings">Restablecer diseño</button><button data-action="fullscreen">Pantalla completa</button></div>
     <div class="disclaimer">El mapa es ilustrativo. La autonomía y el voltaje del coche requieren conexión OBD. Los controles de música son de demostración. El Ibiza utiliza fotografías reales; las placas se ocultan en la versión pública.</div>
