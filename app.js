@@ -165,7 +165,7 @@
   }
   function handleAction(action){
     switch(action){
-      case 'home':closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close();break;
+      case 'home':closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close();window.G2Apps?.close();break;
       case 'open-settings':openScreen('#settingsVeil');break;
       case 'intro-preview':closeScreen('#settingsVeil');window.G2ShowIntro?.();break;
       case 'home-settings':
@@ -191,7 +191,8 @@
       case 'demo-shuffle':case 'demo-repeat':showToast('Aleatorio y repetir: integración pendiente');break;
       case 'reset-settings':settings={...defaults};applySettings();save();showToast('Ajustes restablecidos');break;
       case 'fullscreen':if(document.fullscreenElement){document.exitFullscreen?.()}else{document.documentElement.requestFullscreen?.().catch(()=>showToast('Pantalla completa no disponible'))}break;
-      case 'phone':case 'apps':case 'bluetooth':case 'radio':case 'music':if(window.G2Android)window.G2Android.openTarget(action);else showToast('Acceso pendiente de integración nativa en Android');break;
+      case 'apps':window.G2Apps?.open();break;
+      case 'phone':case 'bluetooth':case 'radio':case 'music':if(window.G2Android)window.G2Android.openTarget(action);else showToast('Acceso pendiente de integración nativa en Android');break;
       default:showToast('Función en desarrollo');
     }
   }
@@ -244,7 +245,7 @@
     };reader.readAsDataURL(file);
   });
   $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();openMap()}});
-  document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close()}});
-  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.0';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
+  document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close();window.G2Apps?.close()}});
+  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.1';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
   photoChange(0);applySettings();updateClock();setInterval(updateClock,20000);
 })();
