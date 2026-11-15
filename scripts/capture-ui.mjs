@@ -65,6 +65,21 @@ try {
   await page.locator('[data-action="car-next"]').click();
   await capture('11-ibiza-trasera');
 
+  // Sample metadata only in the evidence capture, explicitly labeled.
+  // NEVER pretend this is an actual playing MediaSession.
+  await page.locator('[data-action="close-vehicle"]').click();
+  await page.evaluate(() => window.G2MusicUpdate({
+    granted:true,
+    preview:true,
+    title:'Pista de prueba',
+    artist:'EJEMPLO — NO REPRODUCCIÓN REAL',
+    playing:true,
+    positionMs:42000,
+    durationMs:186000,
+    albumArt:''
+  }));
+  await capture('12-musica-integracion-prueba', '.musicPanel');
+
   const meta = {
     project: 'G² Dash',
     note: 'Capturas verificables de HTML/CSS/JS reales; mapa y música ilustrativos; velocidad GPS y OBD no simulados.',
@@ -76,7 +91,7 @@ try {
       '04-musica.png', '05-mapa-ilustrativo.png', '06-mi-ibiza.png',
       '07-iconos-accesos.png', '08-personalizacion.png',
       '09-modo-dia-1280x720.png', '10-ibiza-detalle.png',
-      '11-ibiza-trasera.png'
+      '11-ibiza-trasera.png', '12-musica-integracion-prueba.png'
     ]
   };
   await writeFile(path.join(root, 'meta.json'), JSON.stringify(meta, null, 2) + '\n');

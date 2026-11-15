@@ -38,6 +38,7 @@ public class MainActivity extends Activity {
     private static final int FILE_REQUEST = 21;
 
     private WebView webView;
+    private G2MediaBridge mediaBridge;
     private GeolocationPermissions.Callback pendingGeo;
     private String pendingGeoOrigin;
     private android.webkit.ValueCallback<Uri[]> uploadCallback;
@@ -125,6 +126,7 @@ public class MainActivity extends Activity {
                 }
             }
         });
+        mediaBridge = new G2MediaBridge(this, webView);
         webView.loadUrl(HOME_URL);
     }
 
@@ -216,6 +218,14 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> MainActivity.this.openTarget(key));
         }
         @JavascriptInterface
+        public void musicControl(String action) {
+            runOnUiThread(() -> { if (mediaBridge != null) mediaBridge.control(action); });
+        }
+        @JavascriptInterface
+        public void openMusicAccess() {
+            runOnUiThread(() -> { if (mediaBridge != null) mediaBridge.showAccessSettings(); });
+        }
+        @JavascriptInterface
         public void openMap(String destination) {
             runOnUiThread(() -> MainActivity.this.openMap(destination));
         }
@@ -253,7 +263,20 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (mediaBridge != null) mediaBridge.start();
+    }
+
+    @Override
+    protected void onStop() {
+        if (mediaBridge != null) mediaBridge.stop();
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
+        if (mediaBridge != null) mediaBridge.destroy();
         if (webView != null) {
             webView.removeJavascriptInterface("G2Android");
             webView.destroy();

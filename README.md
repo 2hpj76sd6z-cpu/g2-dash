@@ -30,7 +30,8 @@ Interfaz automotriz minimalista con paneles translúcidos, personalización de f
 
 - APK y launcher Android nativo.
 - Accesos al listado real de aplicaciones instaladas.
-- Controles de música integrados con Android (MediaSession).
+- Controles de música remotos por Wi-Fi (pendiente; distinto a MediaSession local).
+- Música local Android con permiso opcional a MediaSession: [ver detalles](android/MUSICA.md).
 - Integración opcional con OBD para parámetros reales del vehículo.
 - Mapa integrado con proveedor cartográfico.
 - Modelo 360° coherente del Ibiza; actualmente solo existen dos fotografías, no un modelo giratorio.
@@ -43,7 +44,9 @@ El código de la primera aplicación Android está en [android/](android/README.
 Conserva la apariencia de la demostración y las fotografías originales del Ibiza.
 Ofrece acceso nativo a aplicaciones instaladas, teléfono, Bluetooth, selección de fondos,
 y permite solicitar velocidad GPS con autorización del usuario. Es un APK de prueba,
-**no** sustituye todavía el launcher principal ni integra música/OBD en tiempo real.
+**no** sustituye todavía el launcher principal. La música MediaSession local
+puede mostrar datos reales con autorización del usuario; OBD y música remota por
+Wi-Fi continúan pendientes.
 
 El flujo [Android APK](.github/workflows/android-apk.yml) compila un APK de depuración
 en GitHub Actions. Los artefactos aparecen en la pestaña **Actions** cuando el flujo termina correctamente.

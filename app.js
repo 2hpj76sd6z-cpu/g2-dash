@@ -1,5 +1,5 @@
 'use strict';
-/* G² Dash 0.2 — local demonstrator. No telemetry, OBD or media integration is implied. */
+/* G² Dash 0.4 — web demo + optional Android MediaSession metadata. No remote Wi-Fi protocol or OBD integration. */
 (() => {
   const $ = (q) => document.querySelector(q);
   const $$ = (q) => [...document.querySelectorAll(q)];
@@ -88,6 +88,43 @@
       showToast('Ubicación obtenida. El mapa sigue siendo ilustrativo.');
     },(err)=>{$('#speedLabel').textContent='Velocidad GPS';showToast(err.code===1?'Permiso de ubicación denegado':'No se pudo obtener ubicación')},{enableHighAccuracy:true,timeout:10000,maximumAge:2000});
   }
+  // Android invokes this using a local and isolated WebView origin.
+  // On GitHub Pages this API only receives clearly marked visual test data.
+  function mmss(ms) {
+    const s = Math.max(0, Math.floor((Number(ms)||0) / 1000));
+    return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  }
+  window.G2MusicUpdate = function(data) {
+    if (!data || typeof data !== 'object') return;
+    const preview = data.preview === true;
+    const granted = data.granted === true;
+    const active = granted && !!(data.title && data.title !== 'Sin música activa');
+    const access = $('#musicPermission');
+    access.hidden = !window.G2Android || granted;
+    $('#songName').textContent = String(data.title || (granted?'Sin música activa':'Conecta tu música'));
+    $('#songArtist').textContent = preview ? 'VISTA DE PRUEBA · SIN REPRODUCCIÓN REAL' :
+      String(data.artist || (granted?'Abre tu reproductor':'Activa el permiso Android'));
+    const art=$('#albumArt');
+    if (typeof data.albumArt==='string' && data.albumArt.startsWith('data:image/jpeg;base64,')
+       && data.albumArt.length < 400000) { art.src=data.albumArt; art.hidden=false; }
+    else { art.hidden=true;art.removeAttribute('src'); }
+    const duration = Math.max(0, Number(data.durationMs)||0);
+    const position = Math.min(duration || Infinity, Math.max(0, Number(data.positionMs)||0));
+    $('#musicCurrent').textContent=mmss(position);
+    $('#musicDuration').textContent=mmss(duration);
+    $('#trackProgress').style.width= duration>0 ? Math.min(100,position/duration*100)+'%' : '0%';
+    $('#play .icon use').setAttribute('href',data.playing?'#i-pause':'#i-play');
+    $('#deviceStatus').textContent = preview ? 'VISTA DE PRUEBA' : (granted?'ANDROID · MÚSICA':'ANDROID · v0.4');
+    document.querySelector('.musicPanel').dataset.media = preview?'preview':(active?'connected':(granted?'idle':'permission'));
+  };
+  function mediaAction(action) {
+    if (!window.G2Android) {
+      if(action==='toggle')demoPlay();
+      else showToast('Música de demostración: sin reproducción real');
+      return;
+    }
+    window.G2Android.musicControl(action);
+  }
   function demoPlay(){
     isDemoPlaying=!isDemoPlaying;
     $('#play .icon use').setAttribute('href',isDemoPlaying?'#i-pause':'#i-play');
@@ -107,8 +144,11 @@
       case 'gps':activateGps();break;
       case 'navigation':if(window.G2Android)window.G2Android.openMap($('#destination').value.trim());else openMap();break;
       case 'zoom-in':case 'zoom-out':zoom=Math.max(.8,Math.min(1.8,zoom+(action==='zoom-in'?.1:-.1)));$('#mapArtwork').style.transform=`scale(${zoom})`;showToast('Zoom ilustrativo: no sustituye navegación real');break;
-      case 'demo-play':demoPlay();break;
-      case 'demo-shuffle':case 'demo-prev':case 'demo-next':case 'demo-repeat':showToast('Control musical de demostración; integración Android pendiente');break;
+      case 'music-access':if(window.G2Android)window.G2Android.openMusicAccess();else showToast('Solo en Android');break;
+      case 'demo-play':mediaAction('toggle');break;
+      case 'demo-prev':mediaAction('previous');break;
+      case 'demo-next':mediaAction('next');break;
+      case 'demo-shuffle':case 'demo-repeat':showToast('Aleatorio y repetir: integración pendiente');break;
       case 'reset-settings':settings={...defaults};applySettings();save();showToast('Ajustes restablecidos');break;
       case 'fullscreen':if(document.fullscreenElement){document.exitFullscreen?.()}else{document.documentElement.requestFullscreen?.().catch(()=>showToast('Pantalla completa no disponible'))}break;
       case 'phone':case 'apps':case 'bluetooth':case 'radio':case 'music':if(window.G2Android)window.G2Android.openTarget(action);else showToast('Acceso pendiente de integración nativa en Android');break;
@@ -144,6 +184,6 @@
   });
   $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();openMap()}});
   document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil')}});
-  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.3';}
+  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.4';$('#musicPermission').hidden=false;}
   photoChange(0);applySettings();updateClock();setInterval(updateClock,20000);
 })();

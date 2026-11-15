@@ -1,4 +1,4 @@
-# G² Dash para Android — v0.3 (primera prueba)
+# G² Dash para Android — v0.4 (integración de música)
 
 Este módulo es una aplicación Android nativa que **reutiliza exactamente**
 el diseño web aprobado (archivos del directorio principal). No contiene un
@@ -10,8 +10,9 @@ modelo 360° del Ibiza: mantiene las fotografías originales del vehículo.
 - Botones nativos: aplicaciones instaladas, teléfono, Bluetooth y mapas externos.
 - Selección de fondo mediante el selector de archivos de Android.
 - GPS opcional al pulsar el icono; se solicita permiso en ese momento.
-- El mapa dentro del panel sigue siendo ilustrativo, y la música no muestra
-  todavía datos reales de reproducción.
+- El mapa dentro del panel sigue siendo ilustrativo.
+- Música: autorización opcional a sesiones multimedia locales, título, artista,
+  portada, progreso y controles disponibles. Consulta [MÚSICA](MUSICA.md).
 - No se configura como pantalla de inicio predeterminada en esta versión.
 
 ## Compilar
@@ -42,4 +43,4 @@ En estéreos antiguos, la fluidez y los efectos de desenfoque dependerán
 de la versión instalada de Android System WebView.
 
 **Estado:** código fuente y workflow de compilación. La integración
-MediaSession/OBD, launcher HOME y giro 360° se desarrollarán por separado.
+Wi-Fi remoto, OBD, launcher HOME y giro 360° se desarrollarán por separado.

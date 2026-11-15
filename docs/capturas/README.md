@@ -23,6 +23,7 @@ interfaz real en Chromium** a 1280 × 720 y crea capturas por sección.
 | Contraste claro | [09 — Modo día](actual/09-modo-dia-1280x720.png) |
 | Fotografía frontal ampliada | [10 — Ibiza frontal](actual/10-ibiza-detalle.png) |
 | Fotografía trasera ampliada | [11 — Ibiza trasera](actual/11-ibiza-trasera.png) |
+| Música Android con metadatos de prueba (no reproducción real) | [12 — Vista de integración](actual/12-musica-integracion-prueba.png) |
 
 ### Histórico de versiones
 

@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="brand.css"/>
 <link rel="stylesheet" href="widgets.css"/>
+<link rel="stylesheet" href="media.css"/>
 </head>
 <body data-mode="night">
 <div class="wallpaper" id="wallpaper" aria-hidden="true"></div><div class="wallShade" aria-hidden="true"></div>
@@ -42,8 +43,8 @@
         <div class="underLine"></div>
       </div>
       <div class="musicPanel glass">
-        <div class="trackRow"><div class="album"><svg class="icon"><use href="#i-music"/></svg></div><div class="trackText"><strong id="songName">Sin reproducir</strong><span id="songArtist">Abre tu aplicación de música</span></div><button class="smallAction" data-action="music" title="Abrir aplicación de música" aria-label="Abrir aplicación de música"><svg class="icon"><use href="#i-external"/></svg></button></div>
-        <div class="songMeta"><div class="timelineBar"><span id="trackProgress"></span></div><div class="trackTimes"><span>00:00</span><span>00:00</span></div></div>
+        <div class="trackRow"><div class="album"><svg class="icon"><use href="#i-music"/></svg><img class="albumArtImage" id="albumArt" alt="Portada del álbum" hidden/></div><div class="trackText"><strong id="songName">Sin reproducir</strong><span id="songArtist">Abre tu aplicación de música</span><button id="musicPermission" class="musicPermission" data-action="music-access" hidden>Activar acceso a música</button></div><button class="smallAction" data-action="music" title="Abrir aplicación de música" aria-label="Abrir aplicación de música"><svg class="icon"><use href="#i-external"/></svg></button></div>
+        <div class="songMeta"><div class="timelineBar"><span id="trackProgress"></span></div><div class="trackTimes"><span id="musicCurrent">00:00</span><span id="musicDuration">00:00</span></div></div>
         <div class="musicControls">
           <button data-action="demo-shuffle" aria-label="Aleatorio"><svg class="icon"><use href="#i-shuffle"/></svg></button>
           <button data-action="demo-prev" aria-label="Anterior"><svg class="icon"><use href="#i-prev"/></svg></button>
