@@ -42,10 +42,24 @@
 .airplayFoot{border-top:1px solid rgba(207,225,239,.13);margin-top:15px;padding-top:10px;
   color:#a2b6c7;font-size:11px;line-height:1.55}
 .musicPanel .musicControls button[data-action="airplay-setup"]{
-  color:#80edb6;background:rgba(83,214,149,.12);
-  border:1px solid rgba(97,225,160,.31);border-radius:10px;
+  position:relative;color:#a9b8c9;background:rgba(183,199,217,.055);
+  border:1px solid rgba(183,199,217,.16);border-radius:10px;
+  transition:color .18s,background .18s,border-color .18s;
 }
-.musicPanel .musicControls button[data-action="airplay-setup"] .icon{stroke:#8af0be}
+.musicPanel .musicControls button[data-action="airplay-setup"] .icon{stroke:currentColor}
+.musicPanel .musicControls button[data-action="airplay-setup"]:hover{
+  color:#dce9f5;background:rgba(183,199,217,.11);
+}
+.musicPanel .musicControls button[data-action="airplay-setup"][data-airplay-state="ready"]{
+  color:#c4d8ed;background:rgba(125,171,214,.09);border-color:rgba(145,191,232,.24);
+}
+.musicPanel .musicControls button[data-action="airplay-setup"][data-airplay-state="missing"]{
+  color:#efc28d;background:rgba(226,168,91,.09);border-color:rgba(226,168,91,.24);
+}
+.musicPanel .musicControls button[data-action="airplay-setup"][data-airplay-state="playing"]{
+  color:#8af0be;background:rgba(83,214,149,.13);border-color:rgba(97,225,160,.34);
+  box-shadow:0 0 0 3px rgba(83,214,149,.045);
+}
 .airplayShortcut{border-radius:9px;padding:5px 8px;background:rgba(85,221,145,.09);
   border:1px solid rgba(87,224,155,.2);color:#a8efc7;font-size:10px;cursor:pointer}
 .musicDetailFooter .airplayShortcut{flex:none;font-size:11px}
