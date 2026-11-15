@@ -1,4 +1,4 @@
-# G² Dash para Android — v0.4.2 (Mi Ibiza)
+# G² Dash para Android — v0.4.3 (bienvenida de encendido)
 
 Este módulo es una aplicación Android nativa que **reutiliza exactamente**
 el diseño web aprobado (archivos del directorio principal). No contiene un
@@ -13,7 +13,11 @@ modelo 360° del Ibiza: mantiene las fotografías originales del vehículo.
 - El mapa dentro del panel sigue siendo ilustrativo.
 - Música: autorización opcional a sesiones multimedia locales, título, artista,
   portada, progreso y controles disponibles. Consulta [MÚSICA](MUSICA.md).
-- No se configura como pantalla de inicio predeterminada en esta versión.
+- Pantalla de bienvenida SEAT → G² DASH → «Buenas Noches Doble G, ¿A dónde iremos hoy?» → tablero. Saludo dinámico y botón Omitir.
+- Ajustes → Ver bienvenida para repetirla.
+- G² Dash es una **opción HOME**, pero la selección es manual y reversible; nunca se activa automáticamente.
+- Para volver al launcher anterior: Ajustes de Android → Apps → Aplicaciones predeterminadas → App de inicio → elegir el launcher original.
+- **Encendido del vehículo:** algunos estéreos reinician Android; otros solo reanudan desde suspensión. La bienvenida aparece al abrir la aplicación, no necesariamente en cada reanudación. Probar en el estéreo antes de configurar HOME.
 
 ## Compilar
 Requisitos: Android SDK 35, Java 17 y Gradle 8.9.
@@ -43,11 +47,11 @@ En estéreos antiguos, la fluidez y los efectos de desenfoque dependerán
 de la versión instalada de Android System WebView.
 
 **Estado:** código fuente y workflow de compilación. La integración
-Wi-Fi remoto, OBD, launcher HOME y giro 360° se desarrollarán por separado.
+Wi-Fi remoto, OBD, puesta en marcha HOME en el equipo físico y giro 360° se verificarán por separado.
 
 ## Paridad visual
 
-El paquete Android incluye `style.css`, `brand.css`, `widgets.css`, `ibiza-cutout.css`, `media.css`, `adaptive.css`, el JavaScript y las imágenes de `assets/` para conservar los mismos ajustes y el Ibiza real que en GitHub Pages.
+El paquete Android incluye `style.css`, `brand.css`, `widgets.css`, `ibiza-cutout.css`, `media.css`, `adaptive.css`, `intro.css`, `intro.js`, el JavaScript y las imágenes de `assets/` para conservar los mismos ajustes y el Ibiza real que en GitHub Pages.
 
 ## Máscara real del Ibiza v0.4.2
 
