@@ -2,7 +2,7 @@
 
 # G² Dash
 
-**Interfaz automotriz personalizable · Web y Android · v0.4.5**
+**Interfaz automotriz personalizable · Web y Android · v0.5.0**
 
 Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados configurables y acceso a las funciones Android del estéreo.
 
@@ -24,6 +24,12 @@ El símbolo SEAT de la primera pantalla ya utiliza el **vector original**, no un
 La apertura de la app (web o APK Android) muestra tres momentos: emblema **SEAT / G² DASH**, saludo dinámico a Doble G y un resumen de avance. El resumen indica que ya están las fotos reales del Ibiza y la música local con metadatos/portada; deja claro que la música del teléfono por Wi‑Fi sigue pendiente de definir. Después aparece el tablero de siempre. Toda la secuencia dura aproximadamente **4.6 segundos**, incluye **Omitir** y se puede volver a abrir desde **Ajustes → Ver bienvenida**.
 
 El saludo aparece **al abrir la aplicación**. Para verlo al encender el vehículo, Android debe elegir G² Dash como HOME y el estéreo debe ejecutarlo al inicio; la elección es manual, no automática. Algunos estéreos reanudan desde suspensión sin reiniciar la aplicación y, en ese caso, puede no repetirse. Esta conducta requiere validación en el Gearelec.
+
+### Ibiza — 12 vistas conceptuales
+
+El botón **12 VISTAS** abre una galería de doce ilustraciones de la propuesta aprobada. Flechas, miniaturas, selector de 0° a 330°, deslizamiento y recorrido automático opcional. **No es un modelo 3D ni doce fotos reales**. La fotografía original del Ibiza y el fondo del tablero continúan intactos.
+
+[Ver detalles y capturas del visor](docs/IBIZA_360_REFERENCIA_APROBADA.md).
 
 ### Ya está implementado
 
@@ -63,7 +69,7 @@ El saludo aparece **al abrir la aplicación**. Para verlo al encender el vehícu
 
 > **Aviso:** el mapa es una ilustración, no un mapa en tiempo real. Los campos de autonomía y voltaje permanecen vacíos hasta que exista una conexión real; no se inventan valores del vehículo. Los iconos de Wi-Fi y Bluetooth son decorativos en esta demostración web.
 
-## Aplicación Android (v0.4.5 — APK de prueba)
+## Aplicación Android (v0.5.0 — APK de prueba)
 
 El APK reutiliza la interfaz y los recursos del proyecto. Incluye acceso a aplicaciones instaladas y GPS opcional.
 

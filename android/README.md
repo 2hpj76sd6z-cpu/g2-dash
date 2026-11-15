@@ -1,4 +1,4 @@
-# G² Dash para Android — v0.4.3 (bienvenida de encendido)
+# G² Dash para Android — v0.5.0 (galería Ibiza de 12 vistas)
 
 Este módulo es una aplicación Android nativa que **reutiliza exactamente**
 el diseño web aprobado (archivos del directorio principal). No contiene un
@@ -56,3 +56,7 @@ El paquete Android incluye `style.css`, `brand.css`, `widgets.css`, `ibiza-cutou
 ## Máscara real del Ibiza v0.4.2
 
 Se refinó solo la máscara de transparencia del recorte; la fotografía original WebP incrustada no se ha cambiado en absoluto. La matrícula sigue anonimizada. Las dos fotos reales originales permanecen disponibles. El resultado sigue siendo una máscara aproximada, sin modelo 360°.
+
+## Galería visual Ibiza v0.5.0
+
+La tarjeta Mi Ibiza incluye el botón **12 VISTAS**, con imágenes conceptuales aprobadas a 0°–330° en pasos de 30°. Se controla con miniaturas, deslizamiento, selector y flechas. Los WebP se incluyen localmente, sin WebGL ni Internet. **No es un modelo 3D**, y las fotos reales del usuario siguen intactas.

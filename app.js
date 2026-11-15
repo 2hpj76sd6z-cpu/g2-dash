@@ -165,7 +165,7 @@
   }
   function handleAction(action){
     switch(action){
-      case 'home':closeScreen('#settingsVeil');closeScreen('#vehicleVeil');break;
+      case 'home':closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close();break;
       case 'open-settings':openScreen('#settingsVeil');break;
       case 'intro-preview':closeScreen('#settingsVeil');window.G2ShowIntro?.();break;
       case 'home-settings':
@@ -174,6 +174,7 @@
         break;
       case 'close-settings':closeScreen('#settingsVeil');break;
       case 'vehicle':openScreen('#vehicleVeil');break;
+      case 'concept-360':window.G2Concept?.open();break;
       case 'close-vehicle':closeScreen('#vehicleVeil');break;
       case 'car-front':photoChange(0);break;
       case 'car-rear':photoChange(1);break;
@@ -243,7 +244,7 @@
     };reader.readAsDataURL(file);
   });
   $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();openMap()}});
-  document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil')}});
-  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.4.4';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
+  document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close()}});
+  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.0';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
   photoChange(0);applySettings();updateClock();setInterval(updateClock,20000);
 })();

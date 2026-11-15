@@ -144,11 +144,32 @@ try {
   await capture('15-ibiza-mascara-ampliada');
   await page.locator('[data-action="close-vehicle"]').click();
 
+  // Galería conceptual aprobada: capturas reales y QA táctil/teclado.
+  await page.locator('[data-action="concept-360"]').click();
+  await page.locator('#conceptHero').evaluate(img => img.decode());
+  if(await page.locator('#conceptThumbs button').count() !== 12) throw new Error('Faltan miniaturas 12 vistas');
+  if(await page.locator('#conceptAngle').textContent() !== '30°') throw new Error('Ángulo inicial incorrecto');
+  await capture('17-ibiza-conceptual-12-vistas');
+  await page.locator('#conceptNext').click();
+  if(await page.locator('#conceptAngle').textContent() !== '60°') throw new Error('Ángulo siguiente falló');
+  await page.locator('#conceptHero').evaluate(img => img.decode());
+  await capture('18-ibiza-conceptual-60-grados');
+  await page.locator('#conceptThumbs button').nth(6).click();
+  if(await page.locator('#conceptAngle').textContent() !== '180°') throw new Error('Miniatura trasera falló');
+  await page.locator('#conceptHero').evaluate(img => img.decode());
+  await capture('19-ibiza-conceptual-trasera-180');
+  await page.locator('#conceptClose').click();
+  if(!await page.locator('#conceptVeil').isHidden()) throw new Error('No cierra la galería');
+
   // La misma interfaz en pantallas menos espaciosas para evitar cortes.
   await page.setViewportSize({width:1024,height:600});
   await page.reload({waitUntil:'networkidle'});
   await page.locator('#startup').waitFor({state:'hidden',timeout:8000});
   await inspectViewport('1024×600');
+  await page.locator('[data-action="concept-360"]').click();
+  await page.locator('#conceptHero').evaluate(img => img.decode());
+  await capture('20-ibiza-conceptual-1024x600');
+  await page.locator('#conceptClose').click();
   await capture('14-compacto-1024x600');
   await capture('15-ibiza-1024x600','.vehiclePanel');
   await page.setViewportSize({width:960,height:540});
@@ -173,7 +194,9 @@ try {
       '11-ibiza-trasera.png', '12-musica-integracion-prueba.png',
       '13-musica-detallada-ejemplo.png', '14-compacto-1024x600.png',
       '15-ibiza-1024x600.png', '16-compacto-960x540.png',
-      '14-ibiza-mascara-corregida.png', '15-ibiza-mascara-ampliada.png'
+      '14-ibiza-mascara-corregida.png', '15-ibiza-mascara-ampliada.png',
+      '17-ibiza-conceptual-12-vistas.png','18-ibiza-conceptual-60-grados.png',
+      '19-ibiza-conceptual-trasera-180.png','20-ibiza-conceptual-1024x600.png'
     ]
   };
   await writeFile(path.join(root, 'meta.json'), JSON.stringify(meta, null, 2) + '\n');

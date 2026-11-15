@@ -18,6 +18,16 @@ Capturas obtenidas del HTML/CSS/JS real en Chromium horizontal.
 
 La secuencia dura aproximadamente 4.6 segundos y se reproduce al abrir G² Dash; la tercera vista aclara qué está listo y que la música remota por Wi‑Fi sigue pendiente. El encendido automático del estéreo solo podrá verificarse en el dispositivo, tras seleccionar la app HOME si el fabricante lo permite.
 
+## Mi Ibiza — 12 vistas conceptuales (v0.5.0)
+
+Imágenes de la galería real ejecutada en Chromium (los automóviles ilustrados proceden de la propuesta, no son fotografías del vehículo desde esos ángulos).
+
+| Galería 12 vistas | Vista 60° | Trasera 180° |
+|---|---|---|
+| ![Visor conceptual](actual/17-ibiza-conceptual-12-vistas.png) | ![Visor a 60 grados](actual/18-ibiza-conceptual-60-grados.png) | ![Visor a 180 grados](actual/19-ibiza-conceptual-trasera-180.png) |
+
+[Captura compacta 1024 × 600](actual/20-ibiza-conceptual-1024x600.png)
+
 ## Comparación antes y después
 
 [**Bienvenida y estado del proyecto v0.4.5**](CAMBIOS_v0.4.5.md) · [Mi Ibiza: foto completa por defecto y recorte opcional (v0.4.4)](CAMBIOS_v0.4.4.md)

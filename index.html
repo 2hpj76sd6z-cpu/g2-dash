@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"/>
 <meta name="theme-color" content="#111826"/>
-<title>G² Dash · v0.4.5</title>
+<title>G² Dash · v0.5.0</title>
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="brand.css"/>
 <link rel="stylesheet" href="widgets.css"/>
@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="media.css"/>
 <link rel="stylesheet" href="adaptive.css"/>
 <link rel="stylesheet" href="intro.css"/>
+<link rel="stylesheet" href="ibiza360.css"/>
 </head>
 <body data-mode="night">
 <!-- Bienvenida al abrir G² Dash; el fondo del tablero no cambia. -->
@@ -108,7 +109,7 @@
     </section>
 
     <section class="vehiclePanel glass" aria-label="Mi Ibiza">
-      <div class="vehHeading"><div><strong>Mi Ibiza</strong><small>SEAT 6J · 5 puertas</small></div><button class="smallAction" data-action="vehicle" title="Ver fotografías" aria-label="Ver fotografías"><svg class="icon"><use href="#i-expand"/></svg></button></div>
+      <div class="vehHeading"><div><strong>Mi Ibiza</strong><small>SEAT 6J · 5 puertas</small></div><div class="vehTools"><button class="conceptEntry" type="button" data-action="concept-360" aria-label="Abrir doce vistas conceptuales del Ibiza">12 VISTAS</button><button class="smallAction" data-action="vehicle" title="Ver fotografías reales" aria-label="Ver fotografías reales"><svg class="icon"><use href="#i-expand"/></svg></button></div></div>
       <button class="carView" id="vehicleView" data-action="vehicle" title="Ver mi Ibiza" aria-label="Ver fotografías originales del Ibiza">
         <img src="assets/ibiza_frente_original.webp" id="vehiclePhoto" alt="Fotografía frontal real del SEAT Ibiza blanco con boca negra y placa protegida"/>
         <span class="carChip" id="carChip">FRENTE · FOTO ORIGINAL</span>
@@ -160,6 +161,35 @@
 </aside></div>
 
 <div class="screenveil" id="vehicleVeil" hidden><div class="vehicleModal glass" role="dialog" aria-modal="true" aria-label="Fotos de mi Ibiza"><header><div><h2>Mi Ibiza original</h2><p>Dos fotos reales + recorte opcional · placas protegidas</p></div><button class="closeBtn" data-action="close-vehicle" aria-label="Cerrar"><svg class="icon"><use href="#i-x"/></svg></button></header><div class="modalPhoto"><img id="modalCar" src="assets/ibiza_frente_original.webp" alt="Fotografía frontal real del SEAT Ibiza"/></div><div class="modalActions"><button data-action="car-prev">‹ Vista anterior</button><span id="modalLabel">Frontal</span><button data-action="car-next">Vista siguiente ›</button></div><div class="disclaimer">Giro 360° pendiente de modelo 3D correcto. No se simula un giro falso.</div></div></div>
+<div class="screenveil" id="conceptVeil" hidden>
+<section class="conceptModal" role="dialog" aria-modal="true" aria-label="Ibiza: doce vistas conceptuales">
+  <header class="conceptModalHeader">
+    <div><h2>Mi Ibiza · 12 vistas conceptuales</h2><p>SEAT Ibiza 6J · blanco y negro · propuesta visual aprobada</p></div>
+    <div class="vehTools"><span class="conceptTag">NO ES MODELO 3D</span><button type="button" class="closeBtn" id="conceptClose" aria-label="Cerrar galería"><svg class="icon"><use href="#i-x"/></svg></button></div>
+  </header>
+  <div class="conceptStageArea">
+    <div id="conceptStage" class="conceptStage" role="group" aria-label="Vista conceptual: desliza para cambiar">
+      <div class="conceptStageLabel"><b id="conceptLabel">Frontal 3/4 der.</b><span>PROPUESTA VISUAL · ÁNGULO ILUSTRATIVO</span></div>
+      <img id="conceptHero" class="conceptHeroImage" src="assets/ibiza360/vista_01.webp" alt="Ibiza de concepto, ángulo frontal tres cuartos" draggable="false"/>
+      <strong id="conceptAngle" class="conceptAngle">30°</strong>
+    </div>
+    <aside class="conceptAside">
+      <h3>Identidad aprobada</h3>
+      <dl><dt>Carrocería</dt><dd>Blanco · 5 puertas</dd><dt>Techo</dt><dd>Negro</dd><dt>Rines</dt><dd>Negros</dd><dt>Retrovisores</dt><dd>Negros</dd><dt>Manijas</dt><dd>Negras</dd><dt>Cristales</dt><dd>Polarizados</dd></dl>
+      <p>Desliza sobre el auto o toca un ángulo. Se trata de imágenes conceptuales, no de un modelo tridimensional validado.</p>
+    </aside>
+  </div>
+  <div class="conceptControls">
+    <button class="conceptButton" type="button" id="conceptPrev" aria-label="Ángulo anterior">‹</button>
+    <input type="range" min="0" max="11" step="1" value="1" id="conceptSlider" aria-label="Seleccionar vista de cero a trescientos treinta grados"/>
+    <button class="conceptButton" type="button" id="conceptNext" aria-label="Ángulo siguiente">›</button>
+    <button class="conceptButton" type="button" id="conceptAuto" aria-pressed="false" aria-label="Activar o detener recorrido visual">▶</button>
+    <small>30° por vista</small>
+  </div>
+  <div id="conceptThumbs" class="conceptThumbs" role="group" aria-label="Miniaturas de doce ángulos conceptuales"></div>
+  <footer class="conceptFoot">Propuesta visual · 12 ilustraciones, no fotos reales ni rotación 3D. Las fotos originales permanecen disponibles en «Mi Ibiza».</footer>
+</section>
+</div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <!-- All icons are locally bundled, no external assets or icon fonts -->
 <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg"><defs>
@@ -167,5 +197,6 @@
 <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 3h7v7M10 14 21 3M20 13v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></symbol><symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h16m-7-7 7 7-7 7"/></symbol><symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/></symbol><symbol id="i-expand" viewBox="0 0 24 24"><path d="M9 3H3v6M3 3l7 7M15 21h6v-6M21 21l-7-7"/></symbol></defs></svg>
 <script src="intro.js"></script>
 <script src="app.js"></script>
+<script src="ibiza360.js"></script>
 </body>
 </html>

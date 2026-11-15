@@ -23,15 +23,15 @@
 
 ## Estado de implementación
 
-La prueba interactiva autocontenida de doce vistas se entregó en la conversación como
-archivo HTML y paquete ZIP. **Los archivos binarios de esa prueba no están alojados
-en este repositorio en el momento de crear esta nota.** Este documento registra
-las decisiones visuales sin afirmar que el giro ya esté disponible en el APK.
+**Integrado en G² Dash v0.5.0.** El botón **12 VISTAS** muestra la galería aprobada en la web y en el proyecto Android.
 
-La representación comercial con giro real requiere un único modelo 3D validado
-que sea consistente en todos los ángulos o una secuencia de fotografías
-reales tomada con un dispositivo giratorio. Las vistas ilustrativas
-pueden mostrar inconsistencias de geometría entre cuadros.
+- 12 WebP comprimidos: [assets/ibiza360](../assets/ibiza360/).
+- Flechas, deslizamiento, barra de ángulos, miniaturas y recorrido automático.
+- Sin dependencia de red ni WebGL, con el fondo y las fotos reales intactos.
+- Capturas reales y pruebas de 12 miniaturas: [evidencia visual](capturas/README.md).
+- Estado explícito: **PROPUESTA VISUAL, NO ES MODELO 3D**.
+
+El material puede presentar incoherencias entre ángulos porque corresponde a ilustraciones conceptuales; no debe anunciarse como reconstrucción exacta del vehículo.
 
 **Licencia:** consultar [LICENSE](../LICENSE); los nombres y marcas de terceros
 siguen perteneciendo a sus respectivos titulares.

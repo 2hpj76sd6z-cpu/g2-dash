@@ -261,6 +261,8 @@ public class MainActivity extends Activity {
     public void onBackPressed() {
         webView.evaluateJavascript("(function(){const s=document.querySelector('#settingsVeil');" +
                 "const v=document.querySelector('#vehicleVeil');" +
+                "const c=document.querySelector('#conceptVeil');" +
+                "if(c&&!c.hidden){if(window.G2Concept)window.G2Concept.close();else c.hidden=true;return true;}" +
                 "if(s&&!s.hidden){s.hidden=true;return true;}" +
                 "if(v&&!v.hidden){v.hidden=true;return true;}return false;})()",
                 value -> {
