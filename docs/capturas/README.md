@@ -29,6 +29,20 @@ interfaz real en Chromium** a 1280 × 720 y crea capturas por sección.
 |---|---|
 | ![Panel de ajustes](actual/08-personalizacion.png) | ![Modo día](actual/09-modo-dia-1280x720.png) |
 
+## Comprobación de resoluciones (v0.4.2)
+
+La captura real de Chromium verifica que las secciones principales permanecen dentro del área de visualización, sin desbordamiento horizontal y con la foto del Ibiza cargada. Se prueban las siguientes resoluciones:
+
+| Resolución | Captura real |
+|---|---|
+| **1280 × 720** · objetivo del estéreo | [Pantalla principal](actual/01-inicio-1280x720.png) |
+| **1024 × 600** · versión compacta | [Tablero](actual/14-compacto-1024x600.png) · [Mi Ibiza](actual/15-ibiza-1024x600.png) |
+| **960 × 540** · verificación adicional | [Tablero](actual/16-compacto-960x540.png) |
+
+[Ver resultados de geometría en JSON](actual/qa-layout.json).
+
+> Este control detecta cortes de las secciones principales, pero no sustituye las pruebas de fluidez, táctil, WebView y memoria RAM en el estéreo físico.
+
 ## Galería visual actual
 
 | Sección | Evidencia |
