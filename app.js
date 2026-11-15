@@ -140,15 +140,19 @@
     $('#mapStateDetail').textContent=hasDestination?'Se abrirá en Google Maps':'Abre tu navegador para navegar';
   }
   function activateGps(){
-    if(!navigator.geolocation){showToast('GPS no disponible en este navegador');return}
-    if(!window.isSecureContext){showToast('Para usar GPS, abre la prueba mediante HTTPS');return}
-    $('#speedLabel').textContent='Buscando señal GPS…';
+    if(!navigator.geolocation){$('#speedLabel').textContent='GPS no disponible';showToast('GPS no disponible en este navegador');return}
+    if(!window.isSecureContext){$('#speedLabel').textContent='GPS requiere HTTPS';showToast('Para usar GPS, abre la prueba mediante HTTPS');return}
+    $('#speedLabel').textContent='Buscando señal…';
     navigator.geolocation.getCurrentPosition((position)=>{
       const speed=position.coords.speed;
-      if(Number.isFinite(speed)&&speed>=0){$('#speed').innerHTML=`${Math.round(speed*3.6)} <small>km/h</small>`;$('#speedLabel').textContent='Velocidad GPS estimada'}
-      else{$('#speed').innerHTML='— <small>km/h</small>';$('#speedLabel').textContent='Sin velocidad GPS disponible'}
+      if(Number.isFinite(speed)&&speed>=0){$('#speed').innerHTML=`${Math.round(speed*3.6)} <small>km/h</small>`;$('#speedLabel').textContent='GPS activo'}
+      else{$('#speed').innerHTML='— <small>km/h</small>';$('#speedLabel').textContent='Sin velocidad GPS'}
       showToast('GPS activo para estimar velocidad; el mapa sigue siendo ilustrativo.');
-    },(err)=>{$('#speedLabel').textContent='Velocidad GPS';showToast(err.code===1?'Permiso de ubicación denegado':'No se pudo obtener ubicación')},{enableHighAccuracy:true,timeout:10000,maximumAge:2000});
+    },(err)=>{
+      const errors={1:['Sin permiso GPS','Permiso de ubicación denegado'],2:['Señal GPS ausente','No se obtuvo ubicación'],3:['GPS sin respuesta','No se pudo obtener ubicación a tiempo']};
+      const [label,message]=errors[err.code]||['GPS no disponible','No se pudo obtener ubicación'];
+      $('#speedLabel').textContent=label;showToast(message);
+    },{enableHighAccuracy:true,timeout:10000,maximumAge:2000});
   }
   // Android invokes this using a local and isolated WebView origin.
   // On GitHub Pages this API only receives clearly marked visual test data.
