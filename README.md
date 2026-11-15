@@ -21,7 +21,7 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 El símbolo SEAT de la primera pantalla ya utiliza el **vector original**, no una recreación. Fuente del emblema: [Simple Icons – SEAT](https://github.com/simple-icons/simple-icons/blob/develop/icons/seat.svg). La marca SEAT pertenece a su titular; su aparición identifica el vehículo del proyecto y no implica afiliación comercial.
 
 
-La apertura de la app (web o APK Android) muestra tres momentos: emblema **SEAT / G² DASH**, saludo dinámico a Doble G y un resumen de avance. El resumen indica que ya están las fotos reales del Ibiza y la música local con metadatos/portada; deja claro que la música del teléfono por Wi‑Fi sigue pendiente de definir. Después aparece el tablero de siempre. Toda la secuencia dura aproximadamente **4.6 segundos**, incluye **Omitir** y se puede volver a abrir desde **Ajustes → Ver bienvenida**.
+La apertura de la app (web o APK Android) muestra tres momentos: emblema **SEAT / G² DASH**, saludo dinámico a Doble G y un resumen de avance. El resumen indica que el Ibiza tiene fotos originales y un visor conceptual de 12 vistas, y que la música local muestra título y portada; la música del teléfono por Wi‑Fi sigue pendiente de definir. Después aparece el tablero de siempre. Toda la secuencia dura aproximadamente **4.6 segundos**, incluye **Omitir** y se puede volver a abrir desde **Ajustes → Ver bienvenida**.
 
 El saludo aparece **al abrir la aplicación**. Para verlo al encender el vehículo, Android debe elegir G² Dash como HOME y el estéreo debe ejecutarlo al inicio; la elección es manual, no automática. Algunos estéreos reanudan desde suspensión sin reiniciar la aplicación y, en ese caso, puede no repetirse. Esta conducta requiere validación en el Gearelec.
 
@@ -119,7 +119,7 @@ g2-dash/
 ├── media.css                 # Widget de música
 ├── app.js                    # Interacciones y preferencias
 ├── android/                  # APK de prueba y código Android
-├── assets/                   # Fotos originales y máscara del Ibiza
+├── assets/                   # Fotos, máscara y galería conceptual del Ibiza
 ├── docs/capturas/            # Evidencia visual por sección y versión
 ├── .github/workflows/        # APK y capturas automáticas
 ├── README.md

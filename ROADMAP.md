@@ -46,7 +46,7 @@ El botón **12 VISTAS** abre la propuesta aprobada con miniaturas, selector, des
 
 Al abrir G² Dash, la tercera pantalla resume qué está listo y deja la música del teléfono por Wi‑Fi como siguiente etapa pendiente. La galería conceptual de 12 ángulos ya forma parte del tablero. La secuencia dura aproximadamente 4.6 segundos y se puede omitir.
 
-![Resumen v0.4.5 al abrir](docs/capturas/actual/00c-arranque-estado-v050.png)
+![Resumen v0.5.0 al abrir](docs/capturas/actual/00c-arranque-estado-v050.png)
 
 [Ver fotos reales v0.4.4](docs/capturas/CAMBIOS_v0.4.4.md) · [Ver visor conceptual v0.5.0](docs/capturas/CAMBIOS_v0.5.0.md) · [Referencia aprobada](docs/IBIZA_360_REFERENCIA_APROBADA.md)
 
