@@ -8,7 +8,7 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 ![Encabezado actual de G² Dash](docs/capturas/actual/02-encabezado.png)
 
-[Galería visual por sección](docs/capturas/README.md) · [Estado y hoja de ruta](ROADMAP.md)
+[Galería visual por sección](docs/capturas/README.md) · [Reproductor ampliado](docs/capturas/README.md) · [Estado y hoja de ruta](ROADMAP.md)
 
 </div>
 
@@ -49,14 +49,14 @@ La conexión musical desde un iPhone/Android por el punto de acceso Wi-Fi **no e
 
 ### Ya está implementado
 
-- Bienvenida SEAT / G² DASH con saludo a Doble G y resumen del estado v0.5.0.
+- Bienvenida SEAT / G² DASH con saludo a Doble G y resumen del estado v0.5.2.
 - Reproductor musical ampliado con carátula y barra de avance condicionada a las capacidades de MediaSession.
 - Centro de Apps con iconos de Android, búsqueda, favoritos y apertura segura (en web, demostración marcada).
 - Visor conceptual del Ibiza con 12 vistas y controles de ángulo, separado de las fotos reales.
 - Tres estilos de logotipo G² DASH: APEX, PULSE y ORBIT.
 - Widgets ahumados con cuatro tonalidades, opacidad y difuminado ajustables.
 - Ajustes visuales guardados localmente.
-- Sesión de música Android local con título, artista, portada y controles disponibles; requiere permiso explícito.
+- Sesión de música Android local y panel ampliado con título, artista, portada, avance y controles que la app reproductora permita; requiere permiso explícito.
 - Capturas automáticas por sección después de cada subida de código a `main`.
 
 ### Lo siguiente
@@ -75,7 +75,7 @@ La conexión musical desde un iPhone/Android por el punto de acceso Wi-Fi **no e
 - Mi Ibiza abre con la foto frontal completa y ofrece la foto trasera y el recorte transparente como opciones. El recorte sigue en revisión; no es un modelo 3D.
 - Selección opcional de una imagen personal en formato PNG o WebP.
 - GPS del navegador con permiso y HTTPS; búsqueda que abre Google Maps fuera del panel.
-- El reproductor web es una demostración visual; no reproduce audio real.
+- El reproductor web, incluido el panel ampliado, es una demostración visual; no reproduce audio real.
 
 ### Funciones pendientes
 
@@ -86,11 +86,11 @@ La conexión musical desde un iPhone/Android por el punto de acceso Wi-Fi **no e
 
 > **Aviso:** el mapa es una ilustración, no un mapa en tiempo real. Los campos de autonomía y voltaje permanecen vacíos hasta que exista una conexión real; no se inventan valores del vehículo. Los iconos de Wi-Fi y Bluetooth son decorativos en esta demostración web.
 
-## Aplicación Android (v0.5.1 — APK de prueba)
+## Aplicación Android (v0.5.2 — APK de prueba)
 
 El APK reutiliza la interfaz y los recursos del proyecto. Incluye acceso a aplicaciones instaladas y GPS opcional.
 
-La música local funciona mediante la sesión multimedia del reproductor abierto en el estéreo: puede mostrar título, artista, portada y los controles que esa app permita. Requiere habilitar el acceso multimedia en Android. La conexión remota desde el teléfono por Wi-Fi todavía no está implementada; [aquí está el detalle](android/MUSICA.md).
+La música local funciona mediante la sesión multimedia del reproductor abierto en el estéreo: puede mostrar título, artista, portada, avance y los controles que esa app permita. Requiere habilitar el acceso multimedia en Android. El reproductor ampliado se identifica como demostración en la web y no simula sonido. La conexión remota desde el teléfono por Wi-Fi todavía no está implementada; [aquí está el detalle](android/MUSICA.md).
 
 El APK no sustituye todavía el launcher HOME y falta validarlo en el estéreo Gearelec. GitHub Actions compila el APK de depuración en el flujo [Android APK](.github/workflows/android-apk.yml); consulta los artefactos en la pestaña **Actions**.
 
@@ -99,7 +99,7 @@ El APK no sustituye todavía el launcher HOME y falta validarlo en el estéreo G
 
 ## Registro visual por cada actualización
 
-![Resumen de actualización al abrir G² Dash](docs/capturas/actual/00c-arranque-estado-v050.png)
+![Resumen de actualización al abrir G² Dash](docs/capturas/actual/00c-arranque-estado-v052.png)
 
 ![Vista actual de G² Dash](docs/capturas/actual/01-inicio-1280x720.png)
 
