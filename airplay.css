@@ -1,0 +1,55 @@
+/* G² Dash v0.5.3 — enlace AirPlay de iPhone vía receptor Android externo.
+   El UI no reproduce DRM, no levanta servidores ni suplanta un dispositivo AirPlay. */
+.airplayVeil{z-index:18}
+.airplayModal{
+  width:min(850px,96vw);max-height:94vh;overflow:auto;
+  background:linear-gradient(145deg,rgba(22,36,49,.985),rgba(9,18,29,.995));
+  border:1px solid rgba(175,214,230,.25);border-radius:22px;
+  padding:20px 23px;color:#eef5fa;
+  box-shadow:0 24px 75px rgba(0,0,0,.43);
+}
+.airplayHeader{display:flex;align-items:center;gap:13px}
+.airplayLogo{display:grid;place-items:center;flex:none;width:51px;height:51px;
+  border:1px solid rgba(85,223,151,.25);background:rgba(77,204,135,.09);
+  color:#65e69f;border-radius:15px;font-size:27px}
+.airplayHeaderText{flex:1;min-width:0}
+.airplayHeaderText h2{font-size:23px;margin:0;letter-spacing:-.025em}
+.airplayHeaderText p{margin:4px 0 0;color:#a0b7ca;font-size:11px}
+.airplayStatus{margin:15px 0 14px;display:flex;align-items:center;gap:10px;
+  border:1px solid rgba(179,208,227,.19);border-radius:12px;padding:11px 13px;
+  background:rgba(255,255,255,.035)}
+.airplayStatusDot{width:9px;height:9px;flex:none;background:#8fa7b7;border-radius:50%}
+.airplayStatus[data-state="ready"] .airplayStatusDot{background:#65dca0}
+.airplayStatus[data-state="playing"] .airplayStatusDot{background:#65dca0;box-shadow:0 0 0 4px rgba(101,220,160,.12)}
+.airplayStatus[data-state="unsupported"] .airplayStatusDot{background:#dca46c}
+.airplayStatusText{min-width:0;flex:1}
+.airplayStatusText strong{display:block;font-size:13px;font-weight:690}
+.airplayStatusText span{display:block;margin-top:3px;font-size:11px;line-height:1.4;color:#a5b8ca}
+.airplaySteps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.airplayStep{display:flex;align-items:flex-start;gap:11px;
+  border:1px solid rgba(201,225,240,.13);border-radius:12px;
+  background:rgba(235,246,255,.035);padding:12px 13px;min-width:0}
+.airplayStep b{flex:none;display:grid;place-items:center;width:28px;height:28px;
+  border-radius:9px;background:rgba(78,216,148,.11);color:#69dca2;font-size:12px}
+.airplayStep strong{display:block;font-size:12px;font-weight:650}
+.airplayStep p{margin:4px 0 0;color:#acbdcc;font-size:11px;line-height:1.45}
+.airplayActions{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
+.airplayActions button{min-height:38px;border:1px solid rgba(173,220,192,.3);
+  border-radius:10px;padding:8px 14px;background:rgba(79,217,144,.11);
+  color:#d5f9e5;font-size:12px;font-weight:680;cursor:pointer}
+.airplayActions button.primary{background:#67dfa0;border-color:#67dfa0;color:#0b2319}
+.airplayActions button:disabled{opacity:.4;cursor:not-allowed}
+.airplayFoot{border-top:1px solid rgba(207,225,239,.13);margin-top:15px;padding-top:10px;
+  color:#a2b6c7;font-size:11px;line-height:1.55}
+.airplayShortcut{border-radius:9px;padding:5px 8px;background:rgba(85,221,145,.09);
+  border:1px solid rgba(87,224,155,.2);color:#a8efc7;font-size:10px;cursor:pointer}
+.musicDetailFooter .airplayShortcut{flex:none;font-size:11px}
+@media(max-height:590px){
+ .airplayModal{padding:12px 17px;max-height:97vh}
+ .airplayHeader h2{font-size:19px}.airplayLogo{width:41px;height:41px}
+ .airplayStatus{margin:7px 0;padding:7px 10px}
+ .airplayStep{padding:7px 10px}.airplayStep p{font-size:10px}
+ .airplayActions{margin-top:8px}
+ .airplayFoot{margin-top:8px;padding-top:7px}
+}
+@media(max-width:720px){.airplaySteps{grid-template-columns:1fr}}
