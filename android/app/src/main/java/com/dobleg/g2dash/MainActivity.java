@@ -50,6 +50,7 @@ public class MainActivity extends Activity {
 
     private WebView webView;
     private G2MediaBridge mediaBridge;
+    private G2UpdateManager updateManager;
     // Activity lifecycle, NOT the vehicle ignition/ACC signal.
     private boolean pageReady = false;
     private boolean restoredInstance = false;
@@ -152,6 +153,7 @@ public class MainActivity extends Activity {
             }
         });
         mediaBridge = new G2MediaBridge(this, webView);
+        updateManager = new G2UpdateManager(this);
         webView.loadUrl(HOME_URL);
     }
 
@@ -415,6 +417,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int request, int result, Intent data) {
         super.onActivityResult(request, result, data);
+        if (updateManager != null && updateManager.onActivityResult(request)) return;
         if (request == FILE_REQUEST && uploadCallback != null) {
             uploadCallback.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(result, data));
             uploadCallback = null;
@@ -451,6 +454,7 @@ public class MainActivity extends Activity {
         super.onResume();
         showImmersive();
         if (webView != null) webView.onResume();
+        if (updateManager != null) updateManager.checkForUpdate();
         if (wasPaused) {
             wasPaused = false;
             resumeCount++;
