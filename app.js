@@ -17,8 +17,13 @@
   function updateClock(){
     const now = new Date();
     $('#clock').textContent = new Intl.DateTimeFormat('es-MX',{hour:'2-digit',minute:'2-digit',hour12:false}).format(now);
-    const longDate=new Intl.DateTimeFormat('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(now);
-    $('#dateLong').textContent=longDate.charAt(0).toUpperCase()+longDate.slice(1);
+    const localDate = [now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');
+    const fullDate = new Intl.DateTimeFormat('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(now);
+    const compactDate = new Intl.DateTimeFormat('es-MX',{weekday:'short',day:'numeric',month:'short'}).format(now);
+    $('#dateLong').textContent=compactDate;
+    $('#dateLong').dateTime=localDate;
+    $('#dateLong').title=fullDate.charAt(0).toUpperCase()+fullDate.slice(1);
+    $('#dateShort').dateTime=localDate;
     $('#dateShort').textContent=new Intl.DateTimeFormat('es-MX',{weekday:'short',day:'numeric',month:'short',year:'numeric'}).format(now);
     if(settings.theme==='auto')applyTheme(false);
   }

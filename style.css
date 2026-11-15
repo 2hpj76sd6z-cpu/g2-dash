@@ -5,3 +5,5 @@
 .clockPanel,.musicPanel{overflow:hidden}
 .calendarRow{overflow:hidden;text-overflow:ellipsis}
 .digitalClock{font-size:clamp(44px,5.9vw,86px)}
+.digitalClock,.header-date{font-variant-numeric:tabular-nums}
+.calendarRow time{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

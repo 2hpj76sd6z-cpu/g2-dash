@@ -13,8 +13,8 @@
   <header class="topline">
     <button type="button" class="iconButton hamburger" data-action="open-settings" title="Abrir ajustes" aria-label="Abrir ajustes"><svg class="icon"><use href="#i-menu"/></svg></button>
     <div class="brand" aria-label="G al cuadrado Dash"><span>G<sup>2</sup></span><em>DASH</em></div>
-    <span class="header-rule"></span>
-    <div class="header-date" id="dateShort">Fecha</div>
+    <span class="header-rule" aria-hidden="true"></span>
+    <time class="header-date" id="dateShort" datetime="">Fecha</time>
     <div class="header-right">
       <span class="deviceTag" id="deviceStatus">MODO DEMO</span>
       <svg class="icon statusIcon"><use href="#i-wifi"/></svg><svg class="icon statusIcon"><use href="#i-bluetooth"/></svg>
@@ -36,7 +36,7 @@
     <section class="leftStack" aria-label="Reloj y música">
       <div class="clockPanel glass">
         <div class="digitalClock" id="clock">--:--</div>
-        <div class="calendarRow"><svg class="icon"><use href="#i-calendar"/></svg><span id="dateLong">Fecha actual</span></div>
+        <div class="calendarRow"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><time id="dateLong" datetime="">Fecha actual</time></div>
         <div class="underLine"></div>
       </div>
       <div class="musicPanel glass">
