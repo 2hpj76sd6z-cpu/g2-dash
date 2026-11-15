@@ -16,6 +16,14 @@ El panel de aplicaciones se probó en Chromium horizontal. En estas capturas apa
 |---|---|---|
 | ![Apps de demostración](actual/21-apps-panel-demo-1280x720.png) | ![Filtrado en Apps](actual/22-apps-buscador-1280x720.png) | ![Apps compactas](actual/23-apps-compacto-960x540.png) |
 
+## AirPlay por Wi-Fi / iPhone — v0.5.3
+
+Capturas reales de la **interfaz web**; el estado «VISTA WEB» aclara que no hay receptor instalado en esta demostración. No son pruebas de audio ni de carátulas del teléfono. El APK podrá abrir un receptor externo AirPlay, si el Gearelec resulta compatible.
+
+| Asistente 1280×720 | Vista compacta 960×540 |
+|---|---|
+| ![Asistente AirPlay en el tablero](actual/29-airplay-configuracion-1280x720.png) | ![Asistente AirPlay compacto](actual/30-airplay-compacto-960x540.png) |
+
 ## Música — reproductor ampliado local v0.5.2
 
 La vista ampliada se abre desde el botón junto al reproductor. Estas capturas muestran la **demostración web**, con etiquetas visibles y controles inactivos; no representan audio real.
