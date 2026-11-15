@@ -23,7 +23,7 @@
    title.textContent=head;
    detail.textContent=message;
    const shortcut={
-     playing:['playing','AirPlay · sesión detectada','Android detectó música AirPlay en reproducción.'],
+     playing:['playing','AirPlay · reproduciendo','Android detectó música AirPlay en reproducción.'],
      ready:['ready','AirPlay · receptor listo','El receptor está instalado; todavía no se detecta una sesión del iPhone.'],
      missing:['missing','AirPlay · falta el receptor','Abre para ver los pasos de instalación del receptor.'],
      unavailable:['unavailable','AirPlay · no disponible en demo','Instala el APK de G² Dash para consultar las apps del estéreo.'],
@@ -50,7 +50,7 @@
      check.hidden=false;
      if(!supported){
        setInfo('unsupported','Android '+version+' · no compatible',
-         'Este receptor requiere Android 7.0+. G² Dash conserva música local y Bluetooth como alternativas.');
+         'Este receptor requiere Android 7.0+. G² Dash conserva música local y Bluetooth como alternativas.','unavailable');
      }else if(playing){
        setInfo('playing','AirPlay · música detectada',
          'Android publicó una sesión AirPlay. Portada y controles aparecen solo si el receptor comparte esos datos.');
@@ -72,7 +72,7 @@
    const wasPlaying=playing;
    playing=data.granted===true&&pkg===receiver&&data.playing===true;
    if(playing){
-     setShortcutState('playing','AirPlay · sesión detectada','Android detectó música AirPlay en reproducción.');
+     setShortcutState('playing','AirPlay · reproduciendo','Android detectó música AirPlay en reproducción.');
    }else if(!veil.hidden||wasPlaying){
      scan();
    }
