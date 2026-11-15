@@ -89,14 +89,14 @@
         <div class="underLine"></div>
       </div>
       <div class="musicPanel glass">
-        <div class="trackRow"><div class="album"><svg class="icon"><use href="#i-music"/></svg><img class="albumArtImage" id="albumArt" alt="Portada del álbum" hidden/></div><div class="trackText"><strong id="songName">Sin música activa</strong><span id="songArtist">Abre tu reproductor</span><button id="musicPermission" class="musicPermission" data-action="music-access" hidden>Activar acceso a música</button></div><button type="button" class="airplayShortcut" data-action="airplay-setup" title="Conectar iPhone por AirPlay Wi-Fi">AIRPLAY</button><button class="musicExpand" data-action="music-detail" title="Ampliar reproductor" aria-label="Abrir reproductor ampliado"><svg class="icon"><use href="#i-expand"/></svg></button><button class="smallAction" data-action="music" title="Abrir aplicación de música" aria-label="Abrir aplicación de música"><svg class="icon"><use href="#i-external"/></svg></button></div>
+        <div class="trackRow"><div class="album"><svg class="icon"><use href="#i-music"/></svg><img class="albumArtImage" id="albumArt" alt="Portada del álbum" hidden/></div><div class="trackText"><strong id="songName">Sin música activa</strong><span id="songArtist">Abre tu reproductor</span><button id="musicPermission" class="musicPermission" data-action="music-access" hidden>Activar acceso a música</button></div><button class="musicExpand" data-action="music-detail" title="Ampliar reproductor" aria-label="Abrir reproductor ampliado"><svg class="icon"><use href="#i-expand"/></svg></button><button class="smallAction" data-action="music" title="Abrir aplicación de música" aria-label="Abrir aplicación de música"><svg class="icon"><use href="#i-external"/></svg></button></div>
         <div class="songMeta"><div class="mediaStatusRow"><span class="mediaStatus"><i class="mediaDot" aria-hidden="true"></i><span id="musicStatus">Sin conectar</span></span><span class="mediaSource" id="musicSource">MODO DEMO</span></div><div class="timelineBar"><span id="trackProgress"></span></div><div class="trackTimes"><span id="musicCurrent">00:00</span><span id="musicDuration">00:00</span></div></div>
         <div class="musicControls">
           <button data-action="demo-shuffle" disabled aria-label="Aleatorio (pendiente)" title="Aleatorio: función pendiente"><svg class="icon"><use href="#i-shuffle"/></svg></button>
           <button data-action="demo-prev" aria-label="Anterior"><svg class="icon"><use href="#i-prev"/></svg></button>
           <button class="playButton" id="play" data-action="demo-play" aria-label="Reproducir o pausar"><svg class="icon"><use href="#i-play"/></svg></button>
           <button data-action="demo-next" aria-label="Siguiente"><svg class="icon"><use href="#i-next"/></svg></button>
-          <button data-action="demo-repeat" disabled aria-label="Repetir (pendiente)" title="Repetir: función pendiente"><svg class="icon"><use href="#i-repeat"/></svg></button>
+          <button type="button" data-action="airplay-setup" aria-label="Conectar iPhone por AirPlay Wi-Fi" title="Conectar iPhone con AirPlay Wi-Fi"><svg class="icon"><use href="#i-wifi"/></svg></button>
         </div>
       </div>
     </section>
