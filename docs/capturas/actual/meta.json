@@ -2,8 +2,8 @@
   "project": "G² Dash",
   "note": "Capturas verificables de HTML/CSS/JS reales; mapa y música ilustrativos; velocidad GPS y OBD no simulados.",
   "viewport": "1280x720",
-  "source_commit": "4608f8c1a0f344d394e68594d451e69afe650387",
-  "generated_at": "2026-11-15T09:57:19.509Z",
+  "source_commit": "6f8faa29aafd9a8233d84a8ff1192ef88fa8b3b4",
+  "generated_at": "2026-11-15T10:00:43.633Z",
   "shots": [
     "00-arranque-seat-logo.png",
     "00b-arranque-saludo-doble-g.png",
@@ -25,6 +25,10 @@
     "15-ibiza-1024x600.png",
     "16-compacto-960x540.png",
     "14-ibiza-mascara-corregida.png",
-    "15-ibiza-mascara-ampliada.png"
+    "15-ibiza-mascara-ampliada.png",
+    "17-ibiza-conceptual-12-vistas.png",
+    "18-ibiza-conceptual-60-grados.png",
+    "19-ibiza-conceptual-trasera-180.png",
+    "20-ibiza-conceptual-1024x600.png"
   ]
 }
