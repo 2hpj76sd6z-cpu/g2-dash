@@ -18,7 +18,7 @@ Interfaz automotriz minimalista con paneles translúcidos, personalización de f
 
 - Diseño con distribución de reloj, reproductor de demostración, mapa ilustrativo y panel del auto.
 - Reloj y fecha con el horario del dispositivo.
-- Panel fotográfico del SEAT Ibiza 6J, con dos fotografías originales y matrículas anonimizadas para su publicación en GitHub.
+- Panel «Mi Ibiza» con **recorte transparente de la fotografía original del vehículo**, además de sus dos fotos originales. El recorte es una silueta fotográfica aproximada (no modelo 3D ni giro 360°). Permite cargar un PNG/WebP personal desde Ajustes sin cambiar el fondo de pantalla.
 - Fondos predefinidos o imagen seleccionada por el usuario.
 - Widgets de cristal ahumado con **cuatro tonalidades** (grafito, azul humo, verde humo y negro), **opacidad 20–88%** y difuminado independiente (0–16 px), además del color de acento y el fondo personalizable.
 - Tres estilos de logotipo (APEX, PULSE y ORBIT) configurables. Los ajustes visuales se guardan en el navegador.
@@ -82,6 +82,7 @@ g2-dash/
 ├── widgets.css           # Widgets ahumados y tonalidades
 ├── app.js                # Interacciones y preferencias
 ├── assets/
+│   ├── ibiza_real_recortado.svg # Recorte transparente basado en foto original
 │   ├── ibiza_frente_original.webp
 │   └── ibiza_trasera_original.webp
 ├── vista_previa.png      # Captura de la demo
