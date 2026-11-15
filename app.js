@@ -163,6 +163,11 @@
     switch(action){
       case 'home':closeScreen('#settingsVeil');closeScreen('#vehicleVeil');break;
       case 'open-settings':openScreen('#settingsVeil');break;
+      case 'intro-preview':closeScreen('#settingsVeil');window.G2ShowIntro?.();break;
+      case 'home-settings':
+        if(window.G2Android?.openHomeSettings)window.G2Android.openHomeSettings();
+        else showToast('Disponible únicamente en el APK Android');
+        break;
       case 'close-settings':closeScreen('#settingsVeil');break;
       case 'vehicle':openScreen('#vehicleVeil');break;
       case 'close-vehicle':closeScreen('#vehicleVeil');break;
@@ -235,6 +240,6 @@
   });
   $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();openMap()}});
   document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil')}});
-  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.4.2';$('#musicPermission').hidden=false;}
+  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.4.3';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
   photoChange(0);applySettings();updateClock();setInterval(updateClock,20000);
 })();
