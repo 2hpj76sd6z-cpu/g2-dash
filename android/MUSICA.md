@@ -64,13 +64,19 @@ La **demo web** siempre deja los controles ampliados desactivados y muestra expr
 - El ejemplo de la galería está marcado `EJEMPLO VISUAL` / `NO ES AUDIO REAL`.
 
 
-## Siguiente etapa — teléfono por Wi‑Fi (v0.5.2)
+## Reproductor ampliado local v0.5.2
+
+El botón de ampliar en el widget abre la portada y los metadatos en una vista mayor, con barra de avance y controles. **Sigue controlando la MediaSession que ya está activa en el Android del estéreo**; no es todavía un reproductor de música del teléfono por Wi‑Fi.
+
+La barra de avance solo se habilita cuando el reproductor informa la capacidad `ACTION_SEEK_TO`. Anterior, siguiente, reproducir y pausar también se habilitan según lo que publique cada sesión. En la demo web se muestran ejemplos marcados; no hay audio real.
+
+## Siguiente etapa — teléfono por Wi‑Fi (v0.5.3)
 
 El punto de acceso crea la red local, pero no comparte por sí solo audio, título ni portada. Antes de escribir una app emisora para el iPhone, conviene comprobar si **CarLink 2.0 ya publica la reproducción del teléfono como una sesión multimedia de Android**. Si lo hace, el puente MediaSession existente puede mostrar la canción y sus controles.
 
 ### Prueba en el estéreo Gearelec
 
-1. Instala el APK de prueba v0.5.1 desde **GitHub → Actions → Android APK → Artifacts**.
+1. Instala el APK de prueba v0.5.2 desde **GitHub → Actions → Android APK → Artifacts**.
 2. Conecta el iPhone al sistema que ya usas para CarLink 2.0 y reproduce una canción; confirma primero que el audio se escucha en el coche.
 3. En G² Dash, activa el acceso a música de Android y autorízalo en Ajustes.
 4. Regresa al tablero y revisa el reproductor:
