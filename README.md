@@ -14,7 +14,7 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 ## Cómo va el proyecto
 
-**Versión actual: v0.5.2 (desarrollo).** La galería conceptual de 12 ángulos ya está integrada en la web y el APK de prueba. El APK también incluye acceso a apps instaladas, GPS opcional y música local mediante MediaSession. Falta validarlo en el estéreo Gearelec; la música remota del teléfono por Wi‑Fi sigue pendiente.
+**Versión actual: v0.5.2 (desarrollo).** Integra la galería conceptual, el centro de Apps y un reproductor ampliado para la sesión musical local de Android. Falta validar en el Gearelec; la música desde el teléfono por Wi‑Fi sigue pendiente.
 
 ### Bienvenida al iniciar G² Dash
 
@@ -56,7 +56,6 @@ La conexión musical desde un iPhone/Android por el punto de acceso Wi-Fi **no e
 - Tres estilos de logotipo G² DASH: APEX, PULSE y ORBIT.
 - Widgets ahumados con cuatro tonalidades, opacidad y difuminado ajustables.
 - Ajustes visuales guardados localmente.
-- Sesión de música Android local y panel ampliado con título, artista, portada, avance y controles que la app reproductora permita; requiere permiso explícito.
 - Capturas automáticas por sección después de cada subida de código a `main`.
 
 ### Lo siguiente
