@@ -2,7 +2,7 @@
 
 # G² Dash
 
-**Interfaz automotriz personalizable · Web y Android · v0.4.3**
+**Interfaz automotriz personalizable · Web y Android · v0.4.4**
 
 Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados configurables y acceso a las funciones Android del estéreo.
 
@@ -14,7 +14,7 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 ## Cómo va el proyecto
 
-**Versión actual: v0.4.3.** La demo web y el APK Android de prueba ya están disponibles. El APK integra acceso a apps instaladas, GPS opcional y música local mediante MediaSession; todavía no sustituye el launcher principal ni se ha validado en el estéreo físico.
+**Versión actual: v0.4.4.** La demo web y el APK Android de prueba ya están disponibles. El APK integra acceso a apps instaladas, GPS opcional y música local mediante MediaSession; la versión v0.4.4 se recompila con este ajuste visual y todavía falta validarla en el estéreo físico.
 
 ### Bienvenida al iniciar G² Dash
 
@@ -33,9 +33,10 @@ El saludo aparece **al abrir la aplicación**. Para verlo al encender el vehícu
 
 ### Lo siguiente
 
-- Revisar y aprobar la máscara corregida del Ibiza v0.4.2. La foto original no se modificó.
+- Revisar el recorte transparente opcional del Ibiza; la vista inicial usa la fotografía frontal completa para evitar depender de un contorno aproximado.
 - Validar el APK en el estéreo Gearelec y medir fluidez con sus 2 GB de RAM.
 - Definir una solución para música desde el teléfono por Wi-Fi: el punto de acceso no comparte por sí solo sus metadatos.
+- Integrar más adelante la galería conceptual de 12 ángulos, claramente marcada como propuesta y separada de las fotos reales ([alcance aprobado](docs/IBIZA_360_REFERENCIA_APROBADA.md)).
 - Mantener pendientes el mapa real, la conexión OBD y el launcher predeterminado.
 
 ### Funciones disponibles en la web
@@ -44,7 +45,7 @@ El saludo aparece **al abrir la aplicación**. Para verlo al encender el vehícu
 - Logotipo seleccionable entre APEX, PULSE y ORBIT.
 - Widgets ahumados con cuatro tonalidades, opacidad de 20–88% y difuminado de 0–16 px.
 - Apariencia automática, día y noche; fondos y preferencias guardados en el navegador.
-- Mi Ibiza: máscara sobre la fotografía real y dos vistas fotográficas. La máscara sigue en revisión; no es un modelo 3D.
+- Mi Ibiza abre con la foto frontal completa y ofrece la foto trasera y el recorte transparente como opciones. El recorte sigue en revisión; no es un modelo 3D.
 - Selección opcional de una imagen personal en formato PNG o WebP.
 - GPS del navegador con permiso y HTTPS; búsqueda que abre Google Maps fuera del panel.
 - El reproductor web es una demostración visual; no reproduce audio real.
@@ -54,11 +55,12 @@ El saludo aparece **al abrir la aplicación**. Para verlo al encender el vehícu
 - Configurar G² Dash como pantalla HOME predeterminada de Android.
 - Recibir música del teléfono por Wi-Fi. El punto de acceso por sí solo no comparte canción ni portada; se requiere un protocolo compatible o una app complementaria.
 - Integrar mapa en tiempo real y datos OBD del vehículo.
-- Crear un modelo 360° coherente del Ibiza.
+- Integrar el visor conceptual aprobado de 12 ángulos, etiquetado como propuesta visual ([detalle](docs/IBIZA_360_REFERENCIA_APROBADA.md)).
+- El giro 360° real sigue pendiente de un modelo 3D validado o fotografías consistentes de todos los lados.
 
 > **Aviso:** el mapa es una ilustración, no un mapa en tiempo real. Los campos de autonomía y voltaje permanecen vacíos hasta que exista una conexión real; no se inventan valores del vehículo. Los iconos de Wi-Fi y Bluetooth son decorativos en esta demostración web.
 
-## Aplicación Android (v0.4.2 — APK de prueba)
+## Aplicación Android (v0.4.4 — APK de prueba)
 
 El APK reutiliza la interfaz y los recursos del proyecto. Incluye acceso a aplicaciones instaladas y GPS opcional.
 
@@ -66,14 +68,14 @@ La música local funciona mediante la sesión multimedia del reproductor abierto
 
 El APK no sustituye todavía el launcher HOME y falta validarlo en el estéreo Gearelec. GitHub Actions compila el APK de depuración en el flujo [Android APK](.github/workflows/android-apk.yml); consulta los artefactos en la pestaña **Actions**.
 
-[Ver comparación de la máscara del Ibiza v0.4.2](docs/capturas/RECORTE_IBIZA_v0.4.2.md)
+[Ver comparación de Mi Ibiza v0.4.4](docs/capturas/CAMBIOS_v0.4.4.md) · [Historial del recorte v0.4.2](docs/capturas/RECORTE_IBIZA_v0.4.2.md)
 
 
 ## Registro visual por cada actualización
 
 ![Vista actual de G² Dash](docs/capturas/actual/01-inicio-1280x720.png)
 
-[**Ver comparación visual v0.4: Música y Mi Ibiza**](docs/capturas/CAMBIOS_v0.4.md) · [Galería de todas las secciones](docs/capturas/README.md)
+[**Ver cambios de Mi Ibiza v0.4.4**](docs/capturas/CAMBIOS_v0.4.4.md) · [Comparación visual v0.4: Música y Mi Ibiza](docs/capturas/CAMBIOS_v0.4.md) · [Galería de todas las secciones](docs/capturas/README.md)
 
 Las capturas automáticas de **cada sección real de la interfaz** se publican
 en [docs/capturas/](docs/capturas/README.md). El flujo

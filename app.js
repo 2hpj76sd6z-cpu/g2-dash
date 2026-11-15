@@ -6,9 +6,9 @@
   const KEY = 'g2dash.v02.preferences';
   const defaults = { theme:'auto', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', widgetBlur:8, customWallpaper:null };
   const pictures = [
-    {path:'assets/ibiza_real_recortado.svg',name:'Recorte transparente — fotografía real',cutout:true},
-    {path:'assets/ibiza_frente_original.webp',name:'Frontal — fotografía real'},
-    {path:'assets/ibiza_trasera_original.webp',name:'Trasera — fotografía real'},
+    {path:'assets/ibiza_frente_original.webp',name:'Frontal — foto original',alt:'Fotografía frontal real del SEAT Ibiza blanco con boca negra y placa protegida'},
+    {path:'assets/ibiza_trasera_original.webp',name:'Trasera — foto original',alt:'Fotografía trasera real del SEAT Ibiza blanco con placa protegida'},
+    {path:'assets/ibiza_real_recortado.svg',name:'Recorte transparente — fotografía real',alt:'Recorte opcional del SEAT Ibiza basado en la fotografía frontal real',cutout:true},
   ];
   let settings = {...defaults};
   try {settings={...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')}} catch(_){}
@@ -65,13 +65,17 @@
   function photoChange(index){
     currentPhoto=(index+pictures.length)%pictures.length;
     const pic=pictures[currentPhoto];
-    const path=currentPhoto===0&&settings.personalCar?settings.personalCar:pic.path;
+    const isPersonal=currentPhoto===0&&Boolean(settings.personalCar);
+    const path=isPersonal?settings.personalCar:pic.path;
+    const isCutout=Boolean(pic.cutout||isPersonal);
     $('#vehiclePhoto').src=path;$('#modalCar').src=path;
-    $('#vehicleView').classList.toggle('isCutout',currentPhoto===0);
-    $('.modalPhoto').classList.toggle('isCutout',currentPhoto===0);
-    $('#carChip').textContent=currentPhoto===0?'MI IBIZA · SIN FONDO':currentPhoto===1?'Fotografía frontal · placa protegida':'Fotografía trasera · placa protegida';
-    $('#modalLabel').textContent=currentPhoto===0&&settings.personalCar?'PNG personal — fondo transparente':pic.name;
-    $$('#carDot0, #carDot1, #carDot2').forEach((b,i)=>b.classList.toggle('on',i===currentPhoto));
+    $('#vehiclePhoto').alt=isPersonal?'Imagen personal del SEAT Ibiza':pic.alt;
+    $('#modalCar').alt=isPersonal?'Imagen personal del SEAT Ibiza':pic.alt;
+    $('#vehicleView').classList.toggle('isCutout',isCutout);
+    $('.modalPhoto').classList.toggle('isCutout',isCutout);
+    $('#carChip').textContent=isPersonal?'IMAGEN PERSONAL':pic.cutout?'RECORTE · OPCIONAL':currentPhoto===0?'FRENTE · FOTO ORIGINAL':'TRASERA · FOTO ORIGINAL';
+    $('#modalLabel').textContent=isPersonal?'Imagen personal — guardada en este dispositivo':pic.name;
+    document.querySelectorAll('#carDot0, #carDot1, #carDot2').forEach((b,i)=>b.classList.toggle('on',i===currentPhoto));
   }
   function openScreen(selector){$(selector).hidden=false}
   function closeScreen(selector){$(selector).hidden=true}
@@ -171,9 +175,9 @@
       case 'close-settings':closeScreen('#settingsVeil');break;
       case 'vehicle':openScreen('#vehicleVeil');break;
       case 'close-vehicle':closeScreen('#vehicleVeil');break;
-      case 'car-cutout':photoChange(0);break;
-      case 'car-front':photoChange(1);break;
-      case 'car-rear':photoChange(2);break;
+      case 'car-front':photoChange(0);break;
+      case 'car-rear':photoChange(1);break;
+      case 'car-cutout':photoChange(2);break;
       case 'car-prev':photoChange(currentPhoto-1);break;
       case 'car-next':photoChange(currentPhoto+1);break;
       case 'gps':activateGps();break;
@@ -240,6 +244,6 @@
   });
   $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();openMap()}});
   document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil')}});
-  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.4.3';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
+  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.4.4';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
   photoChange(0);applySettings();updateClock();setInterval(updateClock,20000);
 })();

@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"/>
 <meta name="theme-color" content="#111826"/>
-<title>G² Dash · v0.4.3</title>
+<title>G² Dash · v0.4.4</title>
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="brand.css"/>
 <link rel="stylesheet" href="widgets.css"/>
@@ -91,10 +91,10 @@
     <section class="vehiclePanel glass" aria-label="Mi Ibiza">
       <div class="vehHeading"><div><strong>Mi Ibiza</strong><small>SEAT 6J · 5 puertas</small></div><button class="smallAction" data-action="vehicle" title="Ver fotografías" aria-label="Ver fotografías"><svg class="icon"><use href="#i-expand"/></svg></button></div>
       <button class="carView" id="vehicleView" data-action="vehicle" title="Ver mi Ibiza" aria-label="Ver fotografías originales del Ibiza">
-        <img src="assets/ibiza_real_recortado.svg" id="vehiclePhoto" alt="Recorte transparente de la fotografía real del SEAT Ibiza blanco con boca y techo negros"/>
-        <span class="carChip" id="carChip">MI IBIZA · RECORTE REAL</span>
+        <img src="assets/ibiza_frente_original.webp" id="vehiclePhoto" alt="Fotografía frontal real del SEAT Ibiza blanco con boca negra y placa protegida"/>
+        <span class="carChip" id="carChip">FRENTE · FOTO ORIGINAL</span>
       </button>
-      <div class="photoDots"><button class="on" id="carDot0" data-action="car-cutout" title="Recorte" aria-label="Ver Ibiza sin fondo"></button><button id="carDot1" data-action="car-front" title="Frente" aria-label="Ver foto frontal"></button><button id="carDot2" data-action="car-rear" title="Trasera" aria-label="Ver foto trasera"></button><span>Recorte + 2 fotos · no 360°</span></div>
+      <div class="photoDots"><button class="on" id="carDot0" data-action="car-front" title="Frente" aria-label="Ver foto frontal original"></button><button id="carDot1" data-action="car-rear" title="Trasera" aria-label="Ver foto trasera original"></button><button id="carDot2" data-action="car-cutout" title="Recorte opcional" aria-label="Ver recorte transparente opcional"></button><span>2 fotos + recorte · no 360°</span></div>
       <div class="vehicleStats">
         <div><svg class="icon"><use href="#i-fuel"/></svg><strong>—</strong><span>Autonomía*</span></div>
         <div><svg class="icon"><use href="#i-speed"/></svg><strong id="speed">— <small>km/h</small></strong><span id="speedLabel">Velocidad GPS</span></div>
@@ -112,7 +112,7 @@
     <button data-action="radio"><svg class="icon"><use href="#i-radio"/></svg><span>Radio</span></button>
     <button data-action="open-settings"><svg class="icon"><use href="#i-settings"/></svg><span>Ajustes</span></button>
   </nav>
-  <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.4.3</span></footer>
+  <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.4.4</span></footer>
 </div>
 
 <div class="screenveil" id="settingsVeil" hidden><aside class="settings glass" role="dialog" aria-modal="true" aria-label="Personalización"><header><div><h2>Personalización</h2><p>G² Dash · ajustes visuales</p></div><button class="closeBtn" data-action="close-settings" aria-label="Cerrar ajustes"><svg class="icon"><use href="#i-x"/></svg></button></header>
@@ -140,7 +140,7 @@
   </div>
 </aside></div>
 
-<div class="screenveil" id="vehicleVeil" hidden><div class="vehicleModal glass" role="dialog" aria-modal="true" aria-label="Fotos de mi Ibiza"><header><div><h2>Mi Ibiza original</h2><p>Recorte y fotografías reales · placas difuminadas</p></div><button class="closeBtn" data-action="close-vehicle" aria-label="Cerrar"><svg class="icon"><use href="#i-x"/></svg></button></header><div class="modalPhoto"><img id="modalCar" src="assets/ibiza_real_recortado.svg" alt="Foto original del SEAT Ibiza sin fondo"/></div><div class="modalActions"><button data-action="car-prev">‹ Vista anterior</button><span id="modalLabel">Frontal</span><button data-action="car-next">Vista siguiente ›</button></div><div class="disclaimer">Giro 360° pendiente de modelo 3D correcto. No se simula un giro falso.</div></div></div>
+<div class="screenveil" id="vehicleVeil" hidden><div class="vehicleModal glass" role="dialog" aria-modal="true" aria-label="Fotos de mi Ibiza"><header><div><h2>Mi Ibiza original</h2><p>Dos fotos reales + recorte opcional · placas protegidas</p></div><button class="closeBtn" data-action="close-vehicle" aria-label="Cerrar"><svg class="icon"><use href="#i-x"/></svg></button></header><div class="modalPhoto"><img id="modalCar" src="assets/ibiza_frente_original.webp" alt="Fotografía frontal real del SEAT Ibiza"/></div><div class="modalActions"><button data-action="car-prev">‹ Vista anterior</button><span id="modalLabel">Frontal</span><button data-action="car-next">Vista siguiente ›</button></div><div class="disclaimer">Giro 360° pendiente de modelo 3D correcto. No se simula un giro falso.</div></div></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <!-- All icons are locally bundled, no external assets or icon fonts -->
 <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg"><defs>

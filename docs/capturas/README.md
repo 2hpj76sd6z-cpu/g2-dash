@@ -20,7 +20,7 @@ La secuencia se reproduce al abrir G² Dash. El encendido automático del estér
 
 ## Comparación antes y después
 
-[**Mi Ibiza: recorte corregido con la foto original (v0.4.2)**](RECORTE_IBIZA_v0.4.2.md)
+[**Mi Ibiza: foto completa por defecto y recorte opcional (v0.4.4)**](CAMBIOS_v0.4.4.md) · [Historial de la máscara v0.4.2](RECORTE_IBIZA_v0.4.2.md)
 
 
 **[Detalle Música v0.4.1 — comparación antes y después](DETALLE_MUSICA_v0.4.1.md)**
