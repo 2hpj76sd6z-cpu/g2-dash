@@ -146,6 +146,16 @@ try {
     throw new Error('La prueba visual de música no tiene los indicadores correctos');
   }
   await capture('13-musica-detallada-ejemplo', '.musicPanel');
+  // Reproductor ampliado: es una VISTA DE PRUEBA, no audio de Android.
+  await page.locator('[data-action="music-detail"]').click();
+  if(!await page.locator('#musicDetailVeil').isVisible() ||
+     await page.locator('#musicDetailSource').textContent()!=='EJEMPLO VISUAL' ||
+     !await page.locator('#musicSeek').isDisabled() ||
+     !await page.locator('#musicDetailPlay').isDisabled()) {
+    throw new Error('El panel musical ampliado no identifica correctamente la simulación');
+  }
+  await capture('27-musica-ampliada-ejemplo-1280x720');
+  await page.locator('#musicDetailClose').click();
   // Recorte real, mismo WebP con la máscara revisada.
   await page.locator('[data-action="car-cutout"]').click();
   // La vista recortada ahora se carga bajo demanda, así que esperar su decodificación antes de capturar.
@@ -221,6 +231,14 @@ try {
       throw new Error('El panel Apps no cabe en 960x540');
   await capture('23-apps-compacto-960x540');
   await page.locator('#appsClose').click();
+  await page.locator('[data-action="music-detail"]').click();
+  const musicBox=await page.locator('.musicDetailModal').boundingBox();
+  if(!musicBox||musicBox.x<-2||musicBox.y<-2||
+     musicBox.x+musicBox.width>962||musicBox.y+musicBox.height>542) {
+    throw new Error('Reproductor ampliado se sale de 960x540');
+  }
+  await capture('28-musica-ampliada-compacta-960x540');
+  await page.locator('#musicDetailClose').click();
   await writeFile(path.join(root,'qa-layout.json'),JSON.stringify({source_commit:process.env.G2_COMMIT||'local',checked:qa},null,2)+'\n');
 
   const meta = {
@@ -243,6 +261,7 @@ try {
       '19-ibiza-conceptual-trasera-180.png','20-ibiza-conceptual-1024x600.png',
       '21-apps-panel-demo-1280x720.png','22-apps-buscador-1280x720.png',
       '23-apps-compacto-960x540.png',
+      '27-musica-ampliada-ejemplo-1280x720.png','28-musica-ampliada-compacta-960x540.png',
        '24-ibiza-tamano-original.png','25-ibiza-modo-ampliado.png','26-ibiza-deslizamiento-90.png'
     ]
   };
