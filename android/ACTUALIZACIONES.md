@@ -37,6 +37,6 @@ El código de versión se calcula desde la etiqueta: `0.6.0` produce un código 
 
 ## Paso único antes de activar las actualizaciones
 
-El APK de desarrollo actual está firmado como **Android Debug**; su llave privada de CI no está disponible para futuras compilaciones. La primera APK firmada con la llave estable nueva no se podrá instalar encima de una APK de depuración ya instalada. La migración puede requerir desinstalar la versión actual e instalar la primera estable, lo que borra los ajustes locales porque Android no tiene habilitado el respaldo de datos.
+El APK de desarrollo disponible está firmado con el certificado **Android Debug**. El flujo de depuración no conserva una llave estable de firma; por eso, una APK firmada con la nueva llave estable no se podrá instalar encima de una versión de depuración ya instalada. La migración puede requerir desinstalar la versión actual e instalar la primera estable, lo que borra los ajustes locales porque Android no tiene habilitado el respaldo de datos.
 
 Por eso, no publiques la primera etiqueta ni reemplaces la app instalada hasta decidir cuándo hacer esa migración. Después de instalar la primera APK estable, las siguientes versiones se actualizan sobre la misma instalación usando la misma llave.
