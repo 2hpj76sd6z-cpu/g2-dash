@@ -157,6 +157,18 @@ try {
   }
   await capture('27-musica-ampliada-ejemplo-1280x720');
   await page.locator('#musicDetailClose').click();
+
+  // AirPlay es una integración real solamente en Android: comprobar que la
+  // web no simule instalar receptor ni reproducir música.
+  await page.locator('[data-action="airplay-setup"]').first().click();
+  if(!await page.locator('#airplayVeil').isVisible() ||
+     !(await page.locator('#airplayStatusTitle').textContent()).includes('VISTA WEB') ||
+     !await page.locator('#airplayLaunch').isHidden() ||
+     !await page.locator('#airplayInstall').isHidden()){
+     throw new Error('El asistente AirPlay no identifica el modo web de demostración');
+  }
+  await capture('29-airplay-configuracion-1280x720');
+  await page.locator('#airplayClose').click();
   // Recorte real, mismo WebP con la máscara revisada.
   await page.locator('[data-action="car-cutout"]').click();
   // La vista recortada ahora se carga bajo demanda, así que esperar su decodificación antes de capturar.
@@ -240,6 +252,14 @@ try {
   }
   await capture('28-musica-ampliada-compacta-960x540');
   await page.locator('#musicDetailClose').click();
+  await page.locator('[data-action="airplay-setup"]').first().click();
+  const apBox=await page.locator('.airplayModal').boundingBox();
+  if(!apBox||apBox.x<-2||apBox.y<-2||
+     apBox.x+apBox.width>962||apBox.y+apBox.height>542){
+     throw new Error('Asistente AirPlay no cabe en 960x540');
+  }
+  await capture('30-airplay-compacto-960x540');
+  await page.locator('#airplayClose').click();
   await writeFile(path.join(root,'qa-layout.json'),JSON.stringify({source_commit:process.env.G2_COMMIT||'local',checked:qa},null,2)+'\n');
 
   const meta = {
@@ -263,6 +283,7 @@ try {
       '21-apps-panel-demo-1280x720.png','22-apps-buscador-1280x720.png',
       '23-apps-compacto-960x540.png',
       '27-musica-ampliada-ejemplo-1280x720.png','28-musica-ampliada-compacta-960x540.png',
+      '29-airplay-configuracion-1280x720.png','30-airplay-compacto-960x540.png',
        '24-ibiza-tamano-original.png','25-ibiza-modo-ampliado.png','26-ibiza-deslizamiento-90.png'
     ]
   };
