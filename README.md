@@ -20,6 +20,16 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 - En el iPhone: conectar a la misma red local, abrir Apple Music y elegir el receptor desde AirPlay. Si se usa el hotspot del estéreo, la red debe permitir descubrimiento mDNS y comunicación entre dispositivos.
 - **Pendiente de prueba física:** comprobar audio efectivo, portada, estabilidad y controles en el Gearelec. La calidad final depende del receptor, códec, DAC y equipo de sonido; no se promete audio lossless, soporte DRM ni reproducción automática desde el launcher.
 
+
+### v0.5.8 · Mapas y widgets configurables
+
+- La carátula del reproductor en el tablero ahora usa un **contenedor horizontal grande 4:3**, con imagen completa (`object-fit: contain`), sin deformación ni recorte. La vista ampliada también respeta la imagen completa. Si la portada recibida es cuadrada, conserva su forma dentro del contenedor horizontal.
+- El widget de **mapa ilustrativo** es más ancho al abrir (por defecto). Incluye el botón **ABRIR GOOGLE MAPS**, que lanza navegación real en la aplicación o navegador externo; **no es Google Maps embebido en el widget**.
+- En **Ajustes → Organización del tablero** puedes colocar el mapa al centro o a la derecha y escoger entre tamaño amplio o equilibrado.
+- Las métricas de **Autonomía / Velocímetro GPS / Voltaje OBD** pueden intercambiar posiciones seleccionando dos consecutivamente; se guarda la preferencia. El velocímetro muestra datos estimados solo si el Android ofrece velocidad GPS real y autorizas ubicación. Autonomía y voltaje siguen pendientes de OBD.
+- El editor de los siete accesos inferiores anterior sigue disponible. El diseño y las fotos originales del Ibiza permanecen intactos.
+- **Pendiente:** compilación/instalación y pruebas físicas de pantalla en Gearelec 2 GB.
+
 ## Cómo va el proyecto
 
 **Versión actual: v0.5.5 (desarrollo).** Integra la galería conceptual, el centro de Apps y un reproductor ampliado para la sesión musical local de Android. Falta validar en el Gearelec; la música desde el teléfono por Wi‑Fi sigue pendiente.
