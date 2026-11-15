@@ -180,7 +180,7 @@ try {
   await page.locator('[data-action="close-vehicle"]').click();
 
   // Galería conceptual aprobada: capturas reales y QA táctil/teclado.
-  await page.locator('[data-action="concept-360"]').click();
+  await page.locator('.vehiclePanel [data-action="concept-360"]').click();
   await page.locator('#conceptHero').evaluate(img => img.decode());
   if(await page.locator('#conceptThumbs button').count() !== 12) throw new Error('Faltan miniaturas 12 vistas');
   if(await page.locator('#conceptAngle').textContent() !== '30°') throw new Error('Ángulo inicial incorrecto');
@@ -245,7 +245,7 @@ try {
   await page.reload({waitUntil:'networkidle'});
   await page.locator('#startup').waitFor({state:'hidden',timeout:8000});
   await inspectViewport('1024×600');
-  await page.locator('[data-action="concept-360"]').click();
+  await page.locator('.vehiclePanel [data-action="concept-360"]').click();
   await page.locator('#conceptHero').evaluate(img => img.decode());
   await capture('20-ibiza-conceptual-1024x600');
   await page.locator('#conceptClose').click();
