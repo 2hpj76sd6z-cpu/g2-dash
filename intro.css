@@ -1,0 +1,90 @@
+/* G² Dash — bienvenida ligera de encendido. Sin vídeo, sin fuentes externas. */
+.startup {
+  position:fixed; inset:0; z-index:100;
+  display:grid; place-items:center;
+  overflow:hidden; isolation:isolate;
+  background:radial-gradient(ellipse at 50% 45%,#192632 0%,#0b141f 44%,#05080d 100%);
+  color:#f3f7fb; opacity:1;
+  transition:opacity .5s ease;
+}
+.startup[hidden]{display:none!important}
+.startup::before{
+  content:"";position:absolute;left:50%;top:50%;
+  width:min(69vw,700px);height:min(65vh,400px);
+  transform:translate(-50%,-50%);
+  background:radial-gradient(ellipse,rgba(70,208,133,.07),transparent 68%);
+  pointer-events:none;
+}
+.startup.is-exiting{opacity:0;pointer-events:none}
+.startupLogo,.startupGreeting{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  width:100%;text-align:center;
+  padding:clamp(18px,4vw,50px);
+  opacity:0;transform:translateY(9px);
+  transition:opacity .5s ease,transform .5s ease;
+  pointer-events:none;
+}
+.startup[data-stage="logo"] .startupLogo,
+.startup[data-stage="greeting"] .startupGreeting{
+  opacity:1;transform:translateY(0);
+}
+.startupSeatMark{
+  width:clamp(94px,12vw,156px);height:auto;
+  margin:0 0 3px;
+  filter:drop-shadow(0 8px 24px rgba(255,255,255,.09));
+}
+.startupSeatName{
+  font-family:Arial,'Segoe UI',sans-serif;
+  color:#f8f9fc; font-size:clamp(23px,3.2vw,41px);
+  font-weight:800; letter-spacing:.38em;
+  margin-left:.38em;
+}
+.startupSeparator{
+  display:block;width:clamp(45px,5vw,69px);height:2px;
+  background:#55d98e;border-radius:4px;margin:clamp(16px,3vh,27px) 0;
+}
+.startupAppBrand{
+  display:flex;align-items:baseline;gap:12px;
+  font-family:'Arial Black','Segoe UI',Arial,sans-serif;
+  font-size:clamp(20px,2.6vw,32px);font-weight:900;letter-spacing:.07em;
+}
+.startupAppBrand b{color:#55dc90;font-style:italic;letter-spacing:-.08em;font-size:1.19em}
+.startupAppBrand sup{font-size:.36em;vertical-align:super;letter-spacing:0}
+.startupAppBrand span{border-bottom:3px solid #55dc90;padding-bottom:5px}
+.startupGreeting .hello{
+  margin:0 0 15px;
+  font-family:'Segoe UI',Arial,sans-serif;
+  font-weight:650;
+  font-size:clamp(30px,4.5vw,64px);
+  letter-spacing:-.035em;
+  line-height:1.14;
+  text-wrap:balance;
+}
+.startupGreeting .hello .greetingName{color:#64e79c}
+.startupGreeting .question{
+  margin:0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  font-weight:350;
+  font-size:clamp(23px,3vw,42px);
+  line-height:1.25;
+  color:#d9e3ed;
+  text-wrap:balance;
+}
+.startupSkip{
+  position:absolute;right:clamp(16px,3vw,44px);bottom:clamp(15px,3vh,34px);
+  background:transparent;border:1px solid rgba(196,214,227,.2);
+  border-radius:20px;color:#aec1ce;font-size:13px;letter-spacing:.04em;
+  padding:8px 19px;cursor:pointer;
+}
+.startupSkip:focus-visible{outline:2px solid #62e29a;outline-offset:3px}
+.startupSkip:hover{color:#fff;border-color:#64d894}
+@media (max-height:540px){
+  .startupSeatMark{width:88px}
+  .startupSeparator{margin:12px 0}
+  .startupGreeting .hello{font-size:clamp(26px,4vw,39px)}
+  .startupGreeting .question{font-size:clamp(21px,3vw,29px)}
+}
+@media (prefers-reduced-motion: reduce){
+  .startup,.startupLogo,.startupGreeting{transition:none!important}
+}
