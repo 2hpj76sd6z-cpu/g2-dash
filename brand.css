@@ -1,0 +1,134 @@
+/* G² Dash — identidad visual del encabezado.
+   No modifica fondos, fotografías, widgets ni la distribución del tablero. */
+.brand {
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  min-width:max-content;
+  font-style:normal;
+  letter-spacing:normal;
+  white-space:nowrap;
+}
+.brand .brandMark {
+  display:inline-flex;
+  align-items:flex-start;
+  position:relative;
+  font-family:"Arial Black","Segoe UI",Arial,sans-serif;
+  font-weight:900;
+  font-style:italic;
+  font-size:clamp(27px,2.7vw,35px);
+  letter-spacing:-.13em;
+  line-height:.93;
+  color:#52db8a;
+  filter:drop-shadow(0 2px 7px rgba(30,210,117,.13));
+}
+.brand .brandMark sup {
+  position:relative;
+  top:-.11em;
+  margin-left:4px;
+  font-size:.34em;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:0;
+  vertical-align:baseline;
+  color:#87f5b4;
+}
+.brand .brandWord {
+  display:inline-block;
+  position:relative;
+  color:#f8fafc;
+  font-family:"Trebuchet MS","Segoe UI",Arial,sans-serif;
+  font-weight:900;
+  font-style:normal;
+  font-size:clamp(19px,2vw,26px);
+  line-height:1.08;
+  letter-spacing:.085em;
+  padding:0 1px 8px 0;
+}
+.brand .brandWord::after {
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:1px;
+  height:3px;
+  border-radius:99px;
+  background:#52db8a;
+  transform:skew(-23deg);
+}
+.brand[data-logo="apex"] .brandMark{transform:skew(-9deg)}
+.brand[data-logo="apex"] .brandWord{letter-spacing:.105em}
+.brand[data-logo="pulse"] .brandMark{
+  font-family:Impact,"Arial Narrow",sans-serif;
+  font-style:normal;
+  letter-spacing:-.06em;
+  font-size:clamp(29px,2.95vw,38px);
+}
+.brand[data-logo="pulse"] .brandWord{
+  font-family:"Arial Black",Arial,sans-serif;
+  font-style:italic;
+  letter-spacing:-.035em;
+  font-size:clamp(20px,2.1vw,27px);
+}
+.brand[data-logo="pulse"] .brandWord::after{
+  right:21%;
+  height:4px;
+  box-shadow:10px 0 0 #52db8a;
+}
+.brand[data-logo="orbit"]{gap:7px}
+.brand[data-logo="orbit"] .brandMark {
+  font-family:"Trebuchet MS",Arial,sans-serif;
+  font-style:normal;
+  font-size:clamp(22px,2.2vw,29px);
+  letter-spacing:-.10em;
+  border:2px solid rgba(82,219,138,.56);
+  border-right:none;
+  border-radius:9px 0 0 9px;
+  padding:5px 9px 5px 7px;
+}
+.brand[data-logo="orbit"] .brandWord{
+  font-size:clamp(18px,1.8vw,23px);
+  letter-spacing:.14em;
+}
+.brand[data-logo="orbit"] .brandWord::after{height:2px}
+.logoChoices {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.logoChoices button {
+  min-width:0;
+  padding:10px 5px 8px;
+  border:1px solid rgba(216,229,248,.23);
+  border-radius:11px;
+  background:rgba(255,255,255,.045);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  color:#cdd6e5;
+  cursor:pointer;
+}
+.logoChoices button.selected {
+  border-color:#52db8a;
+  background:rgba(82,219,138,.10);
+  box-shadow:inset 0 0 0 1px rgba(82,219,138,.16);
+}
+.logoChoices .brand {
+  gap:6px;
+  transform:scale(.67);
+  transform-origin:center center;
+  margin:-5px -20px;
+  pointer-events:none;
+}
+.logoChoices .brand .brandMark {font-size:29px}
+.logoChoices .brand .brandWord {font-size:22px}
+.logoChoices .brand[data-logo="pulse"] .brandMark{font-size:32px}
+.logoChoices .brand[data-logo="pulse"] .brandWord{font-size:23px}
+.logoChoices .brand[data-logo="orbit"] .brandMark{font-size:26px}
+.logoChoices .brand[data-logo="orbit"] .brandWord{font-size:21px}
+.logoChoices button small {font-size:10px;letter-spacing:.12em;font-weight:700}
+body[data-mode="day"] .brand .brandWord{color:#263647}
+.logoChoices .brand .brandWord{color:#f8fafc!important}
+@media(max-width:900px){
+  .topline .brand{gap:7px}
+  .topline .brand .brandMark{font-size:27px}
+  .topline .brand .brandWord{font-size:19px}
+}
