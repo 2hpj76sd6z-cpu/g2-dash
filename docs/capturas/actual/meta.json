@@ -2,8 +2,8 @@
   "project": "G² Dash",
   "note": "Capturas verificables de HTML/CSS/JS reales; mapa y música ilustrativos; velocidad GPS y OBD no simulados.",
   "viewport": "1280x720",
-  "source_commit": "3a89b0a2756a152b624aaeda19244dd242195758",
-  "generated_at": "2026-11-15T09:17:42.296Z",
+  "source_commit": "0f3e3a6023b2dd00bb1154c8c19d7485dd7d993e",
+  "generated_at": "2026-11-15T09:22:12.595Z",
   "shots": [
     "01-inicio-1280x720.png",
     "02-encabezado.png",
@@ -17,6 +17,8 @@
     "10-ibiza-detalle.png",
     "11-ibiza-trasera.png",
     "12-musica-integracion-prueba.png",
-    "13-musica-detallada-ejemplo.png"
+    "13-musica-detallada-ejemplo.png",
+    "14-ibiza-mascara-corregida.png",
+    "15-ibiza-mascara-ampliada.png"
   ]
 }
