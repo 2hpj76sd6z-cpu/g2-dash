@@ -14,7 +14,7 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 ## Cómo va el proyecto
 
-**Versión actual: v0.4.5 (desarrollo).** La demo web y el APK Android de prueba están disponibles. Esta actualización agrega al inicio un resumen de lo listo y lo pendiente; el APK incluye acceso a apps instaladas, GPS opcional y música local mediante MediaSession. Falta validarlo en el estéreo Gearelec.
+**Versión actual: v0.5.0 (desarrollo).** La demo web y el APK Android de prueba están disponibles. Esta actualización agrega al inicio un resumen de lo listo y lo pendiente; el APK incluye acceso a apps instaladas, GPS opcional y música local mediante MediaSession. Falta validarlo en el estéreo Gearelec.
 
 ### Bienvenida al iniciar G² Dash
 
@@ -33,7 +33,7 @@ El botón **12 VISTAS** abre una galería de doce ilustraciones de la propuesta 
 
 ### Ya está implementado
 
-- Bienvenida SEAT / G² DASH con saludo a Doble G y resumen honesto del avance v0.4.5.
+- Bienvenida SEAT / G² DASH con saludo a Doble G y resumen honesto del avance v0.5.0.
 - Tres estilos de logotipo G² DASH: APEX, PULSE y ORBIT.
 - Widgets ahumados con cuatro tonalidades, opacidad y difuminado ajustables.
 - Ajustes visuales guardados localmente.
@@ -82,7 +82,7 @@ El APK no sustituye todavía el launcher HOME y falta validarlo en el estéreo G
 
 ## Registro visual por cada actualización
 
-![Resumen de actualización al abrir G² Dash](docs/capturas/actual/00c-arranque-estado-v045.png)
+![Resumen de actualización al abrir G² Dash](docs/capturas/actual/00c-arranque-estado-v050.png)
 
 ![Vista actual de G² Dash](docs/capturas/actual/01-inicio-1280x720.png)
 

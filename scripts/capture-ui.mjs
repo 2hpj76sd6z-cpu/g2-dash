@@ -53,10 +53,10 @@ try {
   await page.waitForFunction(() => document.querySelector('#startup')?.dataset.stage === 'status', {timeout:4500});
   const splashVersion = await page.locator('.startupStatusVersion').textContent();
   const nextStep = await page.locator('.startupStatusNext p strong').textContent();
-  if(splashVersion!=='v0.4.5' || nextStep!=='Música del teléfono por Wi‑Fi') {
-    throw new Error('El estado de avance de bienvenida no coincide con v0.4.5');
+  if(splashVersion!=='v0.5.0' || nextStep!=='Música del teléfono por Wi‑Fi') {
+    throw new Error('El estado de avance de bienvenida no coincide con v0.5.0');
   }
-  await capture('00c-arranque-estado-v045');
+  await capture('00c-arranque-estado-v050');
   await page.locator('#startup').waitFor({state:'hidden',timeout:8000});
 
   // Revisión geométrica: no ocultar secciones fuera del área útil.
@@ -187,7 +187,7 @@ try {
     generated_at: new Date().toISOString(),
     shots: [
       '00-arranque-seat-logo.png', '00b-arranque-saludo-doble-g.png',
-      '00c-arranque-estado-v045.png', '01-inicio-1280x720.png', '02-encabezado.png', '03-reloj.png',
+      '00c-arranque-estado-v050.png', '01-inicio-1280x720.png', '02-encabezado.png', '03-reloj.png',
       '04-musica.png', '05-mapa-ilustrativo.png', '06-mi-ibiza.png',
       '07-iconos-accesos.png', '08-personalizacion.png',
       '09-modo-dia-1280x720.png', '10-ibiza-detalle.png',
