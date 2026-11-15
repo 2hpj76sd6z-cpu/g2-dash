@@ -20,7 +20,8 @@ Interfaz automotriz minimalista con paneles translúcidos, personalización de f
 - Reloj y fecha con el horario del dispositivo.
 - Panel fotográfico del SEAT Ibiza 6J, con dos fotografías originales y matrículas anonimizadas para su publicación en GitHub.
 - Fondos predefinidos o imagen seleccionada por el usuario.
-- Opacidad de paneles, intensidad de difuminado y color de acento configurables.
+- Widgets de cristal ahumado con **cuatro tonalidades** (grafito, azul humo, verde humo y negro), **opacidad 20–88%** y difuminado independiente (0–16 px), además del color de acento y el fondo personalizable.
+- Tres estilos de logotipo (APEX, PULSE y ORBIT) configurables. Los ajustes visuales se guardan en el navegador.
 - Modos automático, día y noche; ajustes guardados localmente cuando el navegador lo permite.
 - Opción de solicitar velocidad GPS **si el navegador proporciona esos datos y el usuario autoriza su ubicación**.
 - Búsqueda de destinos que abre Google Maps en una pestaña nueva.
@@ -64,7 +65,9 @@ En **Settings → Pages**, selecciona **Deploy from a branch → main → /(root
 ```text
 g2-dash/
 ├── index.html            # Interfaz
-├── style.css             # Diseño glassmorphism
+├── style.css             # Diseño y estructura base
+├── brand.css             # Estilos configurables del logotipo
+├── widgets.css           # Widgets ahumados y tonalidades
 ├── app.js                # Interacciones y preferencias
 ├── assets/
 │   ├── ibiza_frente_original.webp
