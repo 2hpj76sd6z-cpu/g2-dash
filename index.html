@@ -6,13 +6,14 @@
 <meta name="theme-color" content="#111826"/>
 <title>G² Dash · v0.2</title>
 <link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="brand.css"/>
 </head>
 <body data-mode="night">
 <div class="wallpaper" id="wallpaper" aria-hidden="true"></div><div class="wallShade" aria-hidden="true"></div>
 <div id="app" class="app">
   <header class="topline">
     <button type="button" class="iconButton hamburger" data-action="open-settings" title="Abrir ajustes" aria-label="Abrir ajustes"><svg class="icon"><use href="#i-menu"/></svg></button>
-    <div class="brand" aria-label="G al cuadrado Dash"><span>G<sup>2</sup></span><em>DASH</em></div>
+    <div class="brand" id="brandLogo" data-logo="apex" aria-label="G al cuadrado Dash"><span class="brandMark">G<sup>2</sup></span><span class="brandWord">DASH</span></div>
     <span class="header-rule" aria-hidden="true"></span>
     <time class="header-date" id="dateShort" datetime="">Fecha</time>
     <div class="header-right">
@@ -92,6 +93,7 @@
 <div class="screenveil" id="settingsVeil" hidden><aside class="settings glass" role="dialog" aria-modal="true" aria-label="Personalización"><header><div><h2>Personalización</h2><p>G² Dash · ajustes visuales</p></div><button class="closeBtn" data-action="close-settings" aria-label="Cerrar ajustes"><svg class="icon"><use href="#i-x"/></svg></button></header>
   <div class="settingsBody">
     <label>Modo de apariencia</label><div class="segments"><button data-theme="auto" class="selected">Automático</button><button data-theme="night">Noche</button><button data-theme="day">Día</button></div>
+    <label>Estilo del logotipo G² DASH</label><div class="logoChoices" role="group" aria-label="Seleccionar estilo del logotipo"><button type="button" data-logo="apex" aria-pressed="true" class="selected"><span class="brand" data-logo="apex" aria-hidden="true"><span class="brandMark">G<sup>2</sup></span><span class="brandWord">DASH</span></span><small>APEX</small></button><button type="button" data-logo="pulse" aria-pressed="false"><span class="brand" data-logo="pulse" aria-hidden="true"><span class="brandMark">G<sup>2</sup></span><span class="brandWord">DASH</span></span><small>PULSE</small></button><button type="button" data-logo="orbit" aria-pressed="false"><span class="brand" data-logo="orbit" aria-hidden="true"><span class="brandMark">G<sup>2</sup></span><span class="brandWord">DASH</span></span><small>ORBIT</small></button></div>
     <label>Fondo de pantalla</label><div class="wallChoices"><button data-wall="dusk" class="selected"><span class="p-dusk"></span>Atardecer</button><button data-wall="blue"><span class="p-blue"></span>Azul humo</button><button data-wall="gray"><span class="p-gray"></span>Grafito</button></div>
     <label for="chooseWall">Tu propia imagen</label><input type="file" id="chooseWall" accept="image/*"/><p class="hint">La imagen se procesa localmente para ahorrar memoria y se guarda solo en este dispositivo.</p>
     <label for="blur">Difuminado del fondo <output id="blurValue">14 px</output></label><input id="blur" type="range" min="0" max="32" step="1" value="14"/>
