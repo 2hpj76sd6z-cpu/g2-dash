@@ -24,13 +24,23 @@ El panel de aplicaciones se probó en Chromium horizontal. En estas capturas apa
 |---|---|---|
 | ![Apps de demostración](actual/21-apps-panel-demo-1280x720.png) | ![Filtrado en Apps](actual/22-apps-buscador-1280x720.png) | ![Apps compactas](actual/23-apps-compacto-960x540.png) |
 
-## Bienvenida y estado del proyecto — v0.5.0
+## Música — reproductor ampliado local v0.5.2
+
+La vista ampliada se abre desde el botón junto al reproductor. Estas capturas muestran la **demostración web**, con etiquetas visibles y controles inactivos; no representan audio real.
+
+| Reproductor 1280×720 | Vista compacta 960×540 |
+|---|---|
+| ![Reproductor ampliado, ejemplo visual](actual/27-musica-ampliada-ejemplo-1280x720.png) | ![Reproductor ampliado compacto, ejemplo visual](actual/28-musica-ampliada-compacta-960x540.png) |
+
+En el APK Android, el panel lee la MediaSession local del estéreo. El avance y los controles aparecen solo cuando el reproductor admite esas acciones. La conexión del teléfono por Wi‑Fi sigue pendiente.
+
+## Bienvenida y estado del proyecto — v0.5.2
 
 Capturas obtenidas del HTML/CSS/JS real en Chromium horizontal.
 
 | Logo SEAT + G² DASH | Saludo personalizado | Avance del proyecto |
 |---|---|---|
-| ![Logo inicial](actual/00-arranque-seat-logo.png) | ![Saludo Doble G](actual/00b-arranque-saludo-doble-g.png) | ![Resumen de avances y siguiente paso](actual/00c-arranque-estado-v050.png) |
+| ![Logo inicial](actual/00-arranque-seat-logo.png) | ![Saludo Doble G](actual/00b-arranque-saludo-doble-g.png) | ![Resumen de avances y siguiente paso](actual/00c-arranque-estado-v052.png) |
 
 La secuencia dura aproximadamente 4.6 segundos y se reproduce al abrir G² Dash; la tercera vista aclara qué está listo y que la música remota por Wi‑Fi sigue pendiente. El encendido automático del estéreo solo podrá verificarse en el dispositivo, tras seleccionar la app HOME si el fabricante lo permite.
 
@@ -92,7 +102,7 @@ La captura real de Chromium verifica que las secciones principales permanecen de
 |---|---|
 | Bienvenida — logo | [00 — SEAT + G² DASH](actual/00-arranque-seat-logo.png) |
 | Bienvenida — saludo | [00b — Doble G](actual/00b-arranque-saludo-doble-g.png) |
-| Bienvenida — estado v0.5.0 | [00c — Avances y siguiente paso](actual/00c-arranque-estado-v050.png) |
+| Bienvenida — estado v0.5.2 | [00c — Avances y siguiente paso](actual/00c-arranque-estado-v050.png) |
 | Vista principal completa | [01 — Inicio](actual/01-inicio-1280x720.png) |
 | Marca, fecha y barra superior | [02 — Encabezado](actual/02-encabezado.png) |
 | Hora y fecha | [03 — Reloj](actual/03-reloj.png) |
