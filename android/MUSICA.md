@@ -1,4 +1,4 @@
-# G² Dash — Música Android (v0.5.2)
+# G² Dash — Música Android (v0.5.3)
 
 ## Qué funciona
 
@@ -45,6 +45,20 @@ de reproducción real.
 - Portadas reducidas a 180 píxeles en memoria, sin almacenamiento en disco.
 - Sin cambios a los fondos, fotografías de Ibiza o distribución del tablero.
 - Los botones Aleatorio/Repetir no están integrados todavía.
+
+## Conexión iPhone → Wi-Fi del estéreo → AirPlay (v0.5.3)
+
+**Receptor seleccionado:** [AirPlay Receiver & Server de jqssun](https://f-droid.org/packages/io.github.jqssun.airplay/). Funciona como aplicación separada en Android 7.0 o superior, no se incrusta en G² Dash ni se instala sin consentimiento. [Repositorio del autor](https://github.com/jqssun/android-airplay-server) · [Google Play](https://play.google.com/store/apps/details?id=io.github.jqssun.airplay).
+
+1. En el estéreo, confirma Android 7+ y activa su punto de acceso Wi-Fi.
+2. Conecta el iPhone al Wi-Fi generado por el estéreo. Los dispositivos deben poder verse en la misma subred; algunos hotspots aíslan clientes y restringen anuncios mDNS.
+3. En G² Dash, toca **AIRPLAY → Ver instalación oficial** (si aún falta) o **Abrir receptor AirPlay**. Sigue su configuración y, por seguridad, habilita PIN.
+4. Abre Música/Apple Music u otra aplicación compatible en el iPhone, elige su selector de salida AirPlay y busca el nombre anunciado por el receptor. Si la app no admite enviar al receptor, prueba otro reproductor AirPlay.
+5. En G² Dash, activa **Acceso multimedia** si lo autorizas. Cuando el receptor publique una MediaSession, el widget puede mostrar título, artista, portada y controles disponibles.
+
+**Limitaciones:** La implementación propia de G² Dash no recibe directamente paquetes AirPlay ni transmite audio por sí misma; esto lo hace la app receptora. Que el iPhone genere el flujo no garantiza que Android reciba toda la metadata, en particular si una app usa DRM. Contenido protegido puede no funcionar. Spotify Connect es otra tecnología y no equivale a AirPlay. Si el Wi-Fi del estéreo no proporciona Internet, el iPhone podría necesitar su conexión de datos para canciones no descargadas. Recomendamos probar audio primero y después el traspaso de carátulas.
+
+**Compatibilidad con el Gearelec:** pendiente de verificar Android real, disponibilidad del receptor para su procesador, descubrimiento mDNS y funcionamiento al regresar a G² Dash. No cambiar launcher ni redes predeterminadas hasta concluir la prueba.
 
 ## Panel ampliado v0.5.2
 
