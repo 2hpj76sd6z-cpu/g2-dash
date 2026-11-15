@@ -1,4 +1,4 @@
-# G² Dash — Música Android (v0.4)
+# G² Dash — Música Android (v0.5.2)
 
 ## Qué funciona
 
@@ -45,6 +45,14 @@ de reproducción real.
 - Portadas reducidas a 180 píxeles en memoria, sin almacenamiento en disco.
 - Sin cambios a los fondos, fotografías de Ibiza o distribución del tablero.
 - Los botones Aleatorio/Repetir no están integrados todavía.
+
+## Panel ampliado v0.5.2
+
+Desde el icono de **ampliar** del widget se abre un reproductor sin salir de G² Dash. Presenta portada grande (si la app musical la publica), título, artista, estado y fuente real. Los botones grandes de reproducción tienen habilitación condicional según MediaSession.
+
+La barra permite avanzar solo si la sesión anuncia **`PlaybackState.ACTION_SEEK_TO`**, existe duración positiva y Android concedió el acceso multimedia. El puente nativo valida estos requisitos otra vez antes de llamar a `MediaController.TransportControls.seekTo()`. Esto evita ofrecer un control que la app no admite. API Android 21+, compatible con el mínimo API 23 del proyecto.
+
+La **demo web** siempre deja los controles ampliados desactivados y muestra expresamente que es un ejemplo, no música conectada. La conexión remota por Wi-Fi permanece pendiente.
 
 ## Detalles del widget v0.4.1
 
