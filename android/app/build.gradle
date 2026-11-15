@@ -36,7 +36,7 @@ android {
 
 tasks.register('bundleG2Web', Copy) {
     from(rootProject.projectDir.parentFile) {
-        include 'index.html', 'style.css', 'brand.css', 'widgets.css', 'ibiza-cutout.css', 'media.css', 'app.js', 'assets/**'
+        include 'index.html', 'style.css', 'brand.css', 'widgets.css', 'ibiza-cutout.css', 'media.css', 'adaptive.css', 'app.js', 'assets/**'
     }
     into(layout.buildDirectory.dir('generated/g2web/www'))
 }
