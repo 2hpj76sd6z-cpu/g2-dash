@@ -127,16 +127,32 @@
     const w=window.open(url,'_blank','noopener,noreferrer');
     if(!w)showToast('Permite ventanas nuevas para abrir Google Maps');
   }
+  function launchNavigation(){
+    const term=$('#destination').value.trim();
+    if(window.G2Android)window.G2Android.openMap(term);
+    else openMap();
+  }
+  function updateMapDestinationState(){
+    const hasDestination=Boolean($('#destination').value.trim());
+    const panel=$('.mapPanel');
+    panel.dataset.destination=hasDestination?'ready':'empty';
+    $('#mapStateTitle').textContent=hasDestination?'Destino preparado':'Mapa de demostración';
+    $('#mapStateDetail').textContent=hasDestination?'Se abrirá en Google Maps':'Abre tu navegador para navegar';
+  }
   function activateGps(){
-    if(!navigator.geolocation){showToast('GPS no disponible en este navegador');return}
-    if(!window.isSecureContext){showToast('Para usar GPS, abre la prueba mediante HTTPS');return}
-    $('#speedLabel').textContent='Buscando señal GPS…';
+    if(!navigator.geolocation){$('#speedLabel').textContent='GPS no disponible';showToast('GPS no disponible en este navegador');return}
+    if(!window.isSecureContext){$('#speedLabel').textContent='GPS requiere HTTPS';showToast('Para usar GPS, abre la prueba mediante HTTPS');return}
+    $('#speedLabel').textContent='Buscando señal…';
     navigator.geolocation.getCurrentPosition((position)=>{
       const speed=position.coords.speed;
-      if(Number.isFinite(speed)&&speed>=0){$('#speed').innerHTML=`${Math.round(speed*3.6)} <small>km/h</small>`;$('#speedLabel').textContent='Velocidad GPS estimada'}
-      else{$('#speed').innerHTML='— <small>km/h</small>';$('#speedLabel').textContent='Sin velocidad GPS disponible'}
-      showToast('Ubicación obtenida. El mapa sigue siendo ilustrativo.');
-    },(err)=>{$('#speedLabel').textContent='Velocidad GPS';showToast(err.code===1?'Permiso de ubicación denegado':'No se pudo obtener ubicación')},{enableHighAccuracy:true,timeout:10000,maximumAge:2000});
+      if(Number.isFinite(speed)&&speed>=0){$('#speed').innerHTML=`${Math.round(speed*3.6)} <small>km/h</small>`;$('#speedLabel').textContent='GPS activo'}
+      else{$('#speed').innerHTML='— <small>km/h</small>';$('#speedLabel').textContent='Sin velocidad GPS'}
+      showToast('GPS activo para estimar velocidad; el mapa sigue siendo ilustrativo.');
+    },(err)=>{
+      const errors={1:['Sin permiso GPS','Permiso de ubicación denegado'],2:['Señal GPS ausente','No se obtuvo ubicación'],3:['GPS sin respuesta','No se pudo obtener ubicación a tiempo']};
+      const [label,message]=errors[err.code]||['GPS no disponible','No se pudo obtener ubicación'];
+      $('#speedLabel').textContent=label;showToast(message);
+    },{enableHighAccuracy:true,timeout:10000,maximumAge:2000});
   }
   // Android invokes this using a local and isolated WebView origin.
   // On GitHub Pages this API only receives clearly marked visual test data.
@@ -228,7 +244,7 @@
       case 'car-prev':photoChange(currentPhoto-1);break;
       case 'car-next':photoChange(currentPhoto+1);break;
       case 'gps':activateGps();break;
-      case 'navigation':if(window.G2Android)window.G2Android.openMap($('#destination').value.trim());else openMap();break;
+      case 'navigation':launchNavigation();break;
       case 'zoom-in':case 'zoom-out':zoom=Math.max(.8,Math.min(1.8,zoom+(action==='zoom-in'?.1:-.1)));$('#mapArtwork').style.transform=`scale(${zoom})`;showToast('Zoom ilustrativo: no sustituye navegación real');break;
       case 'music-access':if(window.G2Android)window.G2Android.openMusicAccess();else showToast('Solo en Android');break;
       case 'music-detail':window.G2MusicDetail?.open();break;
@@ -296,8 +312,9 @@
       };img.src=reader.result;
     };reader.readAsDataURL(file);
   });
-  $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();openMap()}});
+  $('#destination').addEventListener('input',updateMapDestinationState);
+  $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();launchNavigation()}});
   document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close();window.G2Apps?.close();window.G2MusicDetail?.close();window.G2AirPlay?.close()}});
   if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.5';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
-  photoChange(0);applySettings();updateClock();setInterval(updateClock,20000);
+  photoChange(0);updateMapDestinationState();applySettings();updateClock();setInterval(updateClock,20000);
 })();

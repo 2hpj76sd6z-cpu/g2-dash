@@ -119,3 +119,15 @@ body[data-mode="night"] #performanceNote {color:#aabbcd}
 .lifecyclePanel small{font-size:11px;line-height:1.45;color:#607484}
 body[data-mode="night"] .lifecyclePanel strong{color:#9cefc0}
 body[data-mode="night"] .lifecyclePanel small{color:#b4c6d7}
+
+/* Navegación: confirma que hay destino escrito sin simular una ruta real. */
+.destination:focus-within{
+  border-color:rgba(132,186,244,.48);
+  box-shadow:0 0 0 3px rgba(93,145,200,.09),inset 0 1px 0 rgba(255,255,255,.06);
+}
+.mapPanel[data-destination="ready"] .where{
+  background:rgba(22,43,67,.86);
+  border-color:rgba(123,180,231,.34);
+}
+.mapPanel[data-destination="ready"] .where .pinIcon{color:#8abcf5}
+.mapPanel[data-destination="ready"] .where strong{color:#f2f7fc}
