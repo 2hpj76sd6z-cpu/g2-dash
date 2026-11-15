@@ -5,7 +5,23 @@ plugins {
 def g2VersionName = project.findProperty("g2VersionName") ?: "0.5.5-dev"
 def g2VersionCode = (project.findProperty("g2VersionCode") ?: "15").toInteger()
 
+def releaseStoreFile = System.getenv("G2DASH_KEYSTORE_FILE")
+def releaseStorePassword = System.getenv("G2DASH_KEYSTORE_PASSWORD")
+def releaseKeyAlias = System.getenv("G2DASH_KEY_ALIAS")
+def releaseKeyPassword = System.getenv("G2DASH_KEY_PASSWORD")
+
 android {
+    signingConfigs {
+        release {
+            if (releaseStoreFile) {
+                storeFile file(releaseStoreFile)
+                storePassword releaseStorePassword
+                keyAlias releaseKeyAlias
+                keyPassword releaseKeyPassword
+            }
+        }
+    }
+
     namespace 'com.dobleg.g2dash'
     compileSdk 35
 
@@ -20,6 +36,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
         }
     }
 
