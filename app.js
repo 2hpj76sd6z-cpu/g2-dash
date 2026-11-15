@@ -71,7 +71,7 @@
     $('.modalPhoto').classList.toggle('isCutout',currentPhoto===0);
     $('#carChip').textContent=currentPhoto===0?'MI IBIZA · SIN FONDO':currentPhoto===1?'Fotografía frontal · placa protegida':'Fotografía trasera · placa protegida';
     $('#modalLabel').textContent=currentPhoto===0&&settings.personalCar?'PNG personal — fondo transparente':pic.name;
-    $('#carDot0, #carDot1, #carDot2').forEach((b,i)=>b.classList.toggle('on',i===currentPhoto));
+    $$('#carDot0, #carDot1, #carDot2').forEach((b,i)=>b.classList.toggle('on',i===currentPhoto));
   }
   function openScreen(selector){$(selector).hidden=false}
   function closeScreen(selector){$(selector).hidden=true}
