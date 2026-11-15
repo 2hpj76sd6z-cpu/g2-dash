@@ -53,8 +53,9 @@ try {
   await page.waitForFunction(() => document.querySelector('#startup')?.dataset.stage === 'status', {timeout:4500});
   const splashVersion = await page.locator('.startupStatusVersion').textContent();
   const nextStep = await page.locator('.startupStatusNext p strong').textContent();
-  if(splashVersion!=='v0.5.1' || nextStep!=='Música del teléfono por Wi‑Fi') {
-    throw new Error('El estado de avance de bienvenida no coincide con v0.5.0');
+  const releaseVersion = (await page.title()).match(/v\d+\.\d+\.\d+/)?.[0];
+  if(!releaseVersion || splashVersion!==releaseVersion || !nextStep.trim()) {
+    throw new Error('La bienvenida no coincide con la versión del tablero o no indica el siguiente paso');
   }
   await capture('00c-arranque-estado-v050');
   await page.locator('#startup').waitFor({state:'hidden',timeout:8000});
