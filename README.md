@@ -18,6 +18,9 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 ### Bienvenida al iniciar G² Dash
 
+El símbolo SEAT de la primera pantalla ya utiliza el **vector original**, no una recreación. Fuente del emblema: [Simple Icons – SEAT](https://github.com/simple-icons/simple-icons/blob/develop/icons/seat.svg). La marca SEAT pertenece a su titular; su aparición identifica el vehículo del proyecto y no implica afiliación comercial.
+
+
 La apertura de la app (web o APK Android) muestra el emblema **SEAT** estilizado y **G² DASH**; después, mediante un fundido, aparece el saludo «**Buenas Noches Doble G, ¿A dónde iremos hoy?**». Según la hora del dispositivo puede decir «Buenos Días» o «Buenas Tardes». Tras otro fundido aparece el tablero de siempre. Dura aproximadamente **4.6 segundos**, incluye **Omitir** y un botón **Ajustes → Ver bienvenida**.
 
 El saludo aparece **al abrir la aplicación**. Para verlo al encender el vehículo, Android debe elegir G² Dash como HOME y el estéreo debe ejecutarlo al inicio; la elección es manual, no automática. Algunos estéreos reanudan desde suspensión sin reiniciar la aplicación y, en ese caso, puede no repetirse. Esta conducta requiere validación en el Gearelec.
