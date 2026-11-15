@@ -2,7 +2,26 @@ plugins {
     id 'com.android.application'
 }
 
+def g2VersionName = project.findProperty("g2VersionName") ?: "0.5.5-dev"
+def g2VersionCode = (project.findProperty("g2VersionCode") ?: "15").toInteger()
+
+def releaseStoreFile = System.getenv("G2DASH_KEYSTORE_FILE")
+def releaseStorePassword = System.getenv("G2DASH_KEYSTORE_PASSWORD")
+def releaseKeyAlias = System.getenv("G2DASH_KEY_ALIAS")
+def releaseKeyPassword = System.getenv("G2DASH_KEY_PASSWORD")
+
 android {
+    signingConfigs {
+        release {
+            if (releaseStoreFile) {
+                storeFile file(releaseStoreFile)
+                storePassword releaseStorePassword
+                keyAlias releaseKeyAlias
+                keyPassword releaseKeyPassword
+            }
+        }
+    }
+
     namespace 'com.dobleg.g2dash'
     compileSdk 35
 
@@ -10,13 +29,14 @@ android {
         applicationId 'com.dobleg.g2dash'
         minSdk 23
         targetSdk 35
-        versionCode 15
-        versionName '0.5.5-dev'
+        versionCode g2VersionCode
+        versionName g2VersionName
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
         }
     }
 
@@ -46,5 +66,6 @@ tasks.named('preBuild').configure {
 }
 
 dependencies {
+    implementation 'androidx.core:core:1.15.0'
     implementation 'androidx.webkit:webkit:1.14.0'
 }
