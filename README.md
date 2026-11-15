@@ -29,8 +29,6 @@ El saludo aparece **al abrir la aplicación**. Para verlo al encender el vehícu
 
 **Detalle visual v0.5.1:** modo **1:1** que respeta los 500×314 píxeles originales y opción **1.3×** para ver el auto más grande; también gestos multitramo y precarga limitada. [Comparación real de ambos modos](docs/capturas/MEJORA_IBIZA_v0.5.1.md).
 
-### Ibiza — 12 vistas conceptuales
-
 El botón **12 VISTAS** abre una galería de doce ilustraciones de la propuesta aprobada. Flechas, miniaturas, selector de 0° a 330°, deslizamiento y recorrido automático opcional. **No es un modelo 3D ni doce fotos reales**. La fotografía original del Ibiza y el fondo del tablero continúan intactos.
 
 [Ver detalles y capturas del visor](docs/IBIZA_360_REFERENCIA_APROBADA.md).
