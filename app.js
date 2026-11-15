@@ -177,6 +177,7 @@
         break;
       case 'close-settings':closeScreen('#settingsVeil');break;
       case 'vehicle':window.G2Concept?.close();openScreen('#vehicleVeil');break;
+      case 'vehicle-real':window.G2Concept?.close();photoChange(0);openScreen('#vehicleVeil');break;
       case 'concept-360':closeScreen('#vehicleVeil');window.G2Concept?.open();break;
       case 'close-vehicle':closeScreen('#vehicleVeil');break;
       case 'car-front':photoChange(0);break;

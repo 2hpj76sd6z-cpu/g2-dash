@@ -204,6 +204,8 @@ try {
   if(!await page.locator('#conceptVeil').isHidden() || !await page.locator('#vehicleVeil').isVisible())
     throw new Error('No abrió el visor de fotos reales');
   await page.locator('#modalCar').evaluate(img=>img.decode());
+  const originalSource=await page.locator('#modalCar').getAttribute('src');
+  if(!originalSource.includes('ibiza_frente_original.webp'))throw new Error('No se abrió la fotografía frontal real');
   await capture('36-ibiza-fotografia-autentica');
   await page.locator('#vehicleVeil [data-action="concept-360"]').click();
   if(!await page.locator('#vehicleVeil').isHidden() || !await page.locator('#conceptVeil').isVisible())
