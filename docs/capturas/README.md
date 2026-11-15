@@ -8,6 +8,14 @@ interfaz real en Chromium** a 1280 × 720 y crea capturas por sección.
 > No son imágenes generadas, ni funciones simuladas como si fueran operativas.
 > El mapa y OBD siguen pendientes. La música MediaSession local se integra opcionalmente en Android; las capturas musicales de ejemplo son únicamente pruebas visuales.
 
+## Reproductor ampliado — v0.5.2
+
+Las vistas siguientes son capturas reales de HTML/CSS/JS a resoluciones horizontales. El ejemplo de metadatos no reproduce audio y mantiene botones desactivados.
+
+| Reproductor ampliado 1280×720 | Vista compacta 960×540 |
+|---|---|
+| ![Reproductor ejemplo](actual/27-musica-ampliada-ejemplo-1280x720.png) | ![Reproductor compacto](actual/28-musica-ampliada-compacta-960x540.png) |
+
 ## Apps — v0.5.1
 
 El panel de aplicaciones se probó en Chromium horizontal. En estas capturas aparecen **solo iconos ilustrativos de demostración**, no datos de apps instaladas. En Android se consulta el listado local real.
