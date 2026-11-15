@@ -307,6 +307,10 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> { if (mediaBridge != null) mediaBridge.control(action); });
         }
         @JavascriptInterface
+        public void musicSeek(long positionMs) {
+            runOnUiThread(() -> { if (mediaBridge != null) mediaBridge.seekTo(positionMs); });
+        }
+        @JavascriptInterface
         public void openMusicAccess() {
             runOnUiThread(() -> { if (mediaBridge != null) mediaBridge.showAccessSettings(); });
         }
@@ -346,6 +350,8 @@ public class MainActivity extends Activity {
         webView.evaluateJavascript("(function(){const s=document.querySelector('#settingsVeil');" +
                 "const v=document.querySelector('#vehicleVeil');" +
                 "const c=document.querySelector('#conceptVeil');" +
+                "const m=document.querySelector('#musicDetailVeil');" +
+                "if(m&&!m.hidden){m.hidden=true;return true;}" +
                 "const a=document.querySelector('#appsVeil');" +
                 "if(a&&!a.hidden){a.hidden=true;return true;}" +
                 "if(c&&!c.hidden){if(window.G2Concept)window.G2Concept.close();else c.hidden=true;return true;}" +
