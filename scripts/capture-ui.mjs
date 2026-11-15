@@ -57,7 +57,7 @@ try {
   if(!releaseVersion || splashVersion!==releaseVersion || !nextStep.trim()) {
     throw new Error('La bienvenida no coincide con la versión del tablero o no indica el siguiente paso');
   }
-  await capture('00c-arranque-estado-v050');
+  await capture('00c-arranque-estado-v052');
   await page.locator('#startup').waitFor({state:'hidden',timeout:8000});
 
   // Revisión geométrica: no ocultar secciones fuera del área útil.
@@ -250,7 +250,7 @@ try {
     generated_at: new Date().toISOString(),
     shots: [
       '00-arranque-seat-logo.png', '00b-arranque-saludo-doble-g.png',
-      '00c-arranque-estado-v050.png', '01-inicio-1280x720.png', '02-encabezado.png', '03-reloj.png',
+      '00c-arranque-estado-v052.png', '01-inicio-1280x720.png', '02-encabezado.png', '03-reloj.png',
       '04-musica.png', '05-mapa-ilustrativo.png', '06-mi-ibiza.png',
       '07-iconos-accesos.png', '08-personalizacion.png',
       '09-modo-dia-1280x720.png', '10-ibiza-detalle.png',
