@@ -36,20 +36,24 @@
   const accents = {steel:'#b7cce8',blue:'#84bbff',warm:'#dfc1a0'};
   const widgetTints = {graphite:'19, 25, 34',blue:'17, 32, 47',green:'17, 35, 33',black:'11, 14, 19'};
   const walls={dusk:'radial-gradient(ellipse at 75% 20%, #837068 0%, transparent 39%),linear-gradient(120deg,#3f4d60,#242d3b 48%,#1b2333)',blue:'radial-gradient(ellipse at 75% 25%, #516f90 0%, transparent 39%),linear-gradient(120deg,#243c57,#152438 48%,#1a2432)',gray:'radial-gradient(ellipse at 75% 25%, #6a6970 0%, transparent 39%),linear-gradient(120deg,#353843,#212735 55%,#171d29)'};
-  function applySettings(){
-    document.documentElement.style.setProperty('--accent',accents[settings.accent]||accents.steel);
-    document.documentElement.style.setProperty('--wallBlur',`${Number(settings.blur)||0}px`);
+  /* Aplicación ligera: mover sliders no repinta el fondo ni las fotos. */
+  function applyWidgetSettings(){
     const opacity=Number.isFinite(Number(settings.opacity))?Math.max(20,Math.min(88,Number(settings.opacity))):54;
     const widgetBlur=Number.isFinite(Number(settings.widgetBlur))?Math.max(0,Math.min(16,Number(settings.widgetBlur))):8;
-    const tint=Object.hasOwn(widgetTints,settings.widgetTint)?settings.widgetTint:'graphite';
+    const tint=Object.prototype.hasOwnProperty.call(widgetTints,settings.widgetTint)?settings.widgetTint:'graphite';
     document.documentElement.style.setProperty('--glassOpacity',opacity/100);
     document.documentElement.style.setProperty('--widgetTintRgb',widgetTints[tint]);
     document.documentElement.style.setProperty('--widgetBlur',widgetBlur+'px');
-    $('#blur').value=settings.blur;$('#blurValue').textContent=`${settings.blur} px`;
     $('#opacity').value=opacity;$('#opacityValue').textContent=`${opacity}%`;
     $('#widgetBlur').value=widgetBlur;$('#widgetBlurValue').textContent=`${widgetBlur} px`;
-    $$('[data-tint]').forEach(b=>{const chosen=b.dataset.tint===tint;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});
-    $$('[data-accent]').forEach(b=>b.classList.toggle('selected',b.dataset.accent===settings.accent));
+    $('[data-tint]').forEach(b=>{const chosen=b.dataset.tint===tint;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});
+  }
+  function applySettings(){
+    document.documentElement.style.setProperty('--accent',accents[settings.accent]||accents.steel);
+    document.documentElement.style.setProperty('--wallBlur',`${Number(settings.blur)||0}px`);
+    applyWidgetSettings();
+    $('#blur').value=settings.blur;$('#blurValue').textContent=`${settings.blur} px`;
+    $('[data-accent]').forEach(b=>b.classList.toggle('selected',b.dataset.accent===settings.accent));
     $$('[data-wall]').forEach(b=>b.classList.toggle('selected',b.dataset.wall===settings.wall));
     const activeLogo=['apex','pulse','orbit'].includes(settings.logo)?settings.logo:'apex';
     $('#brandLogo').dataset.logo=activeLogo;
@@ -119,11 +123,11 @@
   $$('[data-theme]').forEach(button=>button.addEventListener('click',()=>{settings.theme=button.dataset.theme;applyTheme();}));
   $$('[data-wall]').forEach(button=>button.addEventListener('click',()=>{settings.wall=button.dataset.wall;settings.customWallpaper=null;applySettings();save()}));
   $$('[data-accent]').forEach(button=>button.addEventListener('click',()=>{settings.accent=button.dataset.accent;applySettings();save()}));
-  $$('[data-tint]').forEach(button=>button.addEventListener('click',()=>{settings.widgetTint=button.dataset.tint;applySettings();save()}));
+  $$('[data-tint]').forEach(button=>button.addEventListener('click',()=>{settings.widgetTint=button.dataset.tint;applyWidgetSettings();save()}));
   $$('.logoChoices button[data-logo]').forEach(button=>button.addEventListener('click',()=>{settings.logo=button.dataset.logo;applySettings();save()}));
   $('#blur').addEventListener('input',(e)=>{settings.blur=Number(e.target.value);document.documentElement.style.setProperty('--wallBlur',`${settings.blur}px`);$('#blurValue').textContent=`${settings.blur} px`;save()});
-  $('#opacity').addEventListener('input',(e)=>{settings.opacity=Number(e.target.value);applySettings();save()});
-  $('#widgetBlur').addEventListener('input',(e)=>{settings.widgetBlur=Number(e.target.value);applySettings();save()});
+  $('#opacity').addEventListener('input',(e)=>{settings.opacity=Number(e.target.value);applyWidgetSettings();save()});
+  $('#widgetBlur').addEventListener('input',(e)=>{settings.widgetBlur=Number(e.target.value);applyWidgetSettings();save()});
   $('#chooseWall').addEventListener('change',(event)=>{
     const file=event.target.files?.[0];if(!file)return;
     if(!file.type.startsWith('image/')){showToast('Elige una imagen compatible');return}
