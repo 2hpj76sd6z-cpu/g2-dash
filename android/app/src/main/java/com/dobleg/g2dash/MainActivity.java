@@ -8,6 +8,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.util.Base64;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import java.io.ByteArrayOutputStream;
+import java.util.HashSet;
+import java.util.Set;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -213,7 +222,82 @@ public class MainActivity extends Activity {
                 .show();
     }
 
+    /**
+     * Apps solicitadas por el usuario: solo actividades visibles como LAUNCHER.
+     * Los íconos se comprimen a 48 px y se entregan exclusivamente al WebView local.
+     * Sin QUERY_ALL_PACKAGES ni conexión con servidores.
+     */
+    private String listInstalledAppsJson() {
+        JSONArray output = new JSONArray();
+        PackageManager pm = getPackageManager();
+        Intent query = new Intent(Intent.ACTION_MAIN);
+        query.addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> results = pm.queryIntentActivities(query, 0);
+        results.sort(Comparator.comparing(a -> a.loadLabel(pm).toString().toLowerCase()));
+        Set<String> seen = new HashSet<>();
+        int count = 0;
+        for (ResolveInfo info : results) {
+            if (info.activityInfo == null) continue;
+            String pkg = info.activityInfo.packageName;
+            String activity = info.activityInfo.name;
+            if (pkg == null || activity == null || getPackageName().equals(pkg)
+                    || !seen.add(pkg) || count >= 90) continue;
+            try {
+                JSONObject row = new JSONObject();
+                row.put("name", info.loadLabel(pm).toString());
+                row.put("packageName", pkg);
+                row.put("activityName", activity);
+                try {
+                    Drawable drawable = info.loadIcon(pm);
+                    if (drawable != null) {
+                        Bitmap bitmap = Bitmap.createBitmap(48, 48, Bitmap.Config.ARGB_8888);
+                        Canvas canvas = new Canvas(bitmap);
+                        drawable.setBounds(0, 0, 48, 48);
+                        drawable.draw(canvas);
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 90, bytes);
+                        row.put("icon", "data:image/png;base64," + Base64.encodeToString(
+                                bytes.toByteArray(), Base64.NO_WRAP));
+                        bitmap.recycle();
+                    }
+                } catch (Exception ignored) {
+                    // La app sigue accesible aunque el paquete no exponga ícono.
+                }
+                output.put(row);
+                count++;
+            } catch (Exception ignored) { /* Ignorar componente defectuoso. */ }
+        }
+        return output.toString();
+    }
+
+    private void launchValidatedApp(String pkg, String activity) {
+        if (pkg == null || activity == null) return;
+        Intent query = new Intent(Intent.ACTION_MAIN);
+        query.addCategory(Intent.CATEGORY_LAUNCHER);
+        PackageManager pm = getPackageManager();
+        for (ResolveInfo info : pm.queryIntentActivities(query, 0)) {
+            if (info.activityInfo == null) continue;
+            if (pkg.equals(info.activityInfo.packageName)
+                    && activity.equals(info.activityInfo.name)) {
+                Intent launch = new Intent(Intent.ACTION_MAIN);
+                launch.addCategory(Intent.CATEGORY_LAUNCHER);
+                launch.setClassName(pkg, activity);
+                openExternal(launch);
+                return;
+            }
+        }
+        Toast.makeText(this, "Aplicación no disponible", Toast.LENGTH_SHORT).show();
+    }
+
     private class AndroidBridge {
+        @JavascriptInterface
+        public String getInstalledApps() {
+            return listInstalledAppsJson();
+        }
+        @JavascriptInterface
+        public void launchInstalledApp(String packageName, String activityName) {
+            runOnUiThread(() -> MainActivity.this.launchValidatedApp(packageName, activityName));
+        }
         @JavascriptInterface
         public void openTarget(String key) {
             runOnUiThread(() -> MainActivity.this.openTarget(key));
@@ -262,6 +346,8 @@ public class MainActivity extends Activity {
         webView.evaluateJavascript("(function(){const s=document.querySelector('#settingsVeil');" +
                 "const v=document.querySelector('#vehicleVeil');" +
                 "const c=document.querySelector('#conceptVeil');" +
+                "const a=document.querySelector('#appsVeil');" +
+                "if(a&&!a.hidden){a.hidden=true;return true;}" +
                 "if(c&&!c.hidden){if(window.G2Concept)window.G2Concept.close();else c.hidden=true;return true;}" +
                 "if(s&&!s.hidden){s.hidden=true;return true;}" +
                 "if(v&&!v.hidden){v.hidden=true;return true;}return false;})()",
