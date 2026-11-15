@@ -100,3 +100,12 @@ body[data-performance="light"] svg {
  transition:none!important;
 }
 @media(max-height:650px){.performancePicker button{min-height:36px;padding:6px}}
+
+/* v0.5.4: selected performance option must remain readable in day mode. */
+body[data-mode="day"] .performancePicker button.selected {
+ color:#205c3e;
+ background:rgba(48,147,96,.16);
+ border-color:rgba(32,120,76,.72);
+}
+body[data-mode="day"] #performanceNote {color:#56687a}
+body[data-mode="night"] #performanceNote {color:#aabbcd}
