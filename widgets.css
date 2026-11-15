@@ -1,0 +1,63 @@
+/* G² Dash — widgets ahumados. Solo superficies; no altera fotos ni wallpaper. */
+:root {
+  --widgetTintRgb:19, 25, 34;
+  --widgetBlur:8px;
+}
+/* Mantener translucidez incluso en modo de día; texto legible. */
+body[data-mode] .dashboard .glass,
+body[data-mode] .sidebar.glass {
+  background:rgba(var(--widgetTintRgb),var(--glassOpacity));
+  border:1px solid rgba(222,237,251,.23);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.065),0 12px 30px rgba(0,0,0,.17);
+  -webkit-backdrop-filter:blur(var(--widgetBlur)) saturate(112%);
+  backdrop-filter:blur(var(--widgetBlur)) saturate(112%);
+  color:#f1f5fb;
+  --muted:#b3c4d5;
+}
+body[data-mode] .bottomDock button {
+  background:rgba(var(--widgetTintRgb),var(--glassOpacity));
+  color:#f3f7fc;
+  border:1px solid rgba(222,237,251,.21);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 9px 22px rgba(0,0,0,.17);
+  -webkit-backdrop-filter:blur(var(--widgetBlur)) saturate(112%);
+  backdrop-filter:blur(var(--widgetBlur)) saturate(112%);
+}
+body[data-mode="day"] .dashboard .calendarRow,
+body[data-mode="day"] .dashboard .trackText span,
+body[data-mode="day"] .dashboard .trackTimes {color:#c4d3e3}
+body[data-mode="day"] .dashboard .vehicleStats {
+  background:rgba(4,10,16,.19);
+  border-color:rgba(223,235,248,.14);
+}
+body[data-mode="day"] .dashboard .vehicleStats .icon {color:#d1deeb}
+body[data-mode="day"] .sidebar button {color:#c0d0df}
+body[data-mode="day"] .sidebar button.selected {color:#fff}
+body[data-mode="day"] .sidebar button:hover {color:#fff}
+/* Controls are deliberately compact for landscape car displays. */
+.tintPicker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.tintPicker button{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  min-width:0;min-height:65px;padding:8px 3px;
+  background:rgba(250,250,250,.04);border:1px solid rgba(225,238,251,.24);
+  border-radius:11px;color:#e5eef8;font-size:10px;cursor:pointer;
+}
+.tintPicker button.selected {
+  border-color:#57db96;
+  box-shadow:inset 0 0 0 1px rgba(87,219,150,.22);
+  background:rgba(87,219,150,.09);
+}
+.tintPicker .tintSwatch{
+  width:29px;height:26px;border:1px solid rgba(244,250,255,.29);
+  border-radius:8px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+}
+.tintPicker [data-tint="graphite"] .tintSwatch {background:rgba(19,25,34,.85)}
+.tintPicker [data-tint="blue"] .tintSwatch {background:rgba(17,32,47,.85)}
+.tintPicker [data-tint="green"] .tintSwatch {background:rgba(17,35,33,.85)}
+.tintPicker [data-tint="black"] .tintSwatch {background:rgba(11,14,19,.9)}
+body[data-mode="day"] .tintPicker button {color:#293a4d}
+body[data-mode="day"] .tintPicker button.selected {color:#19382b}
+@supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))) {
+  body[data-mode] .dashboard .glass,
+  body[data-mode] .sidebar.glass,
+  body[data-mode] .bottomDock button { background:rgba(var(--widgetTintRgb),.83) }
+}
