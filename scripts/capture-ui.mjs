@@ -43,6 +43,37 @@ try {
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(350);
 
+  // Revisión geométrica: no ocultar secciones fuera del área útil.
+  // No se confunde un screenshot correcto con una prueba de rendimiento del estéreo.
+  const qa = [];
+  const inspectViewport = async label => {
+    const data = await page.evaluate(() => {
+      const names=['.topline','.dashboard','.sidebar','.leftStack','.musicPanel','.mapPanel','.vehiclePanel','.bottomDock','.footer'];
+      const boxes={};
+      for(const selector of names){
+        const el=document.querySelector(selector);
+        if(!el)continue;
+        const b=el.getBoundingClientRect();
+        boxes[selector]={left:+b.left.toFixed(1),top:+b.top.toFixed(1),right:+b.right.toFixed(1),bottom:+b.bottom.toFixed(1),width:+b.width.toFixed(1),height:+b.height.toFixed(1)};
+      }
+      const actualCar=document.querySelector('#vehiclePhoto');
+      return {viewport:{width:innerWidth,height:innerHeight},boxes,carLoaded:Boolean(actualCar?.complete&&actualCar.naturalWidth>0),horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1};
+    });
+    const problems=[];
+    if(data.horizontalOverflow)problems.push('Desplazamiento horizontal');
+    if(!data.carLoaded)problems.push('La imagen del Ibiza no cargó');
+    for(const [name,b] of Object.entries(data.boxes)){
+      if(b.width<34 || b.height<20)problems.push(name+' es demasiado pequeño');
+      if(b.left < -3 || b.top < -3 || b.right>data.viewport.width+3 || b.bottom>data.viewport.height+3){
+        problems.push(name+' queda fuera del viewport');
+      }
+    }
+    qa.push({label,...data,problems});
+    console.log('QA pantalla',label,problems.length?'OBSERVACIONES: '+problems.join('; '):'sin desbordamientos');
+    if(problems.length)throw new Error('Fallo de geometría en '+label+': '+problems.join('; '));
+  };
+  await inspectViewport('1280×720');
+
   await capture('01-inicio-1280x720');
   await capture('02-encabezado', '.topline');
   await capture('03-reloj', '.clockPanel');
@@ -95,6 +126,20 @@ try {
   await capture('15-ibiza-mascara-ampliada');
   await page.locator('[data-action="close-vehicle"]').click();
 
+  // La misma interfaz en pantallas menos espaciosas para evitar cortes.
+  await page.setViewportSize({width:1024,height:600});
+  await page.reload({waitUntil:'networkidle'});
+  await page.waitForTimeout(150);
+  await inspectViewport('1024×600');
+  await capture('14-compacto-1024x600');
+  await capture('15-ibiza-1024x600','.vehiclePanel');
+  await page.setViewportSize({width:960,height:540});
+  await page.reload({waitUntil:'networkidle'});
+  await page.waitForTimeout(150);
+  await inspectViewport('960×540');
+  await capture('16-compacto-960x540');
+  await writeFile(path.join(root,'qa-layout.json'),JSON.stringify({source_commit:process.env.G2_COMMIT||'local',checked:qa},null,2)+'\n');
+
   const meta = {
     project: 'G² Dash',
     note: 'Capturas verificables de HTML/CSS/JS reales; mapa y música ilustrativos; velocidad GPS y OBD no simulados.',
@@ -107,7 +152,8 @@ try {
       '07-iconos-accesos.png', '08-personalizacion.png',
       '09-modo-dia-1280x720.png', '10-ibiza-detalle.png',
       '11-ibiza-trasera.png', '12-musica-integracion-prueba.png',
-      '13-musica-detallada-ejemplo.png',
+      '13-musica-detallada-ejemplo.png', '14-compacto-1024x600.png',
+      '15-ibiza-1024x600.png', '16-compacto-960x540.png',
       '14-ibiza-mascara-corregida.png', '15-ibiza-mascara-ampliada.png'
     ]
   };
