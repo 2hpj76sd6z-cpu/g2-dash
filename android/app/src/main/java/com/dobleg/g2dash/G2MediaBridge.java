@@ -113,6 +113,14 @@ final class G2MediaBridge {
     private MediaController preferredSession() {
         List<MediaController> all = controllers();
         MediaController fallback = null;
+        // AirPlay has priority when genuinely playing: other paused sessions
+        // must not steal the iPhone cover art or transport controls.
+        for (MediaController item : all) {
+            if (item == null) continue;
+            PlaybackState state = item.getPlaybackState();
+            if ("io.github.jqssun.airplay".equals(item.getPackageName())
+                    && state != null && state.getState() == PlaybackState.STATE_PLAYING) return item;
+        }
         for (MediaController item : all) {
             if (item == null) continue;
             PlaybackState state = item.getPlaybackState();
@@ -193,13 +201,13 @@ final class G2MediaBridge {
         if (bitmap == null) bitmap = metadata.getBitmap(MediaMetadata.METADATA_KEY_DISPLAY_ICON);
         if (bitmap == null || bitmap.getWidth() < 1 || bitmap.getHeight() < 1) return "";
         try {
-            int target = 180;
+            int target = 320;
             float factor = Math.min(1f, Math.min((float) target / bitmap.getWidth(), (float) target / bitmap.getHeight()));
             int w = Math.max(1, Math.round(bitmap.getWidth() * factor));
             int h = Math.max(1, Math.round(bitmap.getHeight() * factor));
             Bitmap small = Bitmap.createScaledBitmap(bitmap, w, h, true);
             ByteArrayOutputStream output = new ByteArrayOutputStream();
-            small.compress(Bitmap.CompressFormat.JPEG, 72, output);
+            small.compress(Bitmap.CompressFormat.JPEG, 82, output);
             if (small != bitmap) small.recycle();
             lastArtworkData = "data:image/jpeg;base64," + Base64.encodeToString(output.toByteArray(), Base64.NO_WRAP);
         } catch (Exception ex) {
