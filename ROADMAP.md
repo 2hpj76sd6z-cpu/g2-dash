@@ -2,7 +2,7 @@
 
 ## Situación actual
 
-La versión **v0.4.2** mantiene una demo web y un APK Android de prueba. Ya están configurables el logotipo y el acabado ahumado de los widgets; Android puede leer la sesión musical local con permiso del usuario. El APK aún no reemplaza el launcher del estéreo y falta validarlo en el equipo físico.
+La versión **v0.4.3** mantiene una demo web y un APK Android de prueba, y añade la bienvenida animada. Ya están configurables el logotipo y el acabado ahumado de los widgets; Android puede leer la sesión musical local con permiso del usuario. Android permite elegir manualmente G² Dash como HOME, pero no lo configura por sí mismo. Falta validarlo en el estéreo físico.
 
 | Versión | Objetivo | Estado |
 |---|---|---|
@@ -12,6 +12,7 @@ La versión **v0.4.2** mantiene una demo web y un APK Android de prueba. Ya est�
 | v0.4 | APK Android de prueba, acceso a apps instaladas y GPS opcional | Implementada; validación en estéreo pendiente |
 | v0.4.1 | Música Android local: título, artista, portada y controles compatibles | Implementada; requiere permiso multimedia |
 | v0.4.2 | Máscara corregida sobre la foto real y diseño adaptable | En código; falta revisar y aprobar la máscara |
+| v0.4.3 | Emblema SEAT → saludo Doble G → tablero; selección HOME opcional | Implementado en código; probar encendido real |
 | v0.5 | Música desde el teléfono por Wi-Fi con protocolo o app complementaria | Pendiente de definir |
 | v0.6 | Mapa real con proveedor seleccionado | Pendiente |
 | v0.7 | Integración OBD opcional para datos reales del vehículo | Pendiente |
