@@ -73,6 +73,7 @@
    playing=data.granted===true&&pkg===receiver&&data.playing===true;
    if(playing){
      setShortcutState('playing','AirPlay · reproduciendo','Android detectó música AirPlay en reproducción.');
+     if(!veil.hidden)scan();
    }else if(!veil.hidden||wasPlaying){
      scan();
    }
