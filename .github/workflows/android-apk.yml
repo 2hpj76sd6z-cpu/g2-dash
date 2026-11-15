@@ -16,6 +16,8 @@ on:
       - 'intro.js'
       - 'ibiza360.css'
       - 'ibiza360.js'
+      - 'apps.css'
+      - 'apps.js'
       - 'ibiza-cutout.css'
       - 'app.js'
       - 'assets/**'
@@ -49,6 +51,6 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: G2-Dash-v0.5.0-Android-debug
+          name: G2-Dash-v0.5.1-Android-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
