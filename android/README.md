@@ -1,4 +1,4 @@
-# G² Dash para Android — v0.4.1 (música detallada)
+# G² Dash para Android — v0.4.2 (Mi Ibiza)
 
 Este módulo es una aplicación Android nativa que **reutiliza exactamente**
 el diseño web aprobado (archivos del directorio principal). No contiene un
@@ -48,3 +48,7 @@ Wi-Fi remoto, OBD, launcher HOME y giro 360° se desarrollarán por separado.
 ## Paridad visual
 
 El paquete Android incluye `style.css`, `brand.css`, `widgets.css`, `ibiza-cutout.css`, `media.css`, el JavaScript y las imágenes de `assets/` para conservar los mismos ajustes y el Ibiza real que en GitHub Pages.
+
+## Máscara real del Ibiza v0.4.2
+
+Se refinó solo la máscara de transparencia del recorte; la fotografía original WebP incrustada no se ha cambiado en absoluto. La matrícula sigue anonimizada. Las dos fotos reales originales permanecen disponibles. El resultado sigue siendo una máscara aproximada, sin modelo 360°.

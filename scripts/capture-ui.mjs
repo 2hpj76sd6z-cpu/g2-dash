@@ -87,6 +87,13 @@ try {
     throw new Error('La prueba visual de música no tiene los indicadores correctos');
   }
   await capture('13-musica-detallada-ejemplo', '.musicPanel');
+  // Recorte real, mismo WebP con la máscara revisada.
+  await page.locator('[data-action="car-cutout"]').click();
+  await page.locator('#vehiclePhoto').evaluate(img=>{if(!img.complete||img.naturalWidth<200)throw new Error('SVG Ibiza no cargado');});
+  await capture('14-ibiza-mascara-corregida', '.vehiclePanel');
+  await page.locator('[data-action="vehicle"]').first().click();
+  await capture('15-ibiza-mascara-ampliada');
+  await page.locator('[data-action="close-vehicle"]').click();
 
   const meta = {
     project: 'G² Dash',
@@ -100,7 +107,8 @@ try {
       '07-iconos-accesos.png', '08-personalizacion.png',
       '09-modo-dia-1280x720.png', '10-ibiza-detalle.png',
       '11-ibiza-trasera.png', '12-musica-integracion-prueba.png',
-      '13-musica-detallada-ejemplo.png'
+      '13-musica-detallada-ejemplo.png',
+      '14-ibiza-mascara-corregida.png', '15-ibiza-mascara-ampliada.png'
     ]
   };
   await writeFile(path.join(root, 'meta.json'), JSON.stringify(meta, null, 2) + '\n');

@@ -2,7 +2,7 @@
 
 # G² Dash
 
-**Interfaz automotriz personalizable · Web y Android · v0.4.1**
+**Interfaz automotriz personalizable · Web y Android · v0.4.2**
 
 Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados configurables y acceso a las funciones Android del estéreo.
 
@@ -14,7 +14,7 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 ## Cómo va el proyecto
 
-**Versión actual: v0.4.1.** La demo web y el APK Android de prueba ya están disponibles. El APK integra acceso a apps instaladas, GPS opcional y música local mediante MediaSession; todavía no sustituye el launcher principal ni se ha validado en el estéreo físico.
+**Versión actual: v0.4.2.** La demo web y el APK Android de prueba ya están disponibles. El APK integra acceso a apps instaladas, GPS opcional y música local mediante MediaSession; todavía no sustituye el launcher principal ni se ha validado en el estéreo físico.
 
 ### Ya está implementado
 
@@ -26,7 +26,7 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 ### Lo siguiente
 
-- Afinar el recorte del Ibiza con la imagen aprobada; el acabado actual sigue en revisión.
+- Revisar y aprobar la máscara corregida del Ibiza v0.4.2. La foto original no se modificó.
 - Validar el APK en el estéreo Gearelec y medir fluidez con sus 2 GB de RAM.
 - Definir una solución para música desde el teléfono por Wi-Fi: el punto de acceso no comparte por sí solo sus metadatos.
 - Mantener pendientes el mapa real, la conexión OBD y el launcher predeterminado.
@@ -54,7 +54,7 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 > **Aviso:** el mapa es una ilustración, no un mapa en tiempo real. Los campos de autonomía y voltaje permanecen vacíos hasta que exista una conexión real; no se inventan valores del vehículo. Los iconos de Wi-Fi y Bluetooth son decorativos en esta demostración web.
 
-## Aplicación Android (v0.4.1 — prueba instalable)
+## Aplicación Android (v0.4.2 — prueba instalable)
 
 El código de la primera aplicación Android está en [android/](android/README.md).
 Reutiliza el tablero y las fotografías del Ibiza. El APK permite abrir apps instaladas,
@@ -64,6 +64,8 @@ de música por Wi-Fi, OBD y mapa real continúan pendientes.
 
 El flujo [Android APK](.github/workflows/android-apk.yml) compila un APK de depuración
 en GitHub Actions. Los artefactos aparecen en la pestaña **Actions** cuando el flujo termina correctamente.
+
+[**Mi Ibiza: comparación del recorte anterior y la máscara corregida**](docs/capturas/RECORTE_IBIZA_v0.4.2.md)
 
 ## Registro visual por cada actualización
 

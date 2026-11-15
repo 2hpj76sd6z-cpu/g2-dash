@@ -10,6 +10,9 @@ interfaz real en Chromium** a 1280 × 720 y crea capturas por sección.
 
 ## Comparación antes y después
 
+[**Mi Ibiza: recorte corregido con la foto original (v0.4.2)**](RECORTE_IBIZA_v0.4.2.md)
+
+
 **[Detalle Música v0.4.1 — comparación antes y después](DETALLE_MUSICA_v0.4.1.md)**
 
 **[Ver cambios visuales v0.4 — Música, Ibiza y pantalla completa](CAMBIOS_v0.4.md)**
@@ -43,6 +46,8 @@ interfaz real en Chromium** a 1280 × 720 y crea capturas por sección.
 | Fotografía trasera ampliada | [11 — Ibiza trasera](actual/11-ibiza-trasera.png) |
 | Música Android con metadatos de prueba (no reproducción real) | [12 — Vista de integración](actual/12-musica-integracion-prueba.png) |
 | Música detallada v0.4.1 — ejemplo visual | [13 — Widget detallado](actual/13-musica-detallada-ejemplo.png) |
+| Máscara revisada Ibiza | [14 — Panel](actual/14-ibiza-mascara-corregida.png) |
+| Máscara revisada ampliada | [15 — Ampliación](actual/15-ibiza-mascara-ampliada.png) |
 
 ### Histórico de versiones
 
