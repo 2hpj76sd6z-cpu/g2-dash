@@ -24,6 +24,8 @@ on:
       - 'airplay.js'
       - 'ibiza-cutout.css'
       - 'app.js'
+      - 'touch-studio.css'
+      - 'touch-studio.js'
       - 'assets/**'
       - '.github/workflows/android-apk.yml'
 
@@ -50,18 +52,20 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
-      - name: Verify v0.5.5 sources
+      - name: Verify v0.5.6 sources
         run: |
           test -s index.html
           test -s intro.js
           test -s app.js
+          test -s touch-studio.js
+          test -s touch-studio.css
           test -s android/app/build.gradle
-          grep -q "versionName '0.5.5-dev'" android/app/build.gradle
+          grep -q "versionName '0.5.6-dev'" android/app/build.gradle
       - name: Build debug APK
         run: gradle -p android --no-daemon :app:assembleDebug
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: G2-Dash-v0.5.5-Android-debug
+          name: G2-Dash-v0.5.6-Android-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
