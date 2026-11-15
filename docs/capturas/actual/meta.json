@@ -2,8 +2,8 @@
   "project": "G² Dash",
   "note": "Capturas verificables de HTML/CSS/JS reales; mapa y música ilustrativos; velocidad GPS y OBD no simulados.",
   "viewport": "1280x720",
-  "source_commit": "063d1944a72ec8a1f46beced4abd72d60eb0e950",
-  "generated_at": "2026-11-15T09:05:26.039Z",
+  "source_commit": "3a89b0a2756a152b624aaeda19244dd242195758",
+  "generated_at": "2026-11-15T09:17:42.296Z",
   "shots": [
     "01-inicio-1280x720.png",
     "02-encabezado.png",
