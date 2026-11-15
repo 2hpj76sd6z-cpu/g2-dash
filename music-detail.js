@@ -27,7 +27,7 @@
    const native=Boolean(window.G2Android);
    duration=(active||preview)&&Number.isFinite(+data.durationMs)?Math.min(24*60*60*1000,Math.max(0,+data.durationMs)):0;
    const pos=Math.min(duration,Math.max(0,Number(data.positionMs)||0));
-   const appNames={'com.spotify.music':'SPOTIFY','com.google.android.apps.youtube.music':'YOUTUBE MUSIC',
+   const appNames={'io.github.jqssun.airplay':'AIRPLAY · IPHONE','com.spotify.music':'SPOTIFY','com.google.android.apps.youtube.music':'YOUTUBE MUSIC',
      'com.apple.android.music':'APPLE MUSIC','org.videolan.vlc':'VLC','com.maxmpz.audioplayer':'POWERAMP',
      'com.aspiro.tidal':'TIDAL','deezer.android.app':'DEEZER'};
    title.textContent=preview?'Pista de prueba':active?String(data.title||'Sin título').slice(0,160):granted?'Sin música activa':'Conecta tu música';
