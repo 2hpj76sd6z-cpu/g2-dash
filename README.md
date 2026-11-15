@@ -2,7 +2,7 @@
 
 # G² Dash
 
-**Interfaz automotriz personalizable · Web y Android · v0.5.0**
+**Interfaz automotriz personalizable · Web y Android · v0.5.1**
 
 Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados configurables y acceso a las funciones Android del estéreo.
 
@@ -14,7 +14,7 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 ## Cómo va el proyecto
 
-**Versión actual: v0.5.0 (desarrollo).** La galería conceptual de 12 ángulos ya está integrada en la web y el APK de prueba. El APK también incluye acceso a apps instaladas, GPS opcional y música local mediante MediaSession. Falta validarlo en el estéreo Gearelec; la música remota del teléfono por Wi‑Fi sigue pendiente.
+**Versión actual: v0.5.1 (desarrollo).** La galería conceptual de 12 ángulos ya está integrada en la web y el APK de prueba. El APK también incluye acceso a apps instaladas, GPS opcional y música local mediante MediaSession. Falta validarlo en el estéreo Gearelec; la música remota del teléfono por Wi‑Fi sigue pendiente.
 
 ### Bienvenida al iniciar G² Dash
 
@@ -31,9 +31,16 @@ El botón **12 VISTAS** abre una galería de doce ilustraciones de la propuesta 
 
 [Ver detalles y capturas del visor](docs/IBIZA_360_REFERENCIA_APROBADA.md).
 
+### Apps — centro de aplicaciones v0.5.1
+
+El botón **Apps** abre un panel visual con iconos de las aplicaciones realmente instaladas en Android, búsqueda inmediata, pestañas **Todas / ★ Favoritas**, apertura táctil y favoritos guardados únicamente en el dispositivo. No requiere `QUERY_ALL_PACKAGES`, cuenta en línea ni conexión de red.
+
+En **la demo web** se muestran seis iconos de muestra con la advertencia **EJEMPLO VISUAL — NO SON APPS INSTALADAS**. No se inventa qué aplicaciones tiene el estéreo. Al instalar el APK, Android presenta su lista real. El diseño se adapta a 1280×720 y pantallas compactas.
+
 ### Ya está implementado
 
 - Bienvenida SEAT / G² DASH con saludo a Doble G y resumen del estado v0.5.0.
+- Centro de Apps con iconos de Android, búsqueda, favoritos y apertura segura (en web, demostración marcada).
 - Visor conceptual del Ibiza con 12 vistas y controles de ángulo, separado de las fotos reales.
 - Tres estilos de logotipo G² DASH: APEX, PULSE y ORBIT.
 - Widgets ahumados con cuatro tonalidades, opacidad y difuminado ajustables.
