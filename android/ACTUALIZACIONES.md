@@ -31,7 +31,7 @@ Conserva una copia de la llave y sus contraseñas en un respaldo privado fuera d
 
 ## Publicar una versión
 
-Después de configurar los cuatro secretos, crea una etiqueta estable como `v0.6.0`. GitHub Actions compila y firma el APK, verifica la firma y publica `G2-Dash.apk` en la versión. El actualizador consulta las versiones estables de GitHub.
+Después de integrar este flujo a `main` y configurar los cuatro secretos, crea una etiqueta estable como `v0.6.0`. GitHub Actions compila y firma el APK, verifica la firma y publica `G2-Dash.apk` en la versión. El actualizador consulta las versiones estables de GitHub.
 
 El código de versión se calcula desde la etiqueta: `0.6.0` produce un código superior al APK de desarrollo actual. Usa etiquetas semánticas `vMAJOR.MINOR.PATCH`.
 

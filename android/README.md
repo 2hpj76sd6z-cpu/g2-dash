@@ -30,10 +30,10 @@ Desde la raíz del repositorio:
 APK generado: android/app/build/outputs/apk/debug/app-debug.apk
 
 También se puede compilar en GitHub Actions desde el flujo "G² Dash · Android APK".
-Los APK de CI son de prueba, firmados automáticamente con clave de depuración.
-Si se descarga otra versión firmada con una clave diferente, Android puede
-exigir desinstalar la anterior (se perderían sus ajustes locales). Para
-distribuir actualizaciones estables se necesitará una clave de firma propia.
+Los APK del flujo de CI siguen siendo de prueba y usan una clave de depuración.
+La publicación estable usa una clave propia; consulta
+[ACTUALIZACIONES.md](ACTUALIZACIONES.md). Cambiar la firma puede exigir
+desinstalar el APK previo y borrar sus ajustes locales.
 
 ## Seguridad y privacidad
 - El contenido local se sirve con WebViewAssetLoader en un origen HTTPS interno.
