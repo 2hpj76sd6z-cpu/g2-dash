@@ -51,9 +51,9 @@
   font-family:'Segoe UI',system-ui,Arial,sans-serif;
   font-size:clamp(20px,2.6vw,32px);font-weight:800;letter-spacing:.10em;
 }
-.startupAppBrand b{color:#48c985;font-style:italic;letter-spacing:-.08em;font-size:1.19em}
+.startupAppBrand b{color:#48c985;font-style:italic;font-weight:900;letter-spacing:-.08em;font-size:1.19em}
 .startupAppBrand sup{font-size:.36em;vertical-align:super;letter-spacing:0}
-.startupAppBrand span{border-bottom:3px solid #55dc90;padding-bottom:5px}
+.startupAppBrand span{border-bottom:2px solid #48c985;padding-bottom:5px}
 .startupGreeting .hello{
   margin:0 0 15px;
   font-family:'Segoe UI',Arial,sans-serif;
