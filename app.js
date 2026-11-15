@@ -265,7 +265,7 @@
     if(trigger){event.preventDefault();handleAction(trigger.dataset.action)}
     if(event.target.matches('.screenveil'))event.target.hidden=true;
   });
-  $('[data-theme]').forEach(button=>button.addEventListener('click',()=>{settings.theme=button.dataset.theme;applyTheme();}));
+  $$('[data-theme]').forEach(button=>button.addEventListener('click',()=>{settings.theme=button.dataset.theme;applyTheme();}));
   $('[data-time-format]').forEach(button=>button.addEventListener('click',()=>{
     settings.timeFormat=button.dataset.timeFormat;
     applyClockFormat();updateClock();save();
