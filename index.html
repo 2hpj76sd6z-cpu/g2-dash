@@ -4,15 +4,36 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"/>
 <meta name="theme-color" content="#111826"/>
-<title>G² Dash · v0.4.2</title>
+<title>G² Dash · v0.4.3</title>
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="brand.css"/>
 <link rel="stylesheet" href="widgets.css"/>
 <link rel="stylesheet" href="ibiza-cutout.css"/>
 <link rel="stylesheet" href="media.css"/>
 <link rel="stylesheet" href="adaptive.css"/>
+<link rel="stylesheet" href="intro.css"/>
 </head>
 <body data-mode="night">
+<!-- Bienvenida al abrir G² Dash; el fondo del tablero no cambia. -->
+<div id="startup" class="startup" data-stage="logo" role="status" aria-label="Bienvenida G² Dash">
+  <div class="startupLogo" aria-hidden="true">
+    <svg class="startupSeatMark" viewBox="0 0 180 166" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs><linearGradient id="seatMetal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#dae2e9"/><stop offset="1" stop-color="#849baa"/></linearGradient></defs>
+      <!-- Insignia SEAT estilizada para la pantalla de arranque; no sustituye el logotipo G² Dash. -->
+      <path d="M42 20H146L158 38H62C46 38 40 49 52 57L124 78C157 88 167 105 154 126C146 139 129 146 108 146H24L35 125H112C126 125 131 115 116 110L47 90C21 82 15 68 18 51C21 32 28 20 42 20Z" fill="url(#seatMetal)"/>
+      <path d="M24 75L150 45" stroke="#0d1520" stroke-width="10" stroke-linecap="round"/>
+      <path d="M34 115L154 88" stroke="#0d1520" stroke-width="10" stroke-linecap="round"/>
+    </svg>
+    <span class="startupSeatName">SEAT</span>
+    <i class="startupSeparator"></i>
+    <span class="startupAppBrand"><b>G<sup>2</sup></b><span>DASH</span></span>
+  </div>
+  <div class="startupGreeting" aria-label="Saludo de bienvenida">
+    <p class="hello"><span id="startupTimeGreeting">Buenas Noches</span> <span class="greetingName">Doble G,</span></p>
+    <p class="question">¿A dónde iremos hoy?</p>
+  </div>
+  <button type="button" id="startupSkip" class="startupSkip">Omitir</button>
+</div>
 <div class="wallpaper" id="wallpaper" aria-hidden="true"></div><div class="wallShade" aria-hidden="true"></div>
 <div id="app" class="app">
   <header class="topline">
@@ -91,7 +112,7 @@
     <button data-action="radio"><svg class="icon"><use href="#i-radio"/></svg><span>Radio</span></button>
     <button data-action="open-settings"><svg class="icon"><use href="#i-settings"/></svg><span>Ajustes</span></button>
   </nav>
-  <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.4.2</span></footer>
+  <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.4.3</span></footer>
 </div>
 
 <div class="screenveil" id="settingsVeil" hidden><aside class="settings glass" role="dialog" aria-modal="true" aria-label="Personalización"><header><div><h2>Personalización</h2><p>G² Dash · ajustes visuales</p></div><button class="closeBtn" data-action="close-settings" aria-label="Cerrar ajustes"><svg class="icon"><use href="#i-x"/></svg></button></header>
@@ -112,6 +133,8 @@
     <label for="opacity">Opacidad de widgets <output id="opacityValue">54%</output></label><input id="opacity" type="range" min="20" max="88" step="1" value="54"/>
     <label for="widgetBlur">Difuminado del vidrio <output id="widgetBlurValue">8 px</output></label><input id="widgetBlur" type="range" min="0" max="16" step="1" value="8"/>
     <label>Color de detalle</label><div class="accentPicker"><button data-accent="steel" class="selected" aria-label="Plata" title="Plata"></button><button data-accent="blue" aria-label="Azul frío" title="Azul frío"></button><button data-accent="warm" aria-label="Arena" title="Arena"></button></div>
+    <label>Bienvenida de encendido</label>
+    <div class="settingActions"><button type="button" data-action="intro-preview">Ver bienvenida</button><button type="button" id="homeConfig" data-action="home-settings" hidden>Elegir pantalla de inicio Android</button></div>
     <div class="settingActions"><button data-action="reset-settings">Restablecer diseño</button><button data-action="fullscreen">Pantalla completa</button></div>
     <div class="disclaimer">El mapa es ilustrativo. La autonomía y el voltaje del coche requieren conexión OBD. En el APK Android, la música lee la sesión activa y su portada tras habilitar el acceso multimedia; la demo web no tiene ese acceso. El Ibiza utiliza fotografías reales; las placas se ocultan en la versión pública.</div>
   </div>
@@ -123,6 +146,7 @@
 <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg"><defs>
 <symbol id="i-menu" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></symbol><symbol id="i-home" viewbox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></symbol><symbol id="i-compass" viewbox="0 0 24 24"><path d="m3 10 18-7-7 18-2.9-7.1z"></path></symbol><symbol id="i-music" viewbox="0 0 24 24"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></symbol><symbol id="i-phone" viewbox="0 0 24 24"><path d="M7 3H4a2 2 0 0 0-2 2c0 9.4 7.6 17 17 17a2 2 0 0 0 2-2v-3l-5-3-3 3a15 15 0 0 1-6-6l3-3z"></path></symbol><symbol id="i-apps" viewbox="0 0 24 24"><rect height="7" rx="1" width="7" x="3" y="3"></rect><rect height="7" rx="1" width="7" x="14" y="3"></rect><rect height="7" rx="1" width="7" x="3" y="14"></rect><rect height="7" rx="1" width="7" x="14" y="14"></rect></symbol><symbol id="i-settings" viewbox="0 0 24 24"><path d="M10 2h4l1 3 2 1 3-1 2 4-2 2v2l2 2-2 4-3-1-2 1-1 3h-4l-1-3-2-1-3 1-2-4 2-2v-2l-2-2 2-4 3 1 2-1z"></path><circle cx="12" cy="12" r="3"></circle></symbol><symbol id="i-bluetooth" viewbox="0 0 24 24"><path d="M6 7 18 17l-6 5V2l6 5L6 17"></path></symbol><symbol id="i-radio" viewbox="0 0 24 24"><rect height="12" rx="2" width="18" x="3" y="9"></rect><path d="m5 9 12-6M6 14h8M6 17h7"></path><circle cx="17" cy="16" r="2"></circle></symbol><symbol id="i-camera" viewbox="0 0 24 24"><path d="M5 7h4l2-3h4l2 3h2a2 2 0 0 1 2 2v10H3V9a2 2 0 0 1 2-2z"></path><circle cx="12" cy="13" r="4"></circle></symbol><symbol id="i-car" viewbox="0 0 24 24"><path d="m5 11 2-5h10l2 5 2 2v6h-3v-2H6v2H3v-6zM4 11h16M7 14h2M15 14h2"></path></symbol><symbol id="i-calendar" viewbox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="5"></rect><path d="M7 2v6M17 2v6M3 10h18M8 14h2M13 14h2"></path></symbol><symbol id="i-play" viewbox="0 0 24 24"><path d="m8 5 11 7-11 7z" fill="currentColor" stroke="none"></path></symbol><symbol id="i-pause" viewbox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke-width="4"></path></symbol><symbol id="i-next" viewbox="0 0 24 24"><path d="m4 6 10 6-10 6zM18 5v14"></path></symbol><symbol id="i-prev" viewbox="0 0 24 24"><path d="m20 6-10 6 10 6zM6 5v14"></path></symbol><symbol id="i-shuffle" viewbox="0 0 24 24"><path d="M3 6h4c5 0 6 12 11 12h3m-3-3 3 3-3 3M3 18h4c2 0 3-2 4-4M13 9c1-2 2-3 5-3h3m-3-3 3 3-3 3"></path></symbol><symbol id="i-repeat" viewbox="0 0 24 24"><path d="M3 11V9a4 4 0 0 1 4-4h13m-3-3 3 3-3 3M21 13v2a4 4 0 0 1-4 4H4m3-3-3 3 3 3"></path></symbol><symbol id="i-search" viewbox="0 0 24 24"><circle cx="10" cy="10" r="6"></circle><path d="m15 15 6 6"></path></symbol><symbol id="i-map-pin" viewbox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle></symbol><symbol id="i-arrow" viewbox="0 0 24 24"><path d="m12 2 7 19-7-5-7 5z"></path></symbol><symbol id="i-wifi" viewbox="0 0 24 24"><path d="M2 8a16 16 0 0 1 20 0M5 12a11 11 0 0 1 14 0M8 16a6 6 0 0 1 8 0"></path><circle cx="12" cy="20" fill="currentColor" r="1"></circle></symbol><symbol id="i-fuel" viewbox="0 0 24 24"><rect height="17" rx="1" width="11" x="3" y="4"></rect><path d="M5 8h7M14 9l4 2 2 5v3a2 2 0 0 1-4 0v-4"></path></symbol><symbol id="i-speed" viewbox="0 0 24 24"><path d="M3 19a10 10 0 1 1 18 0M12 14l5-5"></path><circle cx="12" cy="15" r="1"></circle></symbol><symbol id="i-battery" viewbox="0 0 24 24"><rect height="12" rx="2" width="17" x="3" y="6"></rect><path d="M22 10v4M6 12h5"></path></symbol><symbol id="i-image" viewbox="0 0 24 24"><rect height="18" rx="2" width="18" x="3" y="3"></rect><circle cx="8" cy="9" r="2"></circle><path d="m3 18 6-5 4 3 3-5 5 6"></path></symbol>
 <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 3h7v7M10 14 21 3M20 13v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></symbol><symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h16m-7-7 7 7-7 7"/></symbol><symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/></symbol><symbol id="i-expand" viewBox="0 0 24 24"><path d="M9 3H3v6M3 3l7 7M15 21h6v-6M21 21l-7-7"/></symbol></defs></svg>
+<script src="intro.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
