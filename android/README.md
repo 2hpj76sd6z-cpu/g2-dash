@@ -1,4 +1,4 @@
-# G² Dash para Android — v0.5.0 (galería Ibiza de 12 vistas)
+# G² Dash para Android — v0.5.1 (panel Apps y favoritos)
 
 Este módulo es una aplicación Android nativa que **reutiliza exactamente**
 el diseño web aprobado (archivos del directorio principal). No contiene un
@@ -7,7 +7,8 @@ modelo 360° del Ibiza: mantiene las fotografías originales del vehículo.
 ## Funcionamiento
 - Presentación horizontal e inmersiva del tablero sin requerir Internet.
 - Reloj, apariencia, fondo personalizado, difuminado y opacidad guardados localmente.
-- Botones nativos: aplicaciones instaladas, teléfono, Bluetooth y mapas externos.
+- Centro de Apps integrado: lista de aplicaciones instaladas con iconos, buscador, favoritos locales y apertura táctil; se validan las actividades LAUNCHER antes de iniciarlas.
+- Botones Android: teléfono, Bluetooth y mapas externos.
 - Selección de fondo mediante el selector de archivos de Android.
 - GPS opcional al pulsar el icono; se solicita permiso en ese momento.
 - El mapa dentro del panel sigue siendo ilustrativo.
@@ -37,6 +38,7 @@ distribuir actualizaciones estables se necesitará una clave de firma propia.
 - El contenido local se sirve con WebViewAssetLoader en un origen HTTPS interno.
 - Las páginas externas se abren en otras aplicaciones, nunca dentro del WebView con puente nativo.
 - No solicita acceso general a todos los archivos ni permiso QUERY_ALL_PACKAGES.
+- La lista de apps y sus iconos solo se consultan en Android y se muestran en el WebView interno; los favoritos se guardan localmente, sin enviarse a un servidor.
 - Solicita ubicación solo al tocar GPS.
 - No contiene analítica ni SDK publicitarios.
 - Las imágenes y recursos del proyecto están sujetos a la [licencia propietaria](../LICENSE).
@@ -51,7 +53,7 @@ Wi-Fi remoto, OBD, puesta en marcha HOME en el equipo físico y giro 360° se ve
 
 ## Paridad visual
 
-El paquete Android incluye `style.css`, `brand.css`, `widgets.css`, `ibiza-cutout.css`, `media.css`, `adaptive.css`, `intro.css`, `intro.js`, el JavaScript y las imágenes de `assets/` para conservar los mismos ajustes y el Ibiza real que en GitHub Pages.
+El paquete Android incluye `style.css`, `brand.css`, `widgets.css`, `ibiza-cutout.css`, `media.css`, `adaptive.css`, `intro.css`, `intro.js`, `apps.css`, `apps.js`, el JavaScript y las imágenes de `assets/` para conservar los mismos ajustes y el Ibiza real que en GitHub Pages.
 
 ## Máscara real del Ibiza v0.4.2
 
