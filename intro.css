@@ -81,6 +81,47 @@
 }
 .startupSkip:focus-visible{outline:2px solid #62e29a;outline-offset:3px}
 .startupSkip:hover{color:#fff;border-color:#64d894}
+
+.startupStatus{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:clamp(18px,4vw,50px);opacity:0;transform:translateY(9px);
+  transition:opacity .45s ease,transform .45s ease;pointer-events:none;
+}
+.startup[data-stage="status"] .startupStatus{opacity:1;transform:translateY(0)}
+.startupStatusCard{
+  width:min(100%,700px);padding:clamp(21px,3vw,34px);
+  border:1px solid rgba(97,221,149,.2);border-radius:24px;
+  background:rgba(4,10,15,.42);box-shadow:0 20px 70px rgba(0,0,0,.2);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);text-align:left;
+}
+.startupStatusTop{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.startupStatusEyebrow{display:flex;align-items:center;gap:9px;color:#b7c9c1;font-size:11px;font-weight:700;letter-spacing:.15em}
+.startupStatusEyebrow i{width:7px;height:7px;border-radius:50%;background:#63e69b;box-shadow:0 0 12px rgba(99,230,155,.72)}
+.startupStatusVersion{padding:6px 10px;border:1px solid rgba(99,230,155,.3);border-radius:30px;color:#86ecb1;font-size:11px;letter-spacing:.08em}
+.startupStatus h1{margin:18px 0 5px;color:#f5f8fa;font-family:'Segoe UI',Arial,sans-serif;font-size:clamp(27px,3.3vw,40px);font-weight:720;letter-spacing:-.045em;line-height:1.08}
+.startupStatusLead{margin:0;color:#aebdc8;font-size:14px;line-height:1.45}
+.startupStatusGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:21px}
+.startupStatusItem{display:flex;align-items:center;gap:12px;min-height:59px;padding:12px 14px;border:1px solid rgba(224,238,246,.08);border-radius:15px;background:rgba(255,255,255,.025)}
+.startupStatusIcon{display:grid;flex:0 0 27px;width:27px;height:27px;place-items:center;border-radius:9px;background:rgba(88,222,143,.12);color:#6be39d;font-size:16px;font-weight:800}
+.startupStatusIcon.musicMark{font-size:18px}
+.startupStatusItem p{display:grid;gap:3px;margin:0}
+.startupStatusItem strong{color:#f2f6f8;font-size:13px;font-weight:700}
+.startupStatusItem small{color:#aebdc8;font-size:11px;line-height:1.35}
+.startupStatusNext{display:grid;grid-template-columns:30px 1fr auto;align-items:center;gap:12px;margin-top:11px;padding:14px;border:1px solid rgba(99,230,155,.15);border-radius:15px;background:rgba(72,171,111,.055)}
+.startupWifiMark{display:grid;width:27px;height:27px;place-items:center;border-radius:50%;background:rgba(88,222,143,.13);color:#75e9a5;font-size:18px}
+.startupStatusNext p{display:grid;gap:3px;margin:0}
+.startupStatusNext p small{color:#79df9f;font-size:9px;font-weight:800;letter-spacing:.16em}
+.startupStatusNext p strong{color:#eff6f2;font-size:13px}
+.startupStatusNext p span{color:#aebdc8;font-size:11px;line-height:1.35}
+.startupStatusTag{padding:6px 8px;border:1px solid rgba(196,214,227,.15);border-radius:20px;color:#b5c2cb;font-size:9px;font-weight:700;letter-spacing:.08em;white-space:nowrap}
+@media(max-width:640px){
+  .startupStatusCard{padding:20px;border-radius:19px}
+  .startupStatusGrid{grid-template-columns:1fr;gap:8px;margin-top:16px}
+  .startupStatusItem{min-height:52px}
+  .startupStatusNext{grid-template-columns:27px 1fr;gap:9px;padding:11px}
+  .startupStatusTag{grid-column:2;justify-self:start}
+}
+
 @media (max-height:540px){
   .startupSeatMark{width:88px}
   .startupSeparator{margin:12px 0}
@@ -88,5 +129,5 @@
   .startupGreeting .question{font-size:clamp(21px,3vw,29px)}
 }
 @media (prefers-reduced-motion: reduce){
-  .startup,.startupLogo,.startupGreeting{transition:none!important}
+  .startup,.startupLogo,.startupGreeting,.startupStatus{transition:none!important}
 }

@@ -10,8 +10,8 @@ android {
         applicationId 'com.dobleg.g2dash'
         minSdk 23
         targetSdk 35
-        versionCode 8
-        versionName '0.4.4-dev'
+        versionCode 9
+        versionName '0.4.5-dev'
     }
 
     buildTypes {

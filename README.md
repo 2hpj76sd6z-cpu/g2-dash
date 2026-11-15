@@ -2,7 +2,7 @@
 
 # G² Dash
 
-**Interfaz automotriz personalizable · Web y Android · v0.4.4**
+**Interfaz automotriz personalizable · Web y Android · v0.4.5**
 
 Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados configurables y acceso a las funciones Android del estéreo.
 
@@ -14,20 +14,20 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 ## Cómo va el proyecto
 
-**Versión actual: v0.4.4.** La demo web y el APK Android de prueba ya están disponibles. El APK integra acceso a apps instaladas, GPS opcional y música local mediante MediaSession; la versión v0.4.4 se recompila con este ajuste visual y todavía falta validarla en el estéreo físico.
+**Versión actual: v0.4.5 (desarrollo).** La demo web y el APK Android de prueba están disponibles. Esta actualización agrega al inicio un resumen de lo listo y lo pendiente; el APK incluye acceso a apps instaladas, GPS opcional y música local mediante MediaSession. Falta validarlo en el estéreo Gearelec.
 
 ### Bienvenida al iniciar G² Dash
 
 El símbolo SEAT de la primera pantalla ya utiliza el **vector original**, no una recreación. Fuente del emblema: [Simple Icons – SEAT](https://github.com/simple-icons/simple-icons/blob/develop/icons/seat.svg). La marca SEAT pertenece a su titular; su aparición identifica el vehículo del proyecto y no implica afiliación comercial.
 
 
-La apertura de la app (web o APK Android) muestra el emblema **SEAT** estilizado y **G² DASH**; después, mediante un fundido, aparece el saludo «**Buenas Noches Doble G, ¿A dónde iremos hoy?**». Según la hora del dispositivo puede decir «Buenos Días» o «Buenas Tardes». Tras otro fundido aparece el tablero de siempre. Dura aproximadamente **4.6 segundos**, incluye **Omitir** y un botón **Ajustes → Ver bienvenida**.
+La apertura de la app (web o APK Android) muestra tres momentos: emblema **SEAT / G² DASH**, saludo dinámico a Doble G y un resumen de avance. El resumen indica que ya están las fotos reales del Ibiza y la música local con metadatos/portada; deja claro que la música del teléfono por Wi‑Fi sigue pendiente de definir. Después aparece el tablero de siempre. Toda la secuencia dura aproximadamente **4.6 segundos**, incluye **Omitir** y se puede volver a abrir desde **Ajustes → Ver bienvenida**.
 
 El saludo aparece **al abrir la aplicación**. Para verlo al encender el vehículo, Android debe elegir G² Dash como HOME y el estéreo debe ejecutarlo al inicio; la elección es manual, no automática. Algunos estéreos reanudan desde suspensión sin reiniciar la aplicación y, en ese caso, puede no repetirse. Esta conducta requiere validación en el Gearelec.
 
 ### Ya está implementado
 
-- Bienvenida SEAT / G² DASH, saludo dinámico a Doble G y fundidos ligeros.
+- Bienvenida SEAT / G² DASH con saludo a Doble G y resumen honesto del avance v0.4.5.
 - Tres estilos de logotipo G² DASH: APEX, PULSE y ORBIT.
 - Widgets ahumados con cuatro tonalidades, opacidad y difuminado ajustables.
 - Ajustes visuales guardados localmente.
@@ -63,7 +63,7 @@ El saludo aparece **al abrir la aplicación**. Para verlo al encender el vehícu
 
 > **Aviso:** el mapa es una ilustración, no un mapa en tiempo real. Los campos de autonomía y voltaje permanecen vacíos hasta que exista una conexión real; no se inventan valores del vehículo. Los iconos de Wi-Fi y Bluetooth son decorativos en esta demostración web.
 
-## Aplicación Android (v0.4.4 — APK de prueba)
+## Aplicación Android (v0.4.5 — APK de prueba)
 
 El APK reutiliza la interfaz y los recursos del proyecto. Incluye acceso a aplicaciones instaladas y GPS opcional.
 
@@ -71,14 +71,16 @@ La música local funciona mediante la sesión multimedia del reproductor abierto
 
 El APK no sustituye todavía el launcher HOME y falta validarlo en el estéreo Gearelec. GitHub Actions compila el APK de depuración en el flujo [Android APK](.github/workflows/android-apk.yml); consulta los artefactos en la pestaña **Actions**.
 
-[Ver comparación de Mi Ibiza v0.4.4](docs/capturas/CAMBIOS_v0.4.4.md) · [Historial del recorte v0.4.2](docs/capturas/RECORTE_IBIZA_v0.4.2.md)
+[Ver bienvenida actualizada v0.4.5](docs/capturas/CAMBIOS_v0.4.5.md) · [Galería por sección](docs/capturas/README.md) · [Historial del recorte v0.4.2](docs/capturas/RECORTE_IBIZA_v0.4.2.md)
 
 
 ## Registro visual por cada actualización
 
+![Resumen de actualización al abrir G² Dash](docs/capturas/actual/00c-arranque-estado-v045.png)
+
 ![Vista actual de G² Dash](docs/capturas/actual/01-inicio-1280x720.png)
 
-[**Ver cambios de Mi Ibiza v0.4.4**](docs/capturas/CAMBIOS_v0.4.4.md) · [Comparación visual v0.4: Música y Mi Ibiza](docs/capturas/CAMBIOS_v0.4.md) · [Galería de todas las secciones](docs/capturas/README.md)
+[**Ver cambios de Mi Ibiza v0.4.5**](docs/capturas/CAMBIOS_v0.4.5.md) · [Comparación visual v0.4: Música y Mi Ibiza](docs/capturas/CAMBIOS_v0.4.md) · [Galería de todas las secciones](docs/capturas/README.md)
 
 Las capturas automáticas de **cada sección real de la interfaz** se publican
 en [docs/capturas/](docs/capturas/README.md). El flujo

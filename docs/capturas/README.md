@@ -8,17 +8,19 @@ interfaz real en Chromium** a 1280 × 720 y crea capturas por sección.
 > No son imágenes generadas, ni funciones simuladas como si fueran operativas.
 > El mapa y OBD siguen pendientes. La música MediaSession local se integra opcionalmente en Android; las capturas musicales de ejemplo son únicamente pruebas visuales.
 
-## Bienvenida de encendido — v0.4.3
+## Bienvenida y estado del proyecto — v0.4.5
 
 Capturas obtenidas del HTML/CSS/JS real en Chromium horizontal.
 
-| Logo SEAT + G² DASH | Saludo personalizado |
-|---|---|
-| ![Logo inicial](actual/00-arranque-seat-logo.png) | ![Saludo Doble G](actual/00b-arranque-saludo-doble-g.png) |
+| Logo SEAT + G² DASH | Saludo personalizado | Avance del proyecto |
+|---|---|---|
+| ![Logo inicial](actual/00-arranque-seat-logo.png) | ![Saludo Doble G](actual/00b-arranque-saludo-doble-g.png) | ![Resumen de avances y siguiente paso](actual/00c-arranque-estado-v045.png) |
 
-La secuencia se reproduce al abrir G² Dash. El encendido automático del estéreo solo podrá verificarse en el dispositivo, tras seleccionar la app HOME si el fabricante lo permite.
+La secuencia dura aproximadamente 4.6 segundos y se reproduce al abrir G² Dash; la tercera vista aclara qué está listo y que la música remota por Wi‑Fi sigue pendiente. El encendido automático del estéreo solo podrá verificarse en el dispositivo, tras seleccionar la app HOME si el fabricante lo permite.
 
 ## Comparación antes y después
+
+[**Bienvenida y estado del proyecto v0.4.5**](CAMBIOS_v0.4.5.md) · [Mi Ibiza: foto completa por defecto y recorte opcional (v0.4.4)](CAMBIOS_v0.4.4.md)
 
 [**Mi Ibiza: foto completa por defecto y recorte opcional (v0.4.4)**](CAMBIOS_v0.4.4.md) · [Historial de la máscara v0.4.2](RECORTE_IBIZA_v0.4.2.md)
 
@@ -57,7 +59,7 @@ La captura real de Chromium verifica que las secciones principales permanecen de
 
 | Sección | Evidencia |
 |---|---|
-| Vista principal completa | [01 — Inicio](actual/01-inicio-1280x720.png) |
+| Bienvenida — logo | [00 — SEAT + G² DASH](actual/00-arranque-seat-logo.png) |\n| Bienvenida — saludo | [00b — Doble G](actual/00b-arranque-saludo-doble-g.png) |\n| Bienvenida — estado v0.4.5 | [00c — Avances y siguiente paso](actual/00c-arranque-estado-v045.png) |\n| Vista principal completa | [01 — Inicio](actual/01-inicio-1280x720.png) |
 | Marca, fecha y barra superior | [02 — Encabezado](actual/02-encabezado.png) |
 | Hora y fecha | [03 — Reloj](actual/03-reloj.png) |
 | Reproductor | [04 — Música](actual/04-musica.png) |

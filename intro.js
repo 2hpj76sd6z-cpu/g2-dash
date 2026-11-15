@@ -34,7 +34,8 @@
     splash.removeAttribute('aria-hidden');
     splash.classList.remove('is-exiting');
     splash.dataset.stage='logo';
-    jobs.push(setTimeout(()=>{if(token===sequence)splash.dataset.stage='greeting';},1750));
+    jobs.push(setTimeout(()=>{if(token===sequence)splash.dataset.stage='greeting';},1350));
+    jobs.push(setTimeout(()=>{if(token===sequence)splash.dataset.stage='status';},2650));
     jobs.push(setTimeout(()=>finish(token),4100));
   }
   skip.addEventListener('click',()=>finish(sequence));
