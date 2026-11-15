@@ -59,7 +59,10 @@ La captura real de Chromium verifica que las secciones principales permanecen de
 
 | Sección | Evidencia |
 |---|---|
-| Bienvenida — logo | [00 — SEAT + G² DASH](actual/00-arranque-seat-logo.png) |\n| Bienvenida — saludo | [00b — Doble G](actual/00b-arranque-saludo-doble-g.png) |\n| Bienvenida — estado v0.4.5 | [00c — Avances y siguiente paso](actual/00c-arranque-estado-v045.png) |\n| Vista principal completa | [01 — Inicio](actual/01-inicio-1280x720.png) |
+| Bienvenida — logo | [00 — SEAT + G² DASH](actual/00-arranque-seat-logo.png) |
+| Bienvenida — saludo | [00b — Doble G](actual/00b-arranque-saludo-doble-g.png) |
+| Bienvenida — estado v0.4.5 | [00c — Avances y siguiente paso](actual/00c-arranque-estado-v045.png) |
+| Vista principal completa | [01 — Inicio](actual/01-inicio-1280x720.png) |
 | Marca, fecha y barra superior | [02 — Encabezado](actual/02-encabezado.png) |
 | Hora y fecha | [03 — Reloj](actual/03-reloj.png) |
 | Reproductor | [04 — Música](actual/04-musica.png) |

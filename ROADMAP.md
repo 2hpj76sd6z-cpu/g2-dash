@@ -14,7 +14,8 @@ La versión **v0.4.5 (desarrollo)** actualiza la bienvenida con el estado real d
 | v0.4.2 | Máscara corregida sobre la foto real y diseño adaptable | En código; falta revisar y aprobar la máscara |
 | v0.4.3 | Emblema SEAT → saludo Doble G → tablero; selección HOME opcional | Implementado en código; probar encendido real |
 | v0.4.4 | Foto frontal completa por defecto; vista trasera y recorte transparente opcional | Implementada; comprobada en capturas; falta validar en el estéreo |
-| v0.4.5 | Bienvenida con saludo y resumen honesto de avances y siguientes pasos | Implementada en web y APK; captura visual pendiente de publicación |\n| v0.5 | Música desde el teléfono por Wi-Fi con protocolo o app complementaria | Pendiente de definir |
+| v0.4.5 | Bienvenida con saludo y resumen honesto de avances y siguientes pasos | Implementada en web y APK; captura real publicada |
+| v0.5 | Música desde el teléfono por Wi-Fi con protocolo o app complementaria | Pendiente de definir |
 | v0.6 | Mapa real con proveedor seleccionado | Pendiente |
 | v0.7 | Integración OBD opcional para datos reales del vehículo | Pendiente |
 | v0.8 | Medir rendimiento en pantalla 1280 × 720 y estéreo con 2 GB de RAM | Pendiente |
