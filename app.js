@@ -22,7 +22,15 @@
     switch(result.state){
       case 'checking':status.textContent='Buscando versiones…';break;
       case 'current':status.textContent=`G² Dash está actualizado (${result.currentVersion}).`;break;
-      case 'available':status.textContent=`Hay una versión nueva: ${result.version}.`;break;
+      case 'available':
+        status.textContent=`Hay una versión nueva: ${result.version}.`;
+        try{
+          if(localStorage.getItem('g2dash.update.notified')!==result.version){
+            localStorage.setItem('g2dash.update.notified',result.version);
+            showToast(`G² Dash ${result.version} está disponible. Abre Ajustes para actualizar.`);
+          }
+        }catch(_){}
+        break;
       case 'no_release':status.textContent='Todavía no hay una versión publicada.';break;
       case 'downloading':status.textContent=`Descargando G² Dash ${result.version}…`;break;
       case 'permission_required':status.textContent='Permite a G² Dash instalar actualizaciones en los ajustes de Android.';break;

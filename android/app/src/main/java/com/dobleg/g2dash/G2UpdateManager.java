@@ -48,6 +48,8 @@ public final class G2UpdateManager {
     private static final String PREF_PERMISSION_PENDING = "permission_pending";
     private static final String PREF_PENDING_URL = "pending_url";
     private static final String PREF_PENDING_VERSION = "pending_version";
+    private static final String PREF_AVAILABLE_URL = "available_url";
+    private static final String PREF_AVAILABLE_VERSION = "available_version";
     private static final Pattern VERSION_PATTERN =
             Pattern.compile("^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:[-+].*)?$");
 
@@ -74,14 +76,27 @@ public final class G2UpdateManager {
         this.webView = webView;
         this.preferences = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         this.downloadId = preferences.getLong(PREF_DOWNLOAD_ID, -1L);
+        this.latestAssetUrl = preferences.getString(PREF_AVAILABLE_URL, null);
+        this.latestVersion = preferences.getString(PREF_AVAILABLE_VERSION, null);
     }
 
     /** Called after the local dashboard has loaded, so its JS callback is ready. */
     public void start() {
         if (started) return;
         started = true;
-        if (downloadId > 0L) scheduleDownloadPoll(0L);
+        if (downloadId > 0L) {
+            scheduleDownloadPoll(0L);
+            emit("downloading", preferences.getString(PREF_DOWNLOAD_VERSION, latestVersion),
+                    "currentVersion", BuildConfig.VERSION_NAME);
+        } else if (latestVersion != null && latestAssetUrl != null) {
+            if (compareVersions(latestVersion, BuildConfig.VERSION_NAME) > 0) {
+                emit("available", latestVersion, "currentVersion", BuildConfig.VERSION_NAME);
+            } else {
+                clearAvailableRelease();
+            }
+        }
         scheduleNextCheck();
+        onResume();
     }
 
     public void onResume() {
@@ -122,25 +137,38 @@ public final class G2UpdateManager {
             try {
                 Release release = fetchLatestRelease();
                 if (release == null) {
-                    latestAssetUrl = null;
-                    latestVersion = null;
+                    clearAvailableRelease();
                     emit("no_release", null, "currentVersion", BuildConfig.VERSION_NAME);
                 } else if (compareVersions(release.version, BuildConfig.VERSION_NAME) <= 0) {
-                    latestAssetUrl = null;
-                    latestVersion = null;
+                    clearAvailableRelease();
                     emit("current", null, "currentVersion", BuildConfig.VERSION_NAME);
                 } else {
                     latestAssetUrl = release.assetUrl;
                     latestVersion = release.version;
+                    preferences.edit()
+                            .putString(PREF_AVAILABLE_URL, latestAssetUrl)
+                            .putString(PREF_AVAILABLE_VERSION, latestVersion)
+                            .apply();
                     emit("available", release.version, "currentVersion", BuildConfig.VERSION_NAME);
                 }
             } catch (Exception ex) {
-                emit("error", null, "currentVersion", BuildConfig.VERSION_NAME,
-                        "message", "No se pudo revisar la actualización. Verifica Internet e inténtalo de nuevo.");
+                if (latestAssetUrl != null && latestVersion != null &&
+                        compareVersions(latestVersion, BuildConfig.VERSION_NAME) > 0) {
+                    emit("available", latestVersion, "currentVersion", BuildConfig.VERSION_NAME);
+                } else {
+                    emit("error", null, "currentVersion", BuildConfig.VERSION_NAME,
+                            "message", "No se pudo revisar la actualización. Verifica Internet e inténtalo de nuevo.");
+                }
             } finally {
                 checking = false;
             }
         });
+    }
+
+    private void clearAvailableRelease() {
+        latestAssetUrl = null;
+        latestVersion = null;
+        preferences.edit().remove(PREF_AVAILABLE_URL).remove(PREF_AVAILABLE_VERSION).apply();
     }
 
     private void scheduleNextCheck() {
