@@ -53,7 +53,7 @@ try {
   await page.waitForFunction(() => document.querySelector('#startup')?.dataset.stage === 'status', {timeout:4500});
   const splashVersion = await page.locator('.startupStatusVersion').textContent();
   const nextStep = await page.locator('.startupStatusNext p strong').textContent();
-  if(splashVersion!=='v0.5.0' || nextStep!=='Música del teléfono por Wi‑Fi') {
+  if(splashVersion!=='v0.5.1' || nextStep!=='Música del teléfono por Wi‑Fi') {
     throw new Error('El estado de avance de bienvenida no coincide con v0.5.0');
   }
   await capture('00c-arranque-estado-v050');
@@ -97,6 +97,18 @@ try {
   await capture('05-mapa-ilustrativo', '.mapPanel');
   await capture('06-mi-ibiza', '.vehiclePanel');
   await capture('07-iconos-accesos', '.bottomDock');
+
+  // Centro de apps: navegador solo contiene una maqueta marcada como ejemplo.
+  await page.locator('.bottomDock [data-action="apps"]').click();
+  if(!await page.locator('#appsVeil').isVisible())throw new Error('No se abrió el panel de apps');
+  if(await page.locator('.appsCard').count()!==6)throw new Error('Faltan las seis tarjetas de demostración');
+  const demoLabel=await page.locator('#appsInfo').textContent();
+  if(!demoLabel.includes('EJEMPLO VISUAL'))throw new Error('Falta advertencia de demostración');
+  await capture('21-apps-panel-demo-1280x720');
+  await page.locator('#appsSearchInput').fill('Música');
+  if(await page.locator('.appsCard').count()!==1)throw new Error('El buscador de apps no filtró');
+  await capture('22-apps-buscador-1280x720');
+  await page.locator('#appsClose').click();
 
   await page.locator('[data-action="open-settings"]').first().click();
   await capture('08-personalizacion');
@@ -177,6 +189,13 @@ try {
   await page.locator('#startup').waitFor({state:'hidden',timeout:8000});
   await inspectViewport('960×540');
   await capture('16-compacto-960x540');
+  await page.locator('.bottomDock [data-action="apps"]').click();
+  const cardBox=await page.locator('.appsModal').boundingBox();
+  if(!cardBox||cardBox.x < 0||cardBox.y < 0||
+      cardBox.x+cardBox.width>960||cardBox.y+cardBox.height>540)
+      throw new Error('El panel Apps no cabe en 960x540');
+  await capture('23-apps-compacto-960x540');
+  await page.locator('#appsClose').click();
   await writeFile(path.join(root,'qa-layout.json'),JSON.stringify({source_commit:process.env.G2_COMMIT||'local',checked:qa},null,2)+'\n');
 
   const meta = {
@@ -196,7 +215,9 @@ try {
       '15-ibiza-1024x600.png', '16-compacto-960x540.png',
       '14-ibiza-mascara-corregida.png', '15-ibiza-mascara-ampliada.png',
       '17-ibiza-conceptual-12-vistas.png','18-ibiza-conceptual-60-grados.png',
-      '19-ibiza-conceptual-trasera-180.png','20-ibiza-conceptual-1024x600.png'
+      '19-ibiza-conceptual-trasera-180.png','20-ibiza-conceptual-1024x600.png',
+      '21-apps-panel-demo-1280x720.png','22-apps-buscador-1280x720.png',
+      '23-apps-compacto-960x540.png'
     ]
   };
   await writeFile(path.join(root, 'meta.json'), JSON.stringify(meta, null, 2) + '\n');
