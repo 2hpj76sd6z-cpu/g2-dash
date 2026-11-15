@@ -12,6 +12,14 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 </div>
 
+
+### v0.5.7 · Apple Music desde iPhone (AirPlay)
+
+- G² Dash añade instrucciones específicas para Apple Music, acceso explícito a MediaSession y prioridad a la sesión activa del receptor AirPlay; la portada se procesa hasta 320 px para el visor.
+- **Requiere instalar y abrir por separado** el receptor [AirPlay Receiver & Server](https://f-droid.org/packages/io.github.jqssun.airplay/) en un Android 7+ y autorizar acceso multimedia a G² Dash. No se distribuye código GPL del receptor dentro de nuestro APK.
+- En el iPhone: conectar a la misma red local, abrir Apple Music y elegir el receptor desde AirPlay. Si se usa el hotspot del estéreo, la red debe permitir descubrimiento mDNS y comunicación entre dispositivos.
+- **Pendiente de prueba física:** comprobar audio efectivo, portada, estabilidad y controles en el Gearelec. La calidad final depende del receptor, códec, DAC y equipo de sonido; no se promete audio lossless, soporte DRM ni reproducción automática desde el launcher.
+
 ## Cómo va el proyecto
 
 **Versión actual: v0.5.5 (desarrollo).** Integra la galería conceptual, el centro de Apps y un reproductor ampliado para la sesión musical local de Android. Falta validar en el Gearelec; la música desde el teléfono por Wi‑Fi sigue pendiente.
