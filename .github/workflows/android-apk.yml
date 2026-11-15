@@ -11,6 +11,8 @@ on:
       - 'brand.css'
       - 'widgets.css'
       - 'media.css'
+      - 'adaptive.css'
+      - 'ibiza-cutout.css'
       - 'app.js'
       - 'assets/**'
       - '.github/workflows/android-apk.yml'
