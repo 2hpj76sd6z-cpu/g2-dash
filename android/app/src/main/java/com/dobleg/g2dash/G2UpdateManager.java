@@ -65,7 +65,6 @@ public final class G2UpdateManager {
     private final Runnable scheduledCheck = new Runnable() {
         @Override public void run() {
             checkForUpdates(false);
-            mainHandler.postDelayed(this, CHECK_INTERVAL_MS);
         }
     };
     private final Runnable pollDownload = this::pollDownload;
@@ -82,10 +81,7 @@ public final class G2UpdateManager {
         if (started) return;
         started = true;
         if (downloadId > 0L) scheduleDownloadPoll(0L);
-        long lastCheck = preferences.getLong(PREF_LAST_CHECK, 0L);
-        long delay = lastCheck == 0L ? 0L :
-                Math.max(0L, CHECK_INTERVAL_MS - (System.currentTimeMillis() - lastCheck));
-        mainHandler.postDelayed(scheduledCheck, delay);
+        scheduleNextCheck();
     }
 
     public void onResume() {
@@ -113,10 +109,14 @@ public final class G2UpdateManager {
         }
         long now = System.currentTimeMillis();
         long lastCheck = preferences.getLong(PREF_LAST_CHECK, 0L);
-        if (!manual && lastCheck > 0L && now - lastCheck < CHECK_INTERVAL_MS) return;
+        if (!manual && lastCheck > 0L && now - lastCheck < CHECK_INTERVAL_MS) {
+            scheduleNextCheck();
+            return;
+        }
 
         checking = true;
         preferences.edit().putLong(PREF_LAST_CHECK, now).apply();
+        scheduleNextCheck();
         emit("checking", latestVersion, "currentVersion", BuildConfig.VERSION_NAME);
         executor.execute(() -> {
             try {
@@ -141,6 +141,14 @@ public final class G2UpdateManager {
                 checking = false;
             }
         });
+    }
+
+    private void scheduleNextCheck() {
+        mainHandler.removeCallbacks(scheduledCheck);
+        long lastCheck = preferences.getLong(PREF_LAST_CHECK, 0L);
+        long delay = lastCheck == 0L ? 0L :
+                Math.max(0L, CHECK_INTERVAL_MS - (System.currentTimeMillis() - lastCheck));
+        mainHandler.postDelayed(scheduledCheck, delay);
     }
 
     public void installAvailableUpdate() {
@@ -262,6 +270,19 @@ public final class G2UpdateManager {
     }
 
     private void installDownloadedApk(Uri apkUri, String version) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            try {
+                Intent installer = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+                installer.setData(apkUri);
+                installer.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                activity.startActivity(installer);
+                emit("install_prompt", version, "currentVersion", BuildConfig.VERSION_NAME);
+            } catch (Exception ex) {
+                emit("error", version, "currentVersion", BuildConfig.VERSION_NAME,
+                        "message", "Android no pudo abrir el instalador. Vuelve a intentarlo.");
+            }
+            return;
+        }
         int sessionId = -1;
         try {
             PackageInstaller installer = activity.getPackageManager().getPackageInstaller();
