@@ -10,8 +10,8 @@ android {
         applicationId 'com.dobleg.g2dash'
         minSdk 23
         targetSdk 35
-        versionCode 6
-        versionName '0.4.2-dev'
+        versionCode 7
+        versionName '0.4.3-dev'
     }
 
     buildTypes {
@@ -36,7 +36,7 @@ android {
 
 tasks.register('bundleG2Web', Copy) {
     from(rootProject.projectDir.parentFile) {
-        include 'index.html', 'style.css', 'brand.css', 'widgets.css', 'ibiza-cutout.css', 'media.css', 'adaptive.css', 'app.js', 'assets/**'
+        include 'index.html', 'style.css', 'brand.css', 'widgets.css', 'ibiza-cutout.css', 'media.css', 'adaptive.css', 'intro.css', 'intro.js', 'app.js', 'assets/**'
     }
     into(layout.buildDirectory.dir('generated/g2web/www'))
 }
