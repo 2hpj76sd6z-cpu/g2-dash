@@ -104,6 +104,7 @@
   }
   // Etiquetas locales: nunca se descargan metadatos de servicios externos.
   const musicApps = {
+    'io.github.jqssun.airplay':'AIRPLAY · IPHONE',
     'com.spotify.music':'SPOTIFY',
     'com.google.android.apps.youtube.music':'YOUTUBE MUSIC',
     'com.apple.android.music':'APPLE MUSIC',
@@ -148,9 +149,10 @@
     const status = preview?'EJEMPLO VISUAL' : !granted?'Permiso pendiente' : !active?'Sin reproducción' : playing?'Reproduciendo':'En pausa';
     $('#musicStatus').textContent=status;
     $('#musicSource').textContent=preview?'NO ES AUDIO REAL' : (active ? (musicApps[data.package]||'ANDROID AUDIO') : (granted?'ANDROID':'SIN CONECTAR'));
-    $('#deviceStatus').textContent = preview ? 'VISTA DE PRUEBA' : (granted?'ANDROID · MÚSICA':'ANDROID · v0.5.2');
+    $('#deviceStatus').textContent = preview ? 'VISTA DE PRUEBA' : (granted?'ANDROID · MÚSICA':'ANDROID · v0.5.3');
     $('.musicPanel').dataset.media=preview?'preview':(!granted?'permission':(!active?'idle':(playing?'playing':'paused')));
     window.G2MusicDetail?.update(data);
+    window.G2AirPlay?.updateMedia(data);
   };
   function mediaAction(action) {
     if (!window.G2Android) {
@@ -166,7 +168,7 @@
   }
   function handleAction(action){
     switch(action){
-      case 'home':closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close();window.G2Apps?.close();window.G2MusicDetail?.close();break;
+      case 'home':closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close();window.G2Apps?.close();window.G2MusicDetail?.close();window.G2AirPlay?.close();break;
       case 'open-settings':openScreen('#settingsVeil');break;
       case 'intro-preview':closeScreen('#settingsVeil');window.G2ShowIntro?.();break;
       case 'home-settings':
@@ -187,6 +189,7 @@
       case 'zoom-in':case 'zoom-out':zoom=Math.max(.8,Math.min(1.8,zoom+(action==='zoom-in'?.1:-.1)));$('#mapArtwork').style.transform=`scale(${zoom})`;showToast('Zoom ilustrativo: no sustituye navegación real');break;
       case 'music-access':if(window.G2Android)window.G2Android.openMusicAccess();else showToast('Solo en Android');break;
       case 'music-detail':window.G2MusicDetail?.open();break;
+      case 'airplay-setup':window.G2AirPlay?.open();break;
       case 'demo-play':mediaAction('toggle');break;
       case 'demo-prev':mediaAction('previous');break;
       case 'demo-next':mediaAction('next');break;
@@ -247,7 +250,7 @@
     };reader.readAsDataURL(file);
   });
   $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();openMap()}});
-  document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close();window.G2Apps?.close();window.G2MusicDetail?.close()}});
-  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.2';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
+  document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close();window.G2Apps?.close();window.G2MusicDetail?.close();window.G2AirPlay?.close()}});
+  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.3';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
   photoChange(0);applySettings();updateClock();setInterval(updateClock,20000);
 })();
