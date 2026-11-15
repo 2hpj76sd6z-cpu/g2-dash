@@ -28,8 +28,8 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * G² Dash v0.3: local/offline dashboard hosted by native Android.
- * Does not register itself as the system HOME app. No third-party telemetry.
+ * G² Dash: local/offline dashboard hosted by native Android.
+ * May be chosen as HOME by the user; never changes HOME automatically. No telemetry.
  */
 public class MainActivity extends Activity {
     private static final String LOCAL_ORIGIN = "https://appassets.androidplatform.net";
@@ -229,6 +229,11 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void openMap(String destination) {
             runOnUiThread(() -> MainActivity.this.openMap(destination));
+        }
+        @JavascriptInterface
+        public void openHomeSettings() {
+            runOnUiThread(() -> MainActivity.this.openExternal(
+                    new Intent(Settings.ACTION_HOME_SETTINGS)));
         }
     }
 
