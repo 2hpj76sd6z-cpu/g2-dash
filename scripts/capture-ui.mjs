@@ -99,6 +99,44 @@ try {
   await capture('06-mi-ibiza', '.vehiclePanel');
   await capture('07-iconos-accesos', '.bottomDock');
 
+  // v0.5.8: test actual layout behavior at 1280 × 720 before car installation.
+  const mapWidth = await page.locator('.mapPanel').evaluate(el=>el.getBoundingClientRect().width);
+  const carWidth = await page.locator('.vehiclePanel').evaluate(el=>el.getBoundingClientRect().width);
+  const cover = await page.locator('.musicPanel .album').evaluate(el=>{
+    const b=el.getBoundingClientRect();
+    return {width:b.width,height:b.height,fit:getComputedStyle(el.querySelector('img')).objectFit};
+  });
+  if(mapWidth <= carWidth || cover.width < 125 || cover.fit !== 'contain') {
+    throw new Error('v0.5.8: mapa o portada no tienen las proporciones objetivo a 1280x720');
+  }
+  if(!await page.locator('.mapPanel .mapsLaunch').isVisible())
+    throw new Error('Falta el acceso a Google Maps real');
+  await capture('46-v058-inicio-mapa-amplio-1280x720');
+  await page.locator('[data-action="open-settings"]').first().click();
+  await page.locator('[data-map-side="right"]').click();
+  if(await page.locator('.dashboard').getAttribute('data-map-side') !== 'right')
+    throw new Error('El mapa no se movió a la derecha');
+  await page.locator('[data-map-size="balanced"]').click();
+  if(await page.locator('.dashboard').getAttribute('data-map-size') !== 'balanced')
+    throw new Error('No aplicó el modo equilibrado');
+  const originalMetrics = await page.locator('.vehicleStats > div').evaluateAll(els=>els.map(el=>el.dataset.metric));
+  await page.locator('[data-metric-id="1"]').click();
+  await page.locator('[data-metric-id="0"]').click();
+  const reordered = await page.locator('.vehicleStats > div').evaluateAll(els=>els.map(el=>el.dataset.metric));
+  if(JSON.stringify(originalMetrics) === JSON.stringify(reordered))
+    throw new Error('No se intercambiaron las métricas');
+  await capture('47-v058-ajustes-distribucion-1280x720');
+  await page.reload({waitUntil:'networkidle'});
+  const persistent = await page.locator('.vehicleStats > div').evaluateAll(els=>els.map(el=>el.dataset.metric));
+  if(JSON.stringify(persistent) !== JSON.stringify(reordered) ||
+     await page.locator('.dashboard').getAttribute('data-map-side') !== 'right')
+    throw new Error('No persistió la organización del tablero');
+  await page.locator('[data-action="open-settings"]').first().click();
+  await page.locator('.layoutReset').click();
+  await page.locator('[data-action="close-settings"]').click();
+  await inspectViewport('1280×720 · distribución restaurada');
+
+
   // Centro de apps: navegador solo contiene una maqueta marcada como ejemplo.
   await page.locator('.bottomDock [data-action="apps"]').click();
   if(!await page.locator('#appsVeil').isVisible())throw new Error('No se abrió el panel de apps');
