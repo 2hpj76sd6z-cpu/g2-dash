@@ -101,3 +101,8 @@ En **Ajustes → Rendimiento gráfico**, el modo ligero elimina filtros CSS `bac
 3. Confirmar reloj actualizado, sin segunda bienvenida y con las fotos y preferencias intactas.
 4. Suspender y reanudar la pantalla; repetir la prueba.
 5. Solo entonces considerar elegir G² Dash como HOME en Ajustes de Android; mantener la posibilidad de recuperar el launcher original.
+
+
+## Actualizaciones desde GitHub
+
+El APK Android comprueba versiones estables publicadas y ofrece abrir el instalador del sistema. La publicación requiere una llave de firma persistente. Consulta [ACTUALIZACIONES.md](ACTUALIZACIONES.md) antes de crear la primera release.
