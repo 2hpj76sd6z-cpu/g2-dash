@@ -41,6 +41,11 @@
 .airplayActions button:disabled{opacity:.4;cursor:not-allowed}
 .airplayFoot{border-top:1px solid rgba(207,225,239,.13);margin-top:15px;padding-top:10px;
   color:#a2b6c7;font-size:11px;line-height:1.55}
+.musicPanel .musicControls button[data-action="airplay-setup"]{
+  color:#80edb6;background:rgba(83,214,149,.12);
+  border:1px solid rgba(97,225,160,.31);border-radius:10px;
+}
+.musicPanel .musicControls button[data-action="airplay-setup"] .icon{stroke:#8af0be}
 .airplayShortcut{border-radius:9px;padding:5px 8px;background:rgba(85,221,145,.09);
   border:1px solid rgba(87,224,155,.2);color:#a8efc7;font-size:10px;cursor:pointer}
 .musicDetailFooter .airplayShortcut{flex:none;font-size:11px}
