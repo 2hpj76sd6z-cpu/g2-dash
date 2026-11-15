@@ -2,7 +2,7 @@
 
 ## Situación actual
 
-La versión **v0.5.1 (desarrollo)** integra el visor conceptual de 12 ángulos y un nuevo centro de Apps en web y APK. La foto frontal original permanece como vista principal, separada del concepto. Falta validar la aplicación en el Gearelec físico. La música del teléfono por Wi‑Fi, el mapa real, OBD y HOME definitivo siguen pendientes.
+La versión **v0.5.2 (desarrollo)** agrega el reproductor ampliado para la sesión musical local, además del centro de Apps y el visor conceptual. La foto frontal original permanece como vista principal, separada del concepto. Falta validar la aplicación en el Gearelec físico. La música del teléfono por Wi‑Fi, el mapa real, OBD y HOME definitivo siguen pendientes.
 
 | Versión | Objetivo | Estado |
 |---|---|---|
@@ -17,7 +17,8 @@ La versión **v0.5.1 (desarrollo)** integra el visor conceptual de 12 ángulos y
 | v0.4.5 | Bienvenida con saludo y resumen honesto de avances y siguientes pasos | Implementada en web y APK; captura real publicada |
 | v0.5.0 | Galería conceptual del Ibiza: 12 vistas y controles táctiles | Integrada en web y APK; validar en Gearelec |
 | v0.5.1 | Centro de Apps: iconos reales, búsqueda, favoritos y apertura validada | Implementado en código; probar en Gearelec |
-| v0.5.2 | Música desde el teléfono por Wi-Fi con protocolo o app complementaria | Pendiente de definir |
+| v0.5.2 | Reproductor ampliado, portada y búsqueda de posición condicionada a MediaSession | Implementado en código; probar en el Gearelec |
+| v0.5.3 | Música desde el teléfono por Wi-Fi con protocolo o app complementaria | Pendiente de definir |
 | v0.6 | Mapa real con proveedor seleccionado | Pendiente |
 | v0.7 | Integración OBD opcional para datos reales del vehículo | Pendiente |
 | v0.8 | Medir rendimiento en pantalla 1280 × 720 y estéreo con 2 GB de RAM | Pendiente |
@@ -27,7 +28,7 @@ La versión **v0.5.1 (desarrollo)** integra el visor conceptual de 12 ángulos y
 
 - **Marca:** G² verde, DASH blanco y línea verde; variantes APEX, PULSE y ORBIT.
 - **Widgets:** grafito, azul humo, verde humo o negro; opacidad y difuminado ajustables.
-- **Música local Android:** muestra metadatos y portada del reproductor que funciona en el estéreo, y envía reproducir/pausar, anterior y siguiente cuando el reproductor lo permite.
+- **Música local Android:** muestra metadatos y portada del reproductor que funciona en el estéreo, con vista ampliada y avance condicionado a ACTION_SEEK_TO; reproducir/pausar, anterior y siguiente cuando lo permite el reproductor.
 - **Apps:** panel interno con iconos reales de aplicaciones instaladas en el estéreo, búsqueda y favoritos locales; demo web marcada como ejemplo.
 - **Visor conceptual Ibiza:** 12 vistas WebP con flechas, miniaturas, selector por grados, deslizamiento y recorrido automático; marcado como propuesta visual, no modelo 3D.
 - **Capturas visuales:** el flujo de GitHub documenta la pantalla y cada sección después de cada subida a `main`.
