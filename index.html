@@ -260,7 +260,7 @@
   <section class="airplayModal" role="dialog" aria-modal="true" aria-labelledby="airplayHeading">
     <header class="airplayHeader">
       <span class="airplayLogo" aria-hidden="true">◉</span>
-      <div class="airplayHeaderText"><h2 id="airplayHeading">Conectar música por Wi-Fi</h2><p>G² DASH · IPHONE / AIRPLAY · AUDIO REAL</p></div>
+      <div class="airplayHeaderText"><h2 id="airplayHeading">Conectar Apple Music · iPhone</h2><p>G² DASH · AIRPLAY · CONEXIÓN LOCAL</p></div>
       <button type="button" class="closeBtn" id="airplayClose" aria-label="Cerrar conexión AirPlay"><svg class="icon"><use href="#i-x"/></svg></button>
     </header>
     <div class="airplayStatus" id="airplayStatus" data-state="unsupported" aria-live="polite">
@@ -270,13 +270,14 @@
     <div class="airplaySteps" aria-label="Pasos de conexión">
       <div class="airplayStep"><b>01</b><div><strong>Enciende el punto de acceso del estéreo</strong><p>Conecta tu iPhone a esa red Wi-Fi. Ambos dispositivos deben comunicarse dentro de la misma red.</p></div></div>
       <div class="airplayStep"><b>02</b><div><strong>Abre el receptor AirPlay en Android</strong><p>Utilizamos AirPlay Receiver &amp; Server, de jqssun. Configúralo y activa el receptor; recomendamos habilitar PIN.</p></div></div>
-      <div class="airplayStep"><b>03</b><div><strong>Envía música desde tu iPhone</strong><p>En Música u otra app compatible, abre el selector de salida AirPlay y selecciona el nombre anunciado por el receptor.</p></div></div>
-      <div class="airplayStep"><b>04</b><div><strong>Regresa a G² Dash</strong><p>Activa acceso multimedia si aún no lo has autorizado. G² Dash mostrará título, carátula y controles que publique el receptor.</p></div></div>
+      <div class="airplayStep"><b>03</b><div><strong>Envía música desde tu iPhone</strong><p>En Apple Music, pulsa AirPlay desde los controles de reproducción y abre el selector de salida y selecciona el nombre anunciado por el receptor.</p></div></div>
+      <div class="airplayStep"><b>04</b><div><strong>Regresa a G² Dash</strong><p>Toca Permitir portadas y controles si falta el permiso, regresa al tablero y verás los metadatos que publique el receptor.</p></div></div>
     </div>
     <div class="airplayActions">
       <button type="button" class="primary" id="airplayLaunch" hidden>Abrir receptor AirPlay</button>
       <button type="button" class="primary" id="airplayInstall" hidden>Ver instalación oficial</button>
       <button type="button" id="airplayCheck">Comprobar receptor</button>
+      <button type="button" id="airplayMediaAccess" hidden>Permitir portadas y controles</button>
     </div>
     <div class="airplayFoot">La app receptora es independiente de G² Dash y se instala solo si tú lo autorizas. AirPlay necesita comunicación local entre iPhone y estéreo; un punto de acceso que aísla dispositivos podría impedirlo. Para Spotify o Apple Music, el teléfono puede necesitar datos móviles. Esta integración no garantiza compatibilidad de contenido protegido ni carátulas en todos los reproductores.</div>
   </section>
