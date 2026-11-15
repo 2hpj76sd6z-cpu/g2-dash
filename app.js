@@ -46,14 +46,14 @@
     document.documentElement.style.setProperty('--widgetBlur',widgetBlur+'px');
     $('#opacity').value=opacity;$('#opacityValue').textContent=`${opacity}%`;
     $('#widgetBlur').value=widgetBlur;$('#widgetBlurValue').textContent=`${widgetBlur} px`;
-    $('[data-tint]').forEach(b=>{const chosen=b.dataset.tint===tint;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});
+    $$('[data-tint]').forEach(b=>{const chosen=b.dataset.tint===tint;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});
   }
   function applySettings(){
     document.documentElement.style.setProperty('--accent',accents[settings.accent]||accents.steel);
     document.documentElement.style.setProperty('--wallBlur',`${Number(settings.blur)||0}px`);
     applyWidgetSettings();
     $('#blur').value=settings.blur;$('#blurValue').textContent=`${settings.blur} px`;
-    $('[data-accent]').forEach(b=>b.classList.toggle('selected',b.dataset.accent===settings.accent));
+    $$('[data-accent]').forEach(b=>b.classList.toggle('selected',b.dataset.accent===settings.accent));
     $$('[data-wall]').forEach(b=>b.classList.toggle('selected',b.dataset.wall===settings.wall));
     const activeLogo=['apex','pulse','orbit'].includes(settings.logo)?settings.logo:'apex';
     $('#brandLogo').dataset.logo=activeLogo;
