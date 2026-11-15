@@ -8,14 +8,6 @@ interfaz real en Chromium** a 1280 × 720 y crea capturas por sección.
 > No son imágenes generadas, ni funciones simuladas como si fueran operativas.
 > El mapa y OBD siguen pendientes. La música MediaSession local se integra opcionalmente en Android; las capturas musicales de ejemplo son únicamente pruebas visuales.
 
-## Reproductor ampliado — v0.5.2
-
-Las vistas siguientes son capturas reales de HTML/CSS/JS a resoluciones horizontales. El ejemplo de metadatos no reproduce audio y mantiene botones desactivados.
-
-| Reproductor ampliado 1280×720 | Vista compacta 960×540 |
-|---|---|
-| ![Reproductor ejemplo](actual/27-musica-ampliada-ejemplo-1280x720.png) | ![Reproductor compacto](actual/28-musica-ampliada-compacta-960x540.png) |
-
 ## Apps — v0.5.1
 
 El panel de aplicaciones se probó en Chromium horizontal. En estas capturas aparecen **solo iconos ilustrativos de demostración**, no datos de apps instaladas. En Android se consulta el listado local real.
@@ -102,7 +94,7 @@ La captura real de Chromium verifica que las secciones principales permanecen de
 |---|---|
 | Bienvenida — logo | [00 — SEAT + G² DASH](actual/00-arranque-seat-logo.png) |
 | Bienvenida — saludo | [00b — Doble G](actual/00b-arranque-saludo-doble-g.png) |
-| Bienvenida — estado v0.5.2 | [00c — Avances y siguiente paso](actual/00c-arranque-estado-v050.png) |
+| Bienvenida — estado v0.5.2 | [00c — Avances y siguiente paso](actual/00c-arranque-estado-v052.png) |
 | Vista principal completa | [01 — Inicio](actual/01-inicio-1280x720.png) |
 | Marca, fecha y barra superior | [02 — Encabezado](actual/02-encabezado.png) |
 | Hora y fecha | [03 — Reloj](actual/03-reloj.png) |
