@@ -1,0 +1,12 @@
+{
+  "name": "g2-dash-visual-evidence",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Herramienta exclusiva para capturas verificables de G² Dash",
+  "scripts": {
+    "screenshots": "node scripts/capture-ui.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "1.56.1"
+  }
+}

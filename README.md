@@ -48,6 +48,15 @@ y permite solicitar velocidad GPS con autorización del usuario. Es un APK de pr
 El flujo [Android APK](.github/workflows/android-apk.yml) compila un APK de depuración
 en GitHub Actions. Los artefactos aparecen en la pestaña **Actions** cuando el flujo termina correctamente.
 
+## Registro visual por cada actualización
+
+Las capturas automáticas de **cada sección real de la interfaz** se publican
+en [docs/capturas/](docs/capturas/README.md). El flujo
+[Capturas visuales](.github/workflows/capturas-visuales.yml)
+captura la pantalla principal y cada panel (encabezado, reloj, música,
+mapa, Ibiza, iconos, personalización y modo día) después de cada subida
+de código a `main`. Git conserva el historial de versiones.
+
 ## Probar localmente
 
 1. Descarga el repositorio como ZIP y descomprímelo.

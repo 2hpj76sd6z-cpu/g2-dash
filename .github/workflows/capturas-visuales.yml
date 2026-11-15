@@ -1,0 +1,66 @@
+name: G2 Dash - Capturas visuales
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: g2-dash-visual-main
+  cancel-in-progress: true
+
+jobs:
+  captures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout G2 Dash
+        uses: actions/checkout@v4
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar herramienta de capturas
+        run: npm install --no-save --no-package-lock --ignore-scripts
+      - name: Localizar Chromium/Chrome
+        shell: bash
+        run: |
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -n "$CHROME" ]; then
+            echo "G2_BROWSER=$CHROME" >> "$GITHUB_ENV"
+          else
+            npx playwright install chromium
+          fi
+      - name: Iniciar la app web localmente
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/g2-web.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:8765/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8765/ >/dev/null
+      - name: Capturar cada sección (1280 x 720)
+        env:
+          G2_DASH_URL: http://127.0.0.1:8765/
+          G2_COMMIT: ${{ github.sha }}
+        run: node scripts/capture-ui.mjs
+      - name: Adjuntar capturas al repositorio
+        shell: bash
+        run: |
+          git add docs/capturas/actual/
+          if git diff --cached --quiet; then
+            echo "Sin cambios visuales para publicar."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "docs(visual): capturas por seccion ${GITHUB_SHA:0:7}"
+          git fetch origin main
+          if [ "$(git rev-parse HEAD^)" != "$(git rev-parse origin/main)" ]; then
+            echo "Hay un commit nuevo; el siguiente flujo capturará su interfaz."
+            exit 0
+          fi
+          git push origin HEAD:main
