@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"/>
 <meta name="theme-color" content="#111826"/>
-<title>G² Dash · v0.5.4</title>
+<title>G² Dash · v0.5.5</title>
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="brand.css"/>
 <link rel="stylesheet" href="widgets.css"/>
@@ -34,7 +34,7 @@
     <div class="startupStatusCard">
       <div class="startupStatusTop">
         <span class="startupStatusEyebrow"><i></i> G² DASH · ESTADO DEL PROYECTO</span>
-        <span class="startupStatusVersion">v0.5.4</span>
+        <span class="startupStatusVersion">v0.5.5</span>
       </div>
       <h1>Tu tablero va así.</h1>
       <p class="startupStatusLead">Lo que ya está listo y lo que sigue para tu Ibiza.</p>
@@ -135,7 +135,7 @@
     <button data-action="radio"><svg class="icon"><use href="#i-radio"/></svg><span>Radio</span></button>
     <button data-action="open-settings"><svg class="icon"><use href="#i-settings"/></svg><span>Ajustes</span></button>
   </nav>
-  <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.5.4</span></footer>
+  <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.5.5</span></footer>
 </div>
 
 <div class="screenveil" id="settingsVeil" hidden><aside class="settings glass" role="dialog" aria-modal="true" aria-label="Personalización"><header><div><h2>Personalización</h2><p>G² Dash · ajustes visuales</p></div><button class="closeBtn" data-action="close-settings" aria-label="Cerrar ajustes"><svg class="icon"><use href="#i-x"/></svg></button></header>
@@ -164,6 +164,11 @@
     <label>Color de detalle</label><div class="accentPicker"><button data-accent="steel" class="selected" aria-label="Plata" title="Plata"></button><button data-accent="blue" aria-label="Azul frío" title="Azul frío"></button><button data-accent="warm" aria-label="Arena" title="Arena"></button></div>
     <label>Bienvenida de encendido</label>
     <div class="settingActions"><button type="button" data-action="intro-preview">Ver bienvenida</button><button type="button" id="homeConfig" data-action="home-settings" hidden>Elegir pantalla de inicio Android</button></div>
+    <label>Diagnóstico del inicio y reanudación</label>
+    <div class="lifecyclePanel" role="status" aria-live="polite">
+      <strong id="lifecycleMode">VISTA WEB · SIN EVENTO ANDROID</strong>
+      <small id="lifecycleDetail">La demostración no puede detectar el encendido del coche ni el estado del estéreo.</small>
+    </div>
     <div class="settingActions"><button data-action="reset-settings">Restablecer diseño</button><button data-action="fullscreen">Pantalla completa</button></div>
     <div class="disclaimer">El mapa es ilustrativo. La autonomía y el voltaje del coche requieren conexión OBD. En el APK Android, la música lee la sesión activa y su portada tras habilitar el acceso multimedia; la demo web no tiene ese acceso. El Ibiza utiliza fotografías reales; las placas se ocultan en la versión pública.</div>
   </div>

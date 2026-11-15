@@ -50,6 +50,11 @@ public class MainActivity extends Activity {
 
     private WebView webView;
     private G2MediaBridge mediaBridge;
+    // Activity lifecycle, NOT the vehicle ignition/ACC signal.
+    private boolean pageReady = false;
+    private boolean restoredInstance = false;
+    private boolean wasPaused = false;
+    private int resumeCount = 0;
     private GeolocationPermissions.Callback pendingGeo;
     private String pendingGeoOrigin;
     private android.webkit.ValueCallback<Uri[]> uploadCallback;
@@ -57,6 +62,7 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        restoredInstance = savedInstanceState != null;
         showImmersive();
 
         final WebViewAssetLoader assetLoader = new WebViewAssetLoader.Builder()
@@ -97,6 +103,14 @@ public class MainActivity extends Activity {
                     openExternal(new Intent(Intent.ACTION_VIEW, u));
                 }
                 return true;
+            }
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                if (!HOME_URL.equals(url)) return;
+                pageReady = true;
+                emitLifecycle(restoredInstance ? "restored" : "cold_start");
+                restoredInstance = false;
             }
         });
         webView.setWebChromeClient(new WebChromeClient() {
@@ -139,6 +153,14 @@ public class MainActivity extends Activity {
         });
         mediaBridge = new G2MediaBridge(this, webView);
         webView.loadUrl(HOME_URL);
+    }
+
+    /** LOCAL event only: no ignition, ACC or vehicle power signal accessed. */
+    private void emitLifecycle(String phase) {
+        if (!pageReady || webView == null) return;
+        String script = "window.G2AndroidLifecycle && window.G2AndroidLifecycle("
+                + JSONObject.quote(phase) + "," + resumeCount + ",false);";
+        webView.evaluateJavascript(script, null);
     }
 
     private void showImmersive() {
@@ -422,6 +444,39 @@ public class MainActivity extends Activity {
     protected void onStart() {
         super.onStart();
         if (mediaBridge != null) mediaBridge.start();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showImmersive();
+        if (webView != null) webView.onResume();
+        if (wasPaused) {
+            wasPaused = false;
+            resumeCount++;
+            emitLifecycle("resume");
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        if (webView != null) webView.onPause();
+        wasPaused = true;
+        super.onPause();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) showImmersive();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        showImmersive();
+        emitLifecycle("home");
     }
 
     @Override

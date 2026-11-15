@@ -109,3 +109,13 @@ body[data-mode="day"] .performancePicker button.selected {
 }
 body[data-mode="day"] #performanceNote {color:#56687a}
 body[data-mode="night"] #performanceNote {color:#aabbcd}
+
+/* G² Dash v0.5.5 — event diagnostics. Never claims vehicle ignition data. */
+.lifecyclePanel{
+ display:flex;flex-direction:column;gap:6px;border:1px solid rgba(92,178,135,.35);
+ border-radius:11px;padding:11px 12px;background:rgba(33,83,61,.095)
+}
+.lifecyclePanel strong{font-size:11px;letter-spacing:.04em;color:#287b50}
+.lifecyclePanel small{font-size:11px;line-height:1.45;color:#607484}
+body[data-mode="night"] .lifecyclePanel strong{color:#9cefc0}
+body[data-mode="night"] .lifecyclePanel small{color:#b4c6d7}

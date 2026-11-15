@@ -8,6 +8,16 @@ interfaz real en Chromium** a 1280 × 720 y crea capturas por sección.
 > No son imágenes generadas, ni funciones simuladas como si fueran operativas.
 > El mapa y OBD siguen pendientes. La música MediaSession local se integra opcionalmente en Android; las capturas musicales de ejemplo son únicamente pruebas visuales.
 
+## Regreso a G² Dash — v0.5.5
+
+[**Capturas del diagnóstico de inicio y reanudación**](ARRANQUE_v0.5.5.md).
+
+| Diagnóstico web, sin señales Android | Simulación web de reanudación |
+|---|---|
+| ![Inicio web](actual/44-inicio-web-sin-senal-android.png) | ![Prueba de reanudación](actual/45-reanudacion-simulada-web.png) |
+
+La segunda captura está identificada como **SIMULACIÓN WEB**; la reanudación real del equipo requiere una prueba física.
+
 ## Rendimiento gráfico opcional — v0.5.4
 
 [**Comparación visual Normal vs. Ligero y panel de ajustes**](RENDIMIENTO_v0.5.4.md).

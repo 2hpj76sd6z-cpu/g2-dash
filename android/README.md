@@ -81,3 +81,23 @@ G² Dash incorpora **FOTOS REALES** en el visor de 12 vistas y **12 VISTAS** en 
 ## v0.5.4 — Rendimiento gráfico opcional
 
 En **Ajustes → Rendimiento gráfico**, el modo ligero elimina filtros CSS `backdrop-filter` y `filter:blur` de superficies de vidrio y fondo, y transiciones puramente decorativas. Mantiene colores, widgets y fotografías originales; el ajuste se almacena localmente. Al volver a Visual normal se restauran los desenfoques configurados. No se garantiza ahorro específico de RAM/FPS sin medir en el Gearelec físico.
+
+## v0.5.5 — Ciclo de vida al volver al launcher
+
+- `onResume()` reanuda el WebView y restaura el modo inmersivo.
+- `onPause()` pausa el WebView mientras se usa otra aplicación.
+- `onWindowFocusChanged()` restaura el modo inmersivo cuando recupera foco.
+- `onNewIntent()` recibe otra petición de HOME en la misma actividad cuando Android la conserva.
+- `onPageFinished()` registra el inicio o la reconstrucción de la actividad.
+- `singleTask` evita ciertas instancias duplicadas del tablero, sin forzar la aplicación como HOME.
+- Ajustes muestra un diagnóstico local de inicio y reanudaciones de **la app**, no del coche.
+
+**Sin acceso al contacto ACC o llave del vehículo.** El funcionamiento después de suspender o reiniciar depende del firmware de cada estéreo.
+
+### Prueba física segura
+
+1. Con el vehículo estacionado, abrir G² Dash como una app normal.
+2. Verificar bienvenida → tablero, luego pasar a Música o Maps y volver.
+3. Confirmar reloj actualizado, sin segunda bienvenida y con las fotos y preferencias intactas.
+4. Suspender y reanudar la pantalla; repetir la prueba.
+5. Solo entonces considerar elegir G² Dash como HOME en Ajustes de Android; mantener la posibilidad de recuperar el launcher original.

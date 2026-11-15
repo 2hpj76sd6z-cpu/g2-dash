@@ -114,6 +114,20 @@ try {
   await page.locator('[data-action="open-settings"]').first().click();
   await capture('08-personalizacion');
 
+  // Web simulation only: does not imply an Android or ignition event.
+  if((await page.locator('#lifecycleMode').textContent())!=='VISTA WEB · SIN EVENTO ANDROID')
+    throw new Error('Falta el diagnóstico web inicial');
+  await page.locator('#lifecycleMode').scrollIntoViewIfNeeded();
+  await capture('44-inicio-web-sin-senal-android');
+  const originalCar=await page.locator('#vehiclePhoto').getAttribute('src');
+  await page.evaluate(()=>window.G2AndroidLifecycle('resume',1,true));
+  if(!(await page.locator('#lifecycleMode').textContent()).includes('SIMULACIÓN WEB · SESIÓN REANUDADA'))
+    throw new Error('La prueba no etiqueta la simulación de reanudación');
+  if(!(await page.locator('#startup').isHidden()) || (await page.locator('#vehiclePhoto').getAttribute('src')!==originalCar))
+    throw new Error('La prueba de retorno alteró la bienvenida o el coche');
+  await capture('45-reanudacion-simulada-web');
+  await page.evaluate(()=>window.G2AndroidLifecycle('web',0,true));
+
   // v0.5.4: compare exact original dashboard with optional low-effects mode.
   await page.locator('[data-action="close-settings"]').click();
   const actualCar=await page.locator('#vehiclePhoto').getAttribute('src');
@@ -319,6 +333,7 @@ try {
       '07-iconos-accesos.png', '08-personalizacion.png',
       '09-modo-dia-1280x720.png', '10-ibiza-detalle.png',
       '41-rendimiento-normal-1280x720.png','42-rendimiento-ligero-1280x720.png','43-ajustes-rendimiento-ligero.png',
+      '44-inicio-web-sin-senal-android.png','45-reanudacion-simulada-web.png',
       '11-ibiza-trasera.png', '12-musica-integracion-prueba.png',
       '13-musica-detallada-ejemplo.png', '14-compacto-1024x600.png',
       '15-ibiza-1024x600.png', '16-compacto-960x540.png',

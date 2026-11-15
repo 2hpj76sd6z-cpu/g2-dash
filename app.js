@@ -91,6 +91,34 @@
     $('#modalLabel').textContent=isPersonal?'Imagen personal — guardada en este dispositivo':pic.name;
     document.querySelectorAll('#carDot0, #carDot1, #carDot2').forEach((b,i)=>b.classList.toggle('on',i===currentPhoto));
   }
+  // Native Android Activity lifecycle, not a vehicle ignition sensor.
+  // The third argument is ONLY for clearly labeled WEB screenshot tests.
+  window.G2AndroidLifecycle = function(phase, count=0, preview=false) {
+    if(!window.G2Android && !preview)return;
+    const allowed=['cold_start','resume','home','restored','web'];
+    if(!allowed.includes(phase))return;
+    updateClock();
+    const simulated=preview===true || !window.G2Android;
+    const names={
+      cold_start:'INICIO DE LA APP',
+      resume:'SESIÓN REANUDADA',
+      home:'REGRESO A G² DASH',
+      restored:'ACTIVIDAD RECONSTRUIDA',
+      web:'VISTA WEB · SIN EVENTO ANDROID'
+    };
+    const label=$('#lifecycleMode'),details=$('#lifecycleDetail');
+    const time=new Intl.DateTimeFormat('es-MX',{hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date());
+    if(label)label.textContent=(simulated && phase!=='web'?'SIMULACIÓN WEB · ':'')+names[phase];
+    if(details)details.textContent=phase==='web'
+      ? 'Este navegador no informa eventos Android de inicio o suspensión del estéreo.'
+      : (simulated ? 'Prueba visual, no un evento Android real. ' : 'Evento de la app, NO de la llave del coche. ')
+        +'Hora '+time+' · Reanudaciones de la sesión: '+Math.max(0,Number(count)||0);
+    document.body.dataset.lifecycle=phase;
+    const splash=$('#startup');
+    if((phase==='resume'||phase==='restored') && splash && !splash.hidden) {
+      $('#startupSkip')?.click(); // Return straight to the dashboard.
+    }
+  };
   function openScreen(selector){$(selector).hidden=false}
   function closeScreen(selector){$(selector).hidden=true}
   function openMap(){
@@ -270,6 +298,6 @@
   });
   $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();openMap()}});
   document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close();window.G2Apps?.close();window.G2MusicDetail?.close();window.G2AirPlay?.close()}});
-  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.4';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
+  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.5';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
   photoChange(0);applySettings();updateClock();setInterval(updateClock,20000);
 })();

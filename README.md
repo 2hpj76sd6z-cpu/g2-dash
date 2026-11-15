@@ -2,7 +2,7 @@
 
 # G² Dash
 
-**Interfaz automotriz personalizable · Web y Android · v0.5.4**
+**Interfaz automotriz personalizable · Web y Android · v0.5.5**
 
 Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados configurables y acceso a las funciones Android del estéreo.
 
@@ -14,7 +14,7 @@ Tablero horizontal para SEAT Ibiza 6J, con identidad G², widgets ahumados confi
 
 ## Cómo va el proyecto
 
-**Versión actual: v0.5.4 (desarrollo).** Integra la galería conceptual, el centro de Apps y un reproductor ampliado para la sesión musical local de Android. Falta validar en el Gearelec; la música desde el teléfono por Wi‑Fi sigue pendiente.
+**Versión actual: v0.5.5 (desarrollo).** Integra la galería conceptual, el centro de Apps y un reproductor ampliado para la sesión musical local de Android. Falta validar en el Gearelec; la música desde el teléfono por Wi‑Fi sigue pendiente.
 
 ### Bienvenida al iniciar G² Dash
 
@@ -62,6 +62,12 @@ G² Dash verifica la versión de Android, detecta si el paquete `io.github.jqssu
 **Estado: integración en código; todavía no verificada físicamente en el Gearelec.** No se puede afirmar que el hotspot del fabricante anuncie AirPlay por mDNS, que el receptor siga activo en segundo plano o que cada servicio musical permita compartir carátula/controles. El iPhone y Android deben estar en una red local que permita comunicación entre ambos; la música en línea puede usar datos móviles del iPhone. Android 6 o anterior no es compatible con este receptor.
 
 El sitio web no realiza una conexión AirPlay: el asistente muestra de forma explícita «VISTA WEB» y oculta los botones nativos de instalar/abrir. No se ha incorporado código de terceros con licencia GPL al proyecto G² Dash; el receptor se instala como app separada.
+
+### Retorno seguro al tablero — v0.5.5
+
+La APK Android identifica el **inicio de la actividad, su reanudación, reconstrucción y regreso a HOME**. Actualiza el reloj y recupera la pantalla inmersiva sin repetir la bienvenida cuando vuelves de otras apps. El diagnóstico en Ajustes registra únicamente eventos de la aplicación: **no detecta el contacto ACC, la llave ni el encendido del vehículo**. La selección como launcher HOME sigue siendo manual y reversible.
+
+[Comparación y prueba física](docs/capturas/ARRANQUE_v0.5.5.md).
 
 ### Rendimiento — modo ligero para estéreos de 2 GB (v0.5.4)
 
