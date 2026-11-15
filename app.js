@@ -4,7 +4,7 @@
   const $ = (q) => document.querySelector(q);
   const $$ = (q) => [...document.querySelectorAll(q)];
   const KEY = 'g2dash.v02.preferences';
-  const defaults = { theme:'auto', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', widgetBlur:8, performance:'normal', customWallpaper:null };
+  const defaults = { theme:'auto', timeFormat:'24h', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', widgetBlur:8, performance:'normal', customWallpaper:null };
   const pictures = [
     {path:'assets/ibiza_frente_original.webp',name:'Frontal — foto original',alt:'Fotografía frontal real del SEAT Ibiza blanco con boca negra y placa protegida'},
     {path:'assets/ibiza_trasera_original.webp',name:'Trasera — foto original',alt:'Fotografía trasera real del SEAT Ibiza blanco con placa protegida'},
@@ -17,8 +17,14 @@
   function showToast(message){const el=$('#toast');if(!el)return;el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3200)}
   function updateClock(){
     const now = new Date();
-    $('#clock').textContent = new Intl.DateTimeFormat('es-MX',{hour:'2-digit',minute:'2-digit',hour12:false}).format(now);
+    const format12h=settings.timeFormat==='12h';
+    const timeParts=new Intl.DateTimeFormat('es-MX',{hour:'2-digit',minute:'2-digit',hour12:format12h}).formatToParts(now);
+    $('#clock').textContent=timeParts.filter(part=>part.type!=='dayPeriod').map(part=>part.value).join('').trim();
+    const period=timeParts.find(part=>part.type==='dayPeriod')?.value||'';
+    $('#clockPeriod').textContent=period.replace(/[\s.]/g,'').toLocaleUpperCase('es-MX');
+    $('#clockPeriod').hidden=!format12h;
     const localDate = [now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');
+    $('#clock').dateTime=localDate+'T'+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
     const fullDate = new Intl.DateTimeFormat('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(now);
     const compactDate = new Intl.DateTimeFormat('es-MX',{weekday:'short',day:'numeric',month:'short'}).format(now);
     $('#dateLong').textContent=compactDate;
@@ -62,11 +68,21 @@
       ? 'Ligero: elimina desenfoques de fondo y vidrio; conserva tus fotos, colores y preferencias para el modo normal.'
       : 'Visual normal: conserva los desenfoques y los ajustes elegidos.';
   }
+  function applyClockFormat(){
+    const format=settings.timeFormat==='12h'?'12h':'24h';
+    settings.timeFormat=format;
+    $$('[data-time-format]').forEach(button=>{
+      const selected=button.dataset.timeFormat===format;
+      button.classList.toggle('selected',selected);
+      button.setAttribute('aria-pressed',String(selected));
+    });
+  }
   function applySettings(){
     document.documentElement.style.setProperty('--accent',accents[settings.accent]||accents.steel);
     document.documentElement.style.setProperty('--wallBlur',`${Number(settings.blur)||0}px`);
     applyWidgetSettings();
     applyPerformanceMode();
+    applyClockFormat();
     $('#blur').value=settings.blur;$('#blurValue').textContent=`${settings.blur} px`;
     $$('[data-accent]').forEach(b=>b.classList.toggle('selected',b.dataset.accent===settings.accent));
     $$('[data-wall]').forEach(b=>b.classList.toggle('selected',b.dataset.wall===settings.wall));
@@ -127,16 +143,38 @@
     const w=window.open(url,'_blank','noopener,noreferrer');
     if(!w)showToast('Permite ventanas nuevas para abrir Google Maps');
   }
+  function launchNavigation(){
+    const term=$('#destination').value.trim();
+    if(window.G2Android)window.G2Android.openMap(term);
+    else openMap();
+  }
+  function updateMapDestinationState(){
+    const hasDestination=Boolean($('#destination').value.trim());
+    const panel=$('.mapPanel');
+    panel.dataset.destination=hasDestination?'ready':'empty';
+    $('#mapStateTitle').textContent=hasDestination?'Destino preparado':'Mapa de demostración';
+    $('#mapStateDetail').textContent=hasDestination?'Se abrirá en Google Maps':'Abre tu navegador para navegar';
+  }
+  let gpsRequest = 0;
   function activateGps(){
-    if(!navigator.geolocation){showToast('GPS no disponible en este navegador');return}
-    if(!window.isSecureContext){showToast('Para usar GPS, abre la prueba mediante HTTPS');return}
-    $('#speedLabel').textContent='Buscando señal GPS…';
+    const request = ++gpsRequest;
+    $('#speed').innerHTML='— <small>km/h</small>';
+    if(!navigator.geolocation){$('#speedLabel').textContent='GPS no disponible';showToast('GPS no disponible en este navegador');return}
+    if(!window.isSecureContext){$('#speedLabel').textContent='GPS requiere HTTPS';showToast('Para usar GPS, abre la prueba mediante HTTPS');return}
+    $('#speedLabel').textContent='Buscando señal…';
     navigator.geolocation.getCurrentPosition((position)=>{
+      if(request!==gpsRequest)return;
       const speed=position.coords.speed;
-      if(Number.isFinite(speed)&&speed>=0){$('#speed').innerHTML=`${Math.round(speed*3.6)} <small>km/h</small>`;$('#speedLabel').textContent='Velocidad GPS estimada'}
-      else{$('#speed').innerHTML='— <small>km/h</small>';$('#speedLabel').textContent='Sin velocidad GPS disponible'}
-      showToast('Ubicación obtenida. El mapa sigue siendo ilustrativo.');
-    },(err)=>{$('#speedLabel').textContent='Velocidad GPS';showToast(err.code===1?'Permiso de ubicación denegado':'No se pudo obtener ubicación')},{enableHighAccuracy:true,timeout:10000,maximumAge:2000});
+      if(Number.isFinite(speed)&&speed>=0){$('#speed').innerHTML=`${Math.round(speed*3.6)} <small>km/h</small>`;$('#speedLabel').textContent='Lectura puntual GPS'}
+      else{$('#speed').innerHTML='— <small>km/h</small>';$('#speedLabel').textContent='Sin velocidad GPS'}
+      showToast('Lectura puntual del GPS; el mapa sigue siendo ilustrativo.');
+    },(err)=>{
+      if(request!==gpsRequest)return;
+      $('#speed').innerHTML='— <small>km/h</small>';
+      const errors={1:['Sin permiso GPS','Permiso de ubicación denegado'],2:['Señal GPS ausente','No se obtuvo ubicación'],3:['GPS sin respuesta','No se pudo obtener ubicación a tiempo']};
+      const [label,message]=errors[err.code]||['GPS no disponible','No se pudo obtener ubicación'];
+      $('#speedLabel').textContent=label;showToast(message);
+    },{enableHighAccuracy:true,timeout:10000,maximumAge:2000});
   }
   // Android invokes this using a local and isolated WebView origin.
   // On GitHub Pages this API only receives clearly marked visual test data.
@@ -228,7 +266,7 @@
       case 'car-prev':photoChange(currentPhoto-1);break;
       case 'car-next':photoChange(currentPhoto+1);break;
       case 'gps':activateGps();break;
-      case 'navigation':if(window.G2Android)window.G2Android.openMap($('#destination').value.trim());else openMap();break;
+      case 'navigation':launchNavigation();break;
       case 'zoom-in':case 'zoom-out':zoom=Math.max(.8,Math.min(1.8,zoom+(action==='zoom-in'?.1:-.1)));$('#mapArtwork').style.transform=`scale(${zoom})`;showToast('Zoom ilustrativo: no sustituye navegación real');break;
       case 'music-access':if(window.G2Android)window.G2Android.openMusicAccess();else showToast('Solo en Android');break;
       case 'music-detail':window.G2MusicDetail?.open();break;
@@ -237,7 +275,7 @@
       case 'demo-prev':mediaAction('previous');break;
       case 'demo-next':mediaAction('next');break;
       case 'demo-shuffle':case 'demo-repeat':showToast('Aleatorio y repetir: integración pendiente');break;
-      case 'reset-settings':settings={...defaults};applySettings();save();showToast('Ajustes restablecidos');break;
+      case 'reset-settings':settings={...defaults};applySettings();updateClock();save();showToast('Ajustes restablecidos');break;
       case 'fullscreen':if(document.fullscreenElement){document.exitFullscreen?.()}else{document.documentElement.requestFullscreen?.().catch(()=>showToast('Pantalla completa no disponible'))}break;
       case 'apps':window.G2Apps?.open();break;
       case 'phone':case 'bluetooth':case 'radio':case 'music':if(window.G2Android)window.G2Android.openTarget(action);else showToast('Acceso pendiente de integración nativa en Android');break;
@@ -250,6 +288,10 @@
     if(event.target.matches('.screenveil'))event.target.hidden=true;
   });
   $$('[data-theme]').forEach(button=>button.addEventListener('click',()=>{settings.theme=button.dataset.theme;applyTheme();}));
+  $$('[data-time-format]').forEach(button=>button.addEventListener('click',()=>{
+    settings.timeFormat=button.dataset.timeFormat;
+    applyClockFormat();updateClock();save();
+  }));
   $$('[data-wall]').forEach(button=>button.addEventListener('click',()=>{settings.wall=button.dataset.wall;settings.customWallpaper=null;applySettings();save()}));
   $$('[data-accent]').forEach(button=>button.addEventListener('click',()=>{settings.accent=button.dataset.accent;applySettings();save()}));
   $$('[data-tint]').forEach(button=>button.addEventListener('click',()=>{settings.widgetTint=button.dataset.tint;applyWidgetSettings();save()}));
@@ -296,8 +338,9 @@
       };img.src=reader.result;
     };reader.readAsDataURL(file);
   });
-  $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();openMap()}});
+  $('#destination').addEventListener('input',updateMapDestinationState);
+  $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();launchNavigation()}});
   document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close();window.G2Apps?.close();window.G2MusicDetail?.close();window.G2AirPlay?.close()}});
   if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.5';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
-  photoChange(0);applySettings();updateClock();setInterval(updateClock,20000);
+  photoChange(0);updateMapDestinationState();applySettings();updateClock();setInterval(updateClock,20000);
 })();
