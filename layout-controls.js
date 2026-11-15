@@ -6,6 +6,18 @@
   const dashboard = document.querySelector('.dashboard');
   const stats = document.querySelector('.vehicleStats');
   if (!settings || !dashboard || !stats) return;
+  // Genuine navigation launches Google's mapping app/browser; artwork is only a preview.
+  const map = dashboard.querySelector('.mapPanel');
+  if (map && !map.querySelector('.mapsLaunch')) {
+    const launch = document.createElement('button');
+    launch.type='button';
+    launch.className='mapsLaunch';
+    launch.dataset.action='navigation';
+    launch.textContent='ABRIR GOOGLE MAPS';
+    launch.setAttribute('aria-label','Abrir Google Maps para navegación real');
+    const stamp=map.querySelector('.demoStamp');
+    map.insertBefore(launch,stamp||null);
+  }
   const key = 'g2dash.layout.v058';
   const metrics = Array.from(stats.children);
   if (metrics.length !== 3) return;
