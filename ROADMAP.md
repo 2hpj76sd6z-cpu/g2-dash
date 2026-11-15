@@ -4,7 +4,7 @@
 |---|---|---|
 | v0.1 | Prototipo de distribución y fotografías | Completada |
 | v0.2 | Iconos uniformes, apariencia, fondos, personalización, panel del auto y demostración web funcional | Completada |
-| v0.3 | Ajustes de accesibilidad y diseño adaptativo, pruebas en pantalla de 1280 × 720 | Pendiente |
+| v0.3 | Ajustes de accesibilidad y diseño adaptativo, pruebas en pantalla de 1280 × 720 | En curso: identidad visual y widgets ahumados configurables |
 | v0.4 | Proyecto Android nativo, reloj y lanzador de aplicaciones instalado | Pendiente |
 | v0.5 | Controles de música mediante Android MediaSession y accesos configurables | Pendiente |
 | v0.6 | Velocidad GPS nativa y permisos contextualizados | Pendiente |
