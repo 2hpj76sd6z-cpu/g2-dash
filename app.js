@@ -223,7 +223,7 @@
       case 'concept-360':closeScreen('#vehicleVeil');window.G2Concept?.open();break;
       case 'close-vehicle':closeScreen('#vehicleVeil');break;
       case 'car-front':photoChange(1);break;
-      case 'car-rear':photoChange(1);break;
+      case 'car-rear':photoChange(2);break;
       case 'car-cutout':photoChange(0);break;
       case 'car-prev':photoChange(currentPhoto-1);break;
       case 'car-next':photoChange(currentPhoto+1);break;
