@@ -169,3 +169,11 @@ body[data-mode="day"] .widgetStylePicker button:not(.selected){color:#293a4d}
 body[data-mode="day"] .widgetStylePicker button.selected{color:#205c3e;background:rgba(48,147,96,.16);border-color:rgba(32,120,76,.72)}
 
 .songSource{display:block;margin-top:3px;font-size:9px!important;letter-spacing:.08em;color:#80dca9!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* QA: el modo ligero siempre elimina el filtro, incluso con acabado transparente. */
+body[data-performance="light"] .dashboard .glass,
+body[data-performance="light"] .sidebar.glass,
+body[data-performance="light"] .bottomDock button{
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+}
