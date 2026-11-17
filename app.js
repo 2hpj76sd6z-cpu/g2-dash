@@ -319,7 +319,7 @@
       case 'car-next':photoChange(currentPhoto+1);break;
       case 'gps':activateGps();break;
       case 'navigation':launchNavigation();break;
-      case 'zoom-in':case 'zoom-out':zoom=Math.max(.8,Math.min(1.8,zoom+(action==='zoom-in'?.1:-.1)));$('#mapArtwork').style.transform=`scale(${zoom})`;showToast('Zoom ilustrativo: no sustituye navegación real');break;
+      case 'zoom-in':case 'zoom-out':{const delta=action==='zoom-in'?.75:-.75;if(window.G2Android?.mapZoom){window.G2Android.mapZoom(delta);showToast('Zoom de Google Maps aplicado');}else{zoom=Math.max(.8,Math.min(1.8,zoom+(action==='zoom-in'?.1:-.1)));$('#mapArtwork').style.transform=`scale(${zoom})`;showToast('Zoom ilustrativo: no sustituye navegación real');}break;}
       case 'music-access':if(window.G2Android)window.G2Android.openMusicAccess();else showToast('Solo en Android');break;
       case 'music-detail':window.G2MusicDetail?.open();break;
       case 'airplay-setup':window.G2AirPlay?.open();break;
