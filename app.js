@@ -192,12 +192,25 @@
     if(window.G2Android)window.G2Android.openMap(term);
     else openMap();
   }
+  function nativeMapsAvailable(){
+    try{return Boolean(window.G2Android&&typeof window.G2Android.hasNativeMaps==='function'&&window.G2Android.hasNativeMaps())}catch(_){return false}
+  }
   function updateMapDestinationState(){
     const hasDestination=Boolean($('#destination').value.trim());
     const panel=$('.mapPanel');
     panel.dataset.destination=hasDestination?'ready':'empty';
     $('#mapStateTitle').textContent=hasDestination?'Destino preparado':'Mapa de demostración';
-    $('#mapStateDetail').textContent=hasDestination?'Google Maps se mostrará dentro del DASH':'Toca para usar Google Maps dentro del DASH';
+    const detail=$('#mapStateDetail');
+    if(detail)detail.textContent=window.G2Android
+      ? (nativeMapsAvailable()?'Google Maps nativo dentro del DASH':'Mapa web de respaldo dentro del DASH')
+      : (hasDestination?'Google Maps se mostrará dentro del DASH':'Toca para usar Google Maps dentro del DASH');
+    const apiStatus=$('#mapApiStatus');
+    if(apiStatus){
+      apiStatus.dataset.state=window.G2Android?(nativeMapsAvailable()?'ready':'fallback'):'web';
+      apiStatus.textContent=window.G2Android
+        ? (nativeMapsAvailable()?'Google Maps nativo listo: búsqueda, gestos y zoom permanecen dentro del DASH.':'Modo web de respaldo: configura GOOGLE_MAPS_API_KEY para activar el mapa nativo.')
+        : 'Vista web de demostración: la clave de Google Maps se configura únicamente en el APK Android.';
+    }
   }
   let gpsRequest = 0;
   function activateGps(){
