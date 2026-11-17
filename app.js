@@ -5,14 +5,16 @@
   const $$ = (q) => [...document.querySelectorAll(q)];
   const KEY = 'g2dash.v02.preferences';
   const SETTINGS_SCHEMA_VERSION = 1;
-  const defaults = { theme:'auto', timeFormat:'24h', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', widgetStyle:'smoked', widgetBlur:8, performance:'normal', customWallpaper:null };
+  const defaults = { theme:'auto', timeFormat:'24h', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', windowTint:'auto', widgetStyle:'smoked', widgetBlur:8, performance:'normal', customWallpaper:null };
+  const tones = ['graphite', 'blue', 'green', 'warm', 'black'];
   const allowedSettings = {
     theme:['auto','night','day'],
     timeFormat:['12h','24h'],
     wall:['dusk','blue','gray'],
     accent:['steel','blue','warm'],
     logo:['apex','pulse','orbit'],
-    widgetTint:['graphite','blue','green','black'],
+    widgetTint:tones,
+    windowTint:['auto', ...tones],
     widgetStyle:['smoked','transparent'],
     performance:['normal','light']
   };
@@ -69,25 +71,46 @@
     if(persist)save();
   }
   const accents = {steel:'#b7cce8',blue:'#84bbff',warm:'#dfc1a0'};
-  const widgetTints = {graphite:'19, 25, 34',blue:'17, 32, 47',green:'17, 35, 33',black:'11, 14, 19'};
   const walls={dusk:'radial-gradient(ellipse at 75% 20%, #837068 0%, transparent 39%),linear-gradient(120deg,#3f4d60,#242d3b 48%,#1b2333)',blue:'radial-gradient(ellipse at 75% 25%, #516f90 0%, transparent 39%),linear-gradient(120deg,#243c57,#152438 48%,#1a2432)',gray:'radial-gradient(ellipse at 75% 25%, #6a6970 0%, transparent 39%),linear-gradient(120deg,#353843,#212735 55%,#171d29)'};
+  function markToneSelection(attribute, selected){
+    $$(`[${attribute}]`).forEach(button=>{
+      const active=button.getAttribute(attribute)===selected;
+      button.classList.toggle('selected',active);
+      button.setAttribute('aria-pressed',String(active));
+    });
+  }
+  function applyWindowTone(){
+    const tone=settings.windowTint;
+    document.body.dataset.windowTint=tone;
+    const rootStyle=document.documentElement.style;
+    if(tone==='auto'){
+      rootStyle.removeProperty('--windowTintRgb');
+      rootStyle.removeProperty('--windowTintDayRgb');
+    }else{
+      rootStyle.setProperty('--windowTintRgb',`var(--tone-${tone})`);
+      rootStyle.setProperty('--windowTintDayRgb',`var(--tone-${tone}-day)`);
+    }
+    markToneSelection('data-window-tone',tone);
+  }
   /* Aplicación ligera: mover sliders no repinta el fondo ni las fotos. */
   function applyWidgetSettings(){
     const opacity=Number.isFinite(Number(settings.opacity))?Math.max(20,Math.min(88,Number(settings.opacity))):54;
     const widgetBlur=Number.isFinite(Number(settings.widgetBlur))?Math.max(0,Math.min(16,Number(settings.widgetBlur))):8;
-    const tint=Object.prototype.hasOwnProperty.call(widgetTints,settings.widgetTint)?settings.widgetTint:'graphite';
+    const tint=settings.widgetTint;
+    document.body.dataset.widgetTint=tint;
     const widgetStyle=allowedSettings.widgetStyle.includes(settings.widgetStyle)?settings.widgetStyle:'smoked';
     document.body.dataset.widgetStyle=widgetStyle;
     document.documentElement.style.setProperty('--glassOpacity',opacity/100);
-    document.documentElement.style.setProperty('--widgetTintRgb',widgetTints[tint]);
+    document.documentElement.style.setProperty('--widgetTintRgb',`var(--tone-${tint})`);
+    document.documentElement.style.setProperty('--widgetEdgeRgb',`var(--tone-${tint}-edge)`);
     document.documentElement.style.setProperty('--widgetBlur',widgetBlur+'px');
     $('#opacity').value=opacity;$('#opacityValue').textContent=`${opacity}%`;
     $('#widgetBlur').value=widgetBlur;$('#widgetBlurValue').textContent=`${widgetBlur} px`;
-    $$('[data-tint]').forEach(b=>{const chosen=b.dataset.tint===tint;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});
+    markToneSelection('data-tint',tint);
     $$('[data-widget-style]').forEach(b=>{const chosen=b.dataset.widgetStyle===widgetStyle;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});
     const styleNote=$('#widgetStyleNote');
     if(styleNote)styleNote.textContent=widgetStyle==='transparent'
-      ? 'Transparente: se conserva solo un contorno sutil; los iconos y controles mantienen contraste.'
+      ? 'Transparente: el tono se aprecia en el contorno y el relleno queda casi invisible.'
       : 'Ahumado: mantiene el vidrio oscuro y el desenfoque actual.';
   }
   function applyPerformanceMode(){
@@ -125,6 +148,7 @@
     document.documentElement.style.setProperty('--accent',accents[settings.accent]||accents.steel);
     document.documentElement.style.setProperty('--wallBlur',`${Number(settings.blur)||0}px`);
     applyWidgetSettings();
+    applyWindowTone();
     applyPerformanceMode();
     applyClockFormat();
     $('#blur').value=settings.blur;$('#blurValue').textContent=`${settings.blur} px`;
@@ -365,6 +389,11 @@
   $$('[data-wall]').forEach(button=>button.addEventListener('click',()=>{settings.wall=button.dataset.wall;settings.customWallpaper=null;applySettings();save()}));
   $$('[data-accent]').forEach(button=>button.addEventListener('click',()=>{settings.accent=button.dataset.accent;applySettings();save()}));
   $$('[data-tint]').forEach(button=>button.addEventListener('click',()=>{settings.widgetTint=button.dataset.tint;applyWidgetSettings();save()}));
+  $$('[data-window-tone]').forEach(button=>button.addEventListener('click',()=>{
+    settings.windowTint=button.dataset.windowTone;
+    applyWindowTone();
+    save();
+  }));
   $$('[data-widget-style]').forEach(button=>button.addEventListener('click',()=>{settings.widgetStyle=button.dataset.widgetStyle;applyWidgetSettings();save()}));
   $$('[data-performance]').forEach(button=>button.addEventListener('click',()=>{
     settings.performance=button.dataset.performance==='light'?'light':'normal';

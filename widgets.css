@@ -1,6 +1,22 @@
 /* G² Dash — widgets ahumados. Solo superficies; no altera fotos ni wallpaper. */
 :root {
-  --widgetTintRgb:19, 25, 34;
+  --tone-graphite:19, 25, 34;
+  --tone-blue:17, 32, 47;
+  --tone-green:17, 35, 33;
+  --tone-warm:54, 37, 26;
+  --tone-black:11, 14, 19;
+  --tone-graphite-day:227, 234, 242;
+  --tone-blue-day:212, 229, 248;
+  --tone-green-day:212, 236, 224;
+  --tone-warm-day:244, 226, 205;
+  --tone-black-day:209, 213, 218;
+  --tone-graphite-edge:222, 237, 251;
+  --tone-blue-edge:127, 189, 251;
+  --tone-green-edge:121, 209, 166;
+  --tone-warm-edge:237, 187, 137;
+  --tone-black-edge:153, 156, 169;
+  --widgetTintRgb:var(--tone-graphite);
+  --widgetEdgeRgb:var(--tone-graphite-edge);
   --widgetBlur:8px;
 }
 /* Mantener translucidez incluso en modo de día; texto legible. */
@@ -34,7 +50,8 @@ body[data-mode="day"] .sidebar button {color:#c0d0df}
 body[data-mode="day"] .sidebar button.selected {color:#fff}
 body[data-mode="day"] .sidebar button:hover {color:#fff}
 /* Controls are deliberately compact for landscape car displays. */
-.tintPicker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.tintPicker{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.tintPickerWindows{grid-template-columns:repeat(3,minmax(0,1fr))}
 .tintPicker button{
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
   min-width:0;min-height:65px;padding:8px 3px;
@@ -50,10 +67,15 @@ body[data-mode="day"] .sidebar button:hover {color:#fff}
   width:29px;height:26px;border:1px solid rgba(244,250,255,.29);
   border-radius:8px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
 }
-.tintPicker [data-tint="graphite"] .tintSwatch {background:rgba(19,25,34,.85)}
-.tintPicker [data-tint="blue"] .tintSwatch {background:rgba(17,32,47,.85)}
-.tintPicker [data-tint="green"] .tintSwatch {background:rgba(17,35,33,.85)}
-.tintPicker [data-tint="black"] .tintSwatch {background:rgba(11,14,19,.9)}
+.tintPicker [data-tint="graphite"], .tintPicker [data-window-tone="graphite"]{--swatch-rgb:var(--tone-graphite)}
+.tintPicker [data-tint="blue"], .tintPicker [data-window-tone="blue"]{--swatch-rgb:var(--tone-blue)}
+.tintPicker [data-tint="green"], .tintPicker [data-window-tone="green"]{--swatch-rgb:var(--tone-green)}
+.tintPicker [data-tint="warm"], .tintPicker [data-window-tone="warm"]{--swatch-rgb:var(--tone-warm)}
+.tintPicker [data-tint="black"], .tintPicker [data-window-tone="black"]{--swatch-rgb:var(--tone-black)}
+.tintPicker .tintSwatch{background:rgb(var(--swatch-rgb,var(--tone-graphite)))}
+.tintPicker [data-window-tone="auto"] .tintSwatch{
+  background:linear-gradient(135deg,#283447 50%,#e7eef6 50%);
+}
 body[data-mode="day"] .tintPicker button {color:#293a4d}
 body[data-mode="day"] .tintPicker button.selected {color:#19382b}
 @supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))) {
@@ -139,6 +161,9 @@ body[data-mode="night"] .lifecyclePanel small{color:#b4c6d7}
 
 /* G² Dash v0.5.8 — acabado transparente opcional.
  * Superficies casi transparentes, contorno sutil; iconos y controles conservan contraste. */
+body[data-widget-style="transparent"][data-widget-tint]:not([data-widget-tint="graphite"]){
+  --transparentEdgeOpacity:.46;
+}
 body[data-widget-style="transparent"] .dashboard .glass,
 body[data-widget-style="transparent"] .sidebar.glass,
 body[data-widget-style="transparent"] .bottomDock button,
@@ -147,14 +172,14 @@ body[data-widget-style="transparent"] .dashboard .destination,
 body[data-widget-style="transparent"] .dashboard .where,
 body[data-widget-style="transparent"] .dashboard .demoStamp{
   background:rgba(var(--widgetTintRgb),.035)!important;
-  border-color:rgba(222,237,251,.14)!important;
+  border-color:rgba(var(--widgetEdgeRgb),var(--transparentEdgeOpacity,.14))!important;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 8px 22px rgba(0,0,0,.055)!important;
 }
 body[data-widget-style="transparent"] .dashboard .mapPanel{
   background:rgba(var(--widgetTintRgb),.022)!important;
 }
 body[data-widget-style="transparent"] .dashboard .mapArtwork{opacity:.52}
-body[data-widget-style="transparent"] .dashboard .vehicleStats>div+div{border-left-color:rgba(222,237,251,.12)}
+body[data-widget-style="transparent"] .dashboard .vehicleStats>div+div{border-left-color:rgba(var(--widgetEdgeRgb),.24)}
 body[data-widget-style="transparent"] .dashboard .destination input::placeholder{color:rgba(220,235,249,.68)}
 .widgetStylePicker{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .widgetStylePicker button{
@@ -176,6 +201,15 @@ body[data-performance="light"] .sidebar.glass,
 body[data-performance="light"] .bottomDock button{
   -webkit-backdrop-filter:none!important;
   backdrop-filter:none!important;
+}
+
+/* Las ventanas conservan el contraste del texto en ambos modos. */
+body[data-window-tint]:not([data-window-tint="auto"]) .screenveil > [role="dialog"]{
+  background:rgb(var(--windowTintRgb));
+}
+body[data-mode="day"][data-window-tint]:not([data-window-tint="auto"]) .screenveil > .settings,
+body[data-mode="day"][data-window-tint]:not([data-window-tint="auto"]) .screenveil > .vehicleModal{
+  background:rgb(var(--windowTintDayRgb));
 }
 
 /* v0.5.8: make the Maps capability explicit without exposing the API key. */

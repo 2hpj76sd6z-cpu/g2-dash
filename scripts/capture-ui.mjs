@@ -357,6 +357,47 @@ try {
   }
   await capture('30-airplay-compacto-960x540');
   await page.locator('#airplayClose').click();
+  // A transparent widget keeps its low fill while its selected tone colors the border.
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.locator('[data-action="open-settings"]').first().click();
+  await page.locator('[data-theme="night"]').click();
+  const widget = page.locator('.clockPanel');
+  const settingsWindow = page.locator('.settings[role="dialog"]');
+  const windowColor = await settingsWindow.evaluate(el => getComputedStyle(el).backgroundColor);
+  await page.locator('[data-widget-style="transparent"]').click();
+  await page.locator('[data-tint="blue"]').click();
+  if (await settingsWindow.evaluate(el => getComputedStyle(el).backgroundColor) !== windowColor) {
+    throw new Error('El tono de widgets cambió el de la ventana');
+  }
+  const widgetAppearance = el => {
+    const style = getComputedStyle(el);
+    return [style.backgroundColor, style.borderTopColor];
+  };
+  const blueWidget = await widget.evaluate(widgetAppearance);
+  if (blueWidget[0] !== 'rgba(17, 32, 47, 0.035)' || !blueWidget[1].startsWith('rgba(127, 189, 251,')) {
+    throw new Error('El tono azul no conservó la transparencia del widget: ' + blueWidget.join(' / '));
+  }
+  await page.locator('[data-window-tone="green"]').click();
+  if (await settingsWindow.evaluate(el => getComputedStyle(el).backgroundColor) !== 'rgb(17, 35, 33)' ||
+      String(await widget.evaluate(widgetAppearance)) !== String(blueWidget)) {
+    throw new Error('El tono verde de ventanas no se aplicó de manera independiente');
+  }
+  await capture('49-tonos-ajustes-verde');
+  await page.locator('[data-action="close-settings"]').click();
+  await capture('48-widgets-transparentes-azul');
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.locator('#startup').waitFor({state:'hidden',timeout:8000});
+  if (await page.locator('body').getAttribute('data-window-tint') !== 'green' ||
+      await page.locator('body').getAttribute('data-widget-style') !== 'transparent' ||
+      String(await widget.evaluate(widgetAppearance)) !== String(blueWidget)) {
+    throw new Error('Los tonos o el acabado transparente no se restauraron al recargar');
+  }
+  await page.locator('[data-action="music-detail"]').click();
+  if (await page.locator('.musicDetailModal').evaluate(el => getComputedStyle(el).backgroundColor) !== 'rgb(17, 35, 33)') {
+    throw new Error('El reproductor no heredó el tono de ventanas');
+  }
+  await capture('50-reproductor-tono-verde');
+  await page.locator('#musicDetailClose').click();
   await writeFile(path.join(root,'qa-layout.json'),JSON.stringify({source_commit:process.env.G2_COMMIT||'local',checked:qa},null,2)+'\n');
 
   const meta = {
@@ -373,6 +414,7 @@ try {
       '09-modo-dia-1280x720.png', '10-ibiza-detalle.png',
       '41-rendimiento-normal-1280x720.png','42-rendimiento-ligero-1280x720.png','43-ajustes-rendimiento-ligero.png',
       '44-inicio-web-sin-senal-android.png','45-reanudacion-simulada-web.png',
+      '48-widgets-transparentes-azul.png','49-tonos-ajustes-verde.png','50-reproductor-tono-verde.png',
       '11-ibiza-trasera.png', '12-musica-integracion-prueba.png',
       '13-musica-detallada-ejemplo.png', '14-compacto-1024x600.png',
       '15-ibiza-1024x600.png', '16-compacto-960x540.png',
