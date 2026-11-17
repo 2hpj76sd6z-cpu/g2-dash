@@ -93,7 +93,16 @@
   function applyPerformanceMode(){
     const mode=settings.performance==='light'?'light':'normal';
     document.body.dataset.performance=mode;
-    $$('[data-performance]').forEach(button=>{
+    $('.dashboard .glass, .sidebar.glass, .bottomDock button').forEach(el=>{
+      if(mode==='light'){
+        el.style.setProperty('backdrop-filter','none','important');
+        el.style.setProperty('-webkit-backdrop-filter','none','important');
+      } else {
+        el.style.removeProperty('backdrop-filter');
+        el.style.removeProperty('-webkit-backdrop-filter');
+      }
+    });
+    $('[data-performance]').forEach(button=>{
       const selected=button.dataset.performance===mode;
       button.classList.toggle('selected',selected);
       button.setAttribute('aria-pressed',String(selected));
