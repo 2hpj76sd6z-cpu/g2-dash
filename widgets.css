@@ -136,3 +136,34 @@ body[data-mode="night"] .lifecyclePanel small{color:#b4c6d7}
 }
 .mapPanel[data-destination="ready"] .where .pinIcon{color:#8abcf5}
 .mapPanel[data-destination="ready"] .where strong{color:#f2f7fc}
+
+/* G² Dash v0.5.8 — acabado transparente opcional.
+ * Superficies casi transparentes, contorno sutil; iconos y controles conservan contraste. */
+body[data-widget-style="transparent"] .dashboard .glass,
+body[data-widget-style="transparent"] .sidebar.glass,
+body[data-widget-style="transparent"] .bottomDock button,
+body[data-widget-style="transparent"] .dashboard .vehicleStats,
+body[data-widget-style="transparent"] .dashboard .destination,
+body[data-widget-style="transparent"] .dashboard .where,
+body[data-widget-style="transparent"] .dashboard .demoStamp{
+  background:rgba(var(--widgetTintRgb),.075)!important;
+  border-color:rgba(222,237,251,.19)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 24px rgba(0,0,0,.09)!important;
+}
+body[data-widget-style="transparent"] .dashboard .mapPanel{
+  background:rgba(var(--widgetTintRgb),.055)!important;
+}
+body[data-widget-style="transparent"] .dashboard .mapArtwork{opacity:.42}
+body[data-widget-style="transparent"] .dashboard .vehicleStats>div+div{border-left-color:rgba(222,237,251,.16)}
+body[data-widget-style="transparent"] .dashboard .destination input::placeholder{color:rgba(220,235,249,.68)}
+.widgetStylePicker{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.widgetStylePicker button{
+  min-height:42px;padding:8px 9px;border:1px solid rgba(227,239,251,.24);
+  border-radius:10px;background:rgba(231,242,255,.045);color:#dce7f6;font-size:11px;font-weight:700;
+}
+.widgetStylePicker button.selected{
+  color:#bef4d4;border-color:rgba(91,221,147,.78);background:rgba(60,142,95,.14);
+  box-shadow:inset 0 0 0 1px rgba(91,221,147,.12);
+}
+body[data-mode="day"] .widgetStylePicker button:not(.selected){color:#293a4d}
+body[data-mode="day"] .widgetStylePicker button.selected{color:#205c3e;background:rgba(48,147,96,.16);border-color:rgba(32,120,76,.72)}

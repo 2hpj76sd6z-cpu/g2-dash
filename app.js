@@ -5,7 +5,7 @@
   const $$ = (q) => [...document.querySelectorAll(q)];
   const KEY = 'g2dash.v02.preferences';
   const SETTINGS_SCHEMA_VERSION = 1;
-  const defaults = { theme:'auto', timeFormat:'24h', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', widgetBlur:8, performance:'normal', customWallpaper:null };
+  const defaults = { theme:'auto', timeFormat:'24h', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', widgetStyle:'smoked', widgetBlur:8, performance:'normal', customWallpaper:null };
   const allowedSettings = {
     theme:['auto','night','day'],
     timeFormat:['12h','24h'],
@@ -13,6 +13,7 @@
     accent:['steel','blue','warm'],
     logo:['apex','pulse','orbit'],
     widgetTint:['graphite','blue','green','black'],
+    widgetStyle:['smoked','transparent'],
     performance:['normal','light']
   };
   function normalizeSettings(candidate) {
@@ -75,12 +76,19 @@
     const opacity=Number.isFinite(Number(settings.opacity))?Math.max(20,Math.min(88,Number(settings.opacity))):54;
     const widgetBlur=Number.isFinite(Number(settings.widgetBlur))?Math.max(0,Math.min(16,Number(settings.widgetBlur))):8;
     const tint=Object.prototype.hasOwnProperty.call(widgetTints,settings.widgetTint)?settings.widgetTint:'graphite';
+    const widgetStyle=allowedSettings.widgetStyle.includes(settings.widgetStyle)?settings.widgetStyle:'smoked';
+    document.body.dataset.widgetStyle=widgetStyle;
     document.documentElement.style.setProperty('--glassOpacity',opacity/100);
     document.documentElement.style.setProperty('--widgetTintRgb',widgetTints[tint]);
     document.documentElement.style.setProperty('--widgetBlur',widgetBlur+'px');
     $('#opacity').value=opacity;$('#opacityValue').textContent=`${opacity}%`;
     $('#widgetBlur').value=widgetBlur;$('#widgetBlurValue').textContent=`${widgetBlur} px`;
-    $$('[data-tint]').forEach(b=>{const chosen=b.dataset.tint===tint;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});
+    $('[data-tint]').forEach(b=>{const chosen=b.dataset.tint===tint;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});
+    $('[data-widget-style]').forEach(b=>{const chosen=b.dataset.widgetStyle===widgetStyle;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});
+    const styleNote=$('#widgetStyleNote');
+    if(styleNote)styleNote.textContent=widgetStyle==='transparent'
+      ? 'Transparente: se conserva solo un contorno sutil; los iconos y controles mantienen contraste.'
+      : 'Ahumado: mantiene el vidrio oscuro y el desenfoque actual.';
   }
   function applyPerformanceMode(){
     const mode=settings.performance==='light'?'light':'normal';
@@ -323,8 +331,9 @@
   }));
   $$('[data-wall]').forEach(button=>button.addEventListener('click',()=>{settings.wall=button.dataset.wall;settings.customWallpaper=null;applySettings();save()}));
   $$('[data-accent]').forEach(button=>button.addEventListener('click',()=>{settings.accent=button.dataset.accent;applySettings();save()}));
-  $$('[data-tint]').forEach(button=>button.addEventListener('click',()=>{settings.widgetTint=button.dataset.tint;applyWidgetSettings();save()}));
-  $$('[data-performance]').forEach(button=>button.addEventListener('click',()=>{
+  $('[data-tint]').forEach(button=>button.addEventListener('click',()=>{settings.widgetTint=button.dataset.tint;applyWidgetSettings();save()}));
+  $('[data-widget-style]').forEach(button=>button.addEventListener('click',()=>{settings.widgetStyle=button.dataset.widgetStyle;applyWidgetSettings();save()}));
+  $('[data-performance]').forEach(button=>button.addEventListener('click',()=>{
     settings.performance=button.dataset.performance==='light'?'light':'normal';
     applyPerformanceMode();save();
   }));

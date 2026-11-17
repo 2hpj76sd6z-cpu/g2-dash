@@ -91,7 +91,7 @@
         <div class="underLine"></div>
       </div>
       <div class="musicPanel glass">
-        <div class="trackRow"><div class="album"><svg class="icon"><use href="#i-music"/></svg><img class="albumArtImage" id="albumArt" alt="Portada del álbum" hidden/></div><div class="trackText"><strong id="songName">Sin música activa</strong><span id="songArtist">Abre tu reproductor</span><button id="musicPermission" class="musicPermission" data-action="music-access" hidden>Activar acceso a música</button></div><button class="musicExpand" data-action="music-detail" title="Ampliar reproductor" aria-label="Abrir reproductor ampliado"><svg class="icon"><use href="#i-expand"/></svg></button><button class="smallAction" data-action="music" title="Abrir aplicación de música" aria-label="Abrir aplicación de música"><svg class="icon"><use href="#i-external"/></svg></button></div>
+        <div class="trackRow"><div class="album" id="miniAlbum" role="button" tabindex="0" aria-label="Abrir reproductor ampliado"><svg class="icon"><use href="#i-music"/></svg><img class="albumArtImage" id="albumArt" alt="Portada del álbum" hidden/></div><div class="trackText"><strong id="songName">Sin música activa</strong><span id="songArtist">Abre tu reproductor</span><button id="musicPermission" class="musicPermission" data-action="music-access" hidden>Activar acceso a música</button></div><button class="musicExpand" data-action="music-detail" title="Ampliar reproductor" aria-label="Abrir reproductor ampliado"><svg class="icon"><use href="#i-expand"/></svg></button><button class="smallAction" data-action="music" title="Abrir aplicación de música" aria-label="Abrir aplicación de música"><svg class="icon"><use href="#i-external"/></svg></button></div>
         <div class="songMeta"><div class="mediaStatusRow"><span class="mediaStatus"><i class="mediaDot" aria-hidden="true"></i><span id="musicStatus">Sin conectar</span></span><span class="mediaSource" id="musicSource">MODO DEMO</span></div><div class="timelineBar"><span id="trackProgress"></span></div><div class="trackTimes"><span id="musicCurrent">00:00</span><span id="musicDuration">00:00</span></div></div>
         <div class="musicControls">
           <button data-action="demo-shuffle" disabled aria-label="Aleatorio (pendiente)" title="Aleatorio: función pendiente"><svg class="icon"><use href="#i-shuffle"/></svg></button>
@@ -162,6 +162,12 @@
       <button type="button" data-tint="green" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Verde humo</button>
       <button type="button" data-tint="black" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Negro</button>
     </div>
+    <label>Estilo de widgets</label>
+    <div class="widgetStylePicker" role="group" aria-label="Estilo de fondos de widgets">
+      <button type="button" data-widget-style="smoked" class="selected" aria-pressed="true">Ahumado</button>
+      <button type="button" data-widget-style="transparent" aria-pressed="false">Transparente</button>
+    </div>
+    <p id="widgetStyleNote" class="hint">Ahumado: mantiene el vidrio oscuro y el desenfoque actual.</p>
     <label for="opacity">Opacidad de widgets <output id="opacityValue">54%</output></label><input id="opacity" type="range" min="20" max="88" step="1" value="54"/>
     <label for="widgetBlur">Difuminado del vidrio <output id="widgetBlurValue">8 px</output></label><input id="widgetBlur" type="range" min="0" max="16" step="1" value="8"/>
     <label>Color de detalle</label><div class="accentPicker"><button data-accent="steel" class="selected" aria-label="Plata" title="Plata"></button><button data-accent="blue" aria-label="Azul frío" title="Azul frío"></button><button data-accent="warm" aria-label="Arena" title="Arena"></button></div><p class="hint">Color, tintes, fondo y logo se guardan automáticamente en este estéreo.</p>
@@ -235,14 +241,16 @@
  <section class="musicDetailModal" role="dialog" aria-modal="true" aria-labelledby="musicDetailHeading">
   <header class="musicDetailHeader">
    <div><h2 id="musicDetailHeading">Reproductor</h2><p>G² DASH · AUDIO LOCAL ANDROID</p></div>
+   <button type="button" class="musicDetailExpand" id="musicDetailExpand" aria-expanded="false" aria-label="Expandir reproductor a pantalla completa" title="Pantalla completa"><svg class="icon"><use href="#i-expand"/></svg></button>
    <button type="button" class="closeBtn" id="musicDetailClose" aria-label="Cerrar reproductor"><svg class="icon"><use href="#i-x"/></svg></button>
   </header>
   <div class="musicDetailBody">
-   <div class="musicDetailCover" aria-label="Portada de música"><span class="musicDetailCoverSymbol" aria-hidden="true">♫</span><img id="musicDetailCoverImage" alt="Portada de la canción actual" hidden/></div>
+   <div class="musicDetailCover" id="musicDetailCover" aria-label="Portada de música; toca para expandir"><span class="musicDetailCoverSymbol" aria-hidden="true">♫</span><img id="musicDetailCoverImage" alt="Portada de la canción actual" hidden/></div>
    <div class="musicDetailContent">
     <div class="musicDetailLabel"><span id="musicDetailSource">MÚSICA LOCAL</span><span class="musicDetailMode" id="musicDetailMode">SIN CONECTAR</span></div>
     <div id="musicDetailTitle" class="musicDetailTitle">Conecta tu música</div>
     <div id="musicDetailArtist" class="musicDetailArtist">Abre un reproductor en este Android</div>
+    <div id="musicDetailAlbum" class="musicDetailAlbum">ÁLBUM NO DISPONIBLE</div>
     <div class="musicSeek">
      <input id="musicSeek" type="range" min="0" max="1" step="1000" value="0" aria-label="Posición de reproducción" disabled/>
      <div class="musicSeekTimes"><span id="musicDetailCurrent">00:00</span><span id="musicDetailTotal">00:00</span></div>

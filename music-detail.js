@@ -5,9 +5,11 @@
  const veil=document.getElementById('musicDetailVeil');
  if(!veil)return;
  const $=id=>document.getElementById(id);
- const title=$('musicDetailTitle'), artist=$('musicDetailArtist');
+ const title=$('musicDetailTitle'), artist=$('musicDetailArtist'), album=$('musicDetailAlbum');
  const source=$('musicDetailSource'), mode=$('musicDetailMode');
- const cover=$('musicDetailCoverImage'), seek=$('musicSeek');
+ const coverFrame=$('musicDetailCover'), cover=$('musicDetailCoverImage'), seek=$('musicSeek');
+ const miniAlbum=$('miniAlbum');
+ const expand=$('musicDetailExpand');
  const current=$('musicDetailCurrent'), total=$('musicDetailTotal');
  const status=$('musicDetailHint'), action=$('musicDetailPlay');
  const perm=$('musicDetailPermission'), prev=$('musicDetailPrev'), next=$('musicDetailNext');
@@ -30,9 +32,12 @@
    const appNames={'io.github.jqssun.airplay':'AIRPLAY · IPHONE','com.spotify.music':'SPOTIFY','com.google.android.apps.youtube.music':'YOUTUBE MUSIC',
      'com.apple.android.music':'APPLE MUSIC','org.videolan.vlc':'VLC','com.maxmpz.audioplayer':'POWERAMP',
      'com.aspiro.tidal':'TIDAL','deezer.android.app':'DEEZER'};
+   const sourceName=preview?'EJEMPLO VISUAL':active?(appNames[data.package]||'ANDROID AUDIO'):'MÚSICA LOCAL';
    title.textContent=preview?'Pista de prueba':active?String(data.title||'Sin título').slice(0,160):granted?'Sin música activa':'Conecta tu música';
    artist.textContent=preview?'EJEMPLO · NO ES AUDIO REAL':active?String(data.artist||'Artista desconocido').slice(0,160):granted?'Abre el reproductor en este Android':'Autoriza el acceso a música en Android';
-   source.textContent=preview?'EJEMPLO VISUAL':active?(appNames[data.package]||'ANDROID AUDIO'):'MÚSICA LOCAL';
+   album.textContent=preview?'ÁLBUM DE PRUEBA':active?String(data.album||'Álbum no disponible').slice(0,160):'ÁLBUM NO DISPONIBLE';
+   source.textContent=sourceName;
+   source.dataset.source=String(data.package||'').toLowerCase();
    mode.textContent=preview?'SIN REPRODUCCIÓN':playing?'REPRODUCIENDO':active?'EN PAUSA':granted?'SIN SESIÓN':'SIN PERMISO';
    const validCover=active&&!preview&&typeof data.albumArt==='string'&&
      data.albumArt.startsWith('data:image/jpeg;base64,')&&data.albumArt.length<400000;
@@ -57,13 +62,28 @@
      !canSeek?'La app de música no permite cambiar el punto de reproducción':
      'Controlando el reproductor activo de este Android';
  }
- function open(){veil.hidden=false;update(last||{granted:false});$('musicDetailClose').focus()}
- function close(){veil.hidden=true}
+ function setExpanded(expanded){
+   veil.classList.toggle('expanded',Boolean(expanded));
+   expand.setAttribute('aria-expanded',String(Boolean(expanded)));
+   expand.setAttribute('aria-label',expanded?'Restaurar tamaño del reproductor':'Expandir reproductor a pantalla completa');
+   expand.title=expanded?'Restaurar tamaño':'Pantalla completa';
+ }
+ function open(){veil.hidden=false;setExpanded(false);update(last||{granted:false});$('musicDetailClose').focus()}
+ function close(){setExpanded(false);veil.hidden=true}
  function ctl(k){
    if(!window.G2Android||!last||last.preview===true)return;
    try{window.G2Android.musicControl(k)}catch(_){status.textContent='No se pudo enviar el control al reproductor'}
  }
  $('musicDetailClose').addEventListener('click',close);
+ expand.addEventListener('click',()=>setExpanded(!veil.classList.contains('expanded')));
+ coverFrame.addEventListener('click',()=>setExpanded(!veil.classList.contains('expanded')));
+ coverFrame.setAttribute('role','button');
+ coverFrame.setAttribute('tabindex','0');
+ coverFrame.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setExpanded(!veil.classList.contains('expanded'))}});
+ if(miniAlbum){
+   miniAlbum.addEventListener('click',open);
+   miniAlbum.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
+ }
  veil.addEventListener('click',e=>{if(e.target===veil)close()});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!veil.hidden){e.stopPropagation();close()}});
  prev.addEventListener('click',()=>ctl('previous'));

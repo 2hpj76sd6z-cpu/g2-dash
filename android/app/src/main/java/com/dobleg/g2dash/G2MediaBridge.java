@@ -226,6 +226,7 @@ final class G2MediaBridge {
             if (!granted) {
                 data.put("title", "Conecta tu música");
                 data.put("artist", "Autoriza el acceso en Android");
+                data.put("album", "Álbum no disponible");
                 data.put("playing", false);
                 data.put("albumArt", "");
                 data.put("durationMs", 0);
@@ -235,6 +236,7 @@ final class G2MediaBridge {
                 if (current == null) {
                     data.put("title", "Sin música activa");
                     data.put("artist", "Abre tu reproductor en este Android");
+                    data.put("album", "Álbum no disponible");
                     data.put("playing", false);
                     data.put("albumArt", "");
                     data.put("durationMs", 0);
@@ -247,11 +249,14 @@ final class G2MediaBridge {
                             safeText(meta.getText(MediaMetadata.METADATA_KEY_TITLE), "Sin título");
                     String artist = meta == null ? "Artista no disponible" :
                             safeText(meta.getText(MediaMetadata.METADATA_KEY_ARTIST), "Artista no disponible");
+                    String album = meta == null ? "Álbum no disponible" :
+                            safeText(meta.getText(MediaMetadata.METADATA_KEY_ALBUM), "Álbum no disponible");
                     long duration = meta == null ? 0 : Math.max(0, meta.getLong(MediaMetadata.METADATA_KEY_DURATION));
                     long position = state == null ? 0 : Math.max(0, state.getPosition());
                     if (duration > 0) position = Math.min(position, duration);
                     data.put("title", title);
                     data.put("artist", artist);
+                    data.put("album", album);
                     data.put("playing", playing);
                     long actions = state == null ? 0 : state.getActions();
                     data.put("canSeek", duration > 0 &&
