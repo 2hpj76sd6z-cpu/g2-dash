@@ -10,6 +10,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
 import org.json.JSONArray;
@@ -21,6 +22,7 @@ import android.os.Bundle;
 import android.os.Build;
 import android.provider.Settings;
 import android.view.View;
+import android.view.Gravity;
 import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -30,12 +32,15 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
 import androidx.webkit.WebViewAssetLoader;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * G² Dash: local/offline dashboard hosted by native Android.
@@ -49,6 +54,9 @@ public class MainActivity extends Activity {
     private static final String AIRPLAY_PACKAGE = "io.github.jqssun.airplay";
 
     private WebView webView;
+    private WebView mapWebView;
+    private Button closeMapButton;
+    private FrameLayout root;
     private G2MediaBridge mediaBridge;
     // Activity lifecycle, NOT the vehicle ignition/ACC signal.
     private boolean pageReady = false;
@@ -70,7 +78,34 @@ public class MainActivity extends Activity {
                 .build();
 
         webView = new WebView(this);
-        setContentView(webView);
+        root = new FrameLayout(this);
+        root.setBackgroundColor(Color.BLACK);
+        root.addView(webView, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT));
+
+        mapWebView = new WebView(this);
+        mapWebView.setVisibility(View.GONE);
+        root.addView(mapWebView, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT));
+
+        closeMapButton = new Button(this);
+        closeMapButton.setText("×  Cerrar mapa");
+        closeMapButton.setAllCaps(false);
+        closeMapButton.setTextColor(Color.WHITE);
+        closeMapButton.setTextSize(14f);
+        closeMapButton.setBackgroundColor(Color.rgb(20, 32, 48));
+        closeMapButton.setPadding(24, 8, 24, 8);
+        closeMapButton.setVisibility(View.GONE);
+        closeMapButton.setOnClickListener(v -> closeMapOverlay());
+        FrameLayout.LayoutParams closeParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        closeParams.gravity = Gravity.TOP | Gravity.END;
+        closeParams.setMargins(0, 24, 24, 0);
+        root.addView(closeMapButton, closeParams);
+        setContentView(root);
         WebSettings s = webView.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
@@ -117,7 +152,7 @@ public class MainActivity extends Activity {
             @Override
             public void onGeolocationPermissionsShowPrompt(
                     String origin, GeolocationPermissions.Callback callback) {
-                if (!LOCAL_ORIGIN.equals(origin)) {
+                if (!LOCAL_ORIGIN.equals(origin) && !isMapOrigin(origin)) {
                     callback.invoke(origin, false, false);
                     return;
                 }
@@ -151,6 +186,50 @@ public class MainActivity extends Activity {
                 }
             }
         });
+        WebSettings mapSettings = mapWebView.getSettings();
+        mapSettings.setJavaScriptEnabled(true);
+        mapSettings.setDomStorageEnabled(true);
+        mapSettings.setAllowFileAccess(false);
+        mapSettings.setAllowContentAccess(false);
+        mapSettings.setSupportMultipleWindows(false);
+        mapSettings.setJavaScriptCanOpenWindowsAutomatically(false);
+        mapSettings.setBuiltInZoomControls(false);
+        mapSettings.setDisplayZoomControls(false);
+        mapSettings.setGeolocationEnabled(true);
+        mapSettings.setMediaPlaybackRequiresUserGesture(true);
+        mapWebView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        mapWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) {
+                Uri u = req.getUrl();
+                if (isMapUrl(u)) return false;
+                if ("https".equalsIgnoreCase(u.getScheme()) || "http".equalsIgnoreCase(u.getScheme())) {
+                    openExternal(new Intent(Intent.ACTION_VIEW, u));
+                }
+                return true;
+            }
+        });
+        mapWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onGeolocationPermissionsShowPrompt(
+                    String origin, GeolocationPermissions.Callback callback) {
+                if (!isMapOrigin(origin)) {
+                    callback.invoke(origin, false, false);
+                    return;
+                }
+                if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    callback.invoke(origin, true, false);
+                } else {
+                    pendingGeo = callback;
+                    pendingGeoOrigin = origin;
+                    requestPermissions(
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            LOCATION_REQUEST);
+                }
+            }
+        });
+
         mediaBridge = new G2MediaBridge(this, webView);
         webView.loadUrl(HOME_URL);
     }
@@ -182,12 +261,51 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void openMap(String destination) {
+    private boolean isMapHost(String host) {
+        if (host == null) return false;
+        String h = host.toLowerCase(Locale.US);
+        return h.equals("google.com") || h.endsWith(".google.com")
+                || h.equals("googleusercontent.com") || h.endsWith(".googleusercontent.com")
+                || h.equals("gstatic.com") || h.endsWith(".gstatic.com");
+    }
+
+    private boolean isMapOrigin(String origin) {
+        try {
+            Uri parsed = Uri.parse(origin);
+            return "https".equalsIgnoreCase(parsed.getScheme()) && isMapHost(parsed.getHost());
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
+    private boolean isMapUrl(Uri uri) {
+        return uri != null && "https".equalsIgnoreCase(uri.getScheme())
+                && isMapHost(uri.getHost());
+    }
+
+    private void showMapOverlay(String destination) {
+        if (mapWebView == null) return;
         String query = destination == null ? "" : destination.trim();
         Uri uri = Uri.parse(query.isEmpty()
                 ? "https://www.google.com/maps/"
                 : "https://www.google.com/maps/search/?api=1&query=" + Uri.encode(query));
-        openExternal(new Intent(Intent.ACTION_VIEW, uri));
+        webView.setVisibility(View.GONE);
+        mapWebView.setVisibility(View.VISIBLE);
+        closeMapButton.setVisibility(View.VISIBLE);
+        mapWebView.loadUrl(uri.toString());
+    }
+
+    private void closeMapOverlay() {
+        if (mapWebView == null || mapWebView.getVisibility() != View.VISIBLE) return;
+        mapWebView.stopLoading();
+        mapWebView.setVisibility(View.GONE);
+        closeMapButton.setVisibility(View.GONE);
+        webView.setVisibility(View.VISIBLE);
+        webView.requestFocus();
+    }
+
+    private void openMap(String destination) {
+        showMapOverlay(destination);
     }
 
     private void openTarget(String key) {
@@ -423,6 +541,10 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        if (mapWebView != null && mapWebView.getVisibility() == View.VISIBLE) {
+            closeMapOverlay();
+            return;
+        }
         webView.evaluateJavascript("(function(){const s=document.querySelector('#settingsVeil');" +
                 "const v=document.querySelector('#vehicleVeil');" +
                 "const c=document.querySelector('#conceptVeil');" +
@@ -451,6 +573,7 @@ public class MainActivity extends Activity {
         super.onResume();
         showImmersive();
         if (webView != null) webView.onResume();
+        if (mapWebView != null) mapWebView.onResume();
         if (wasPaused) {
             wasPaused = false;
             resumeCount++;
@@ -461,6 +584,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         if (webView != null) webView.onPause();
+        if (mapWebView != null) mapWebView.onPause();
         wasPaused = true;
         super.onPause();
     }
@@ -491,6 +615,9 @@ public class MainActivity extends Activity {
         if (webView != null) {
             webView.removeJavascriptInterface("G2Android");
             webView.destroy();
+        }
+        if (mapWebView != null) {
+            mapWebView.destroy();
         }
         super.onDestroy();
     }

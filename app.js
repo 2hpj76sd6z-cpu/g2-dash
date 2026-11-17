@@ -154,7 +154,7 @@
     const panel=$('.mapPanel');
     panel.dataset.destination=hasDestination?'ready':'empty';
     $('#mapStateTitle').textContent=hasDestination?'Destino preparado':'Mapa de demostración';
-    $('#mapStateDetail').textContent=hasDestination?'Se abrirá en Google Maps':'Abre tu navegador para navegar';
+    $('#mapStateDetail').textContent=hasDestination?'Google Maps se mostrará dentro del DASH':'Toca para usar Google Maps dentro del DASH';
   }
   let gpsRequest = 0;
   function activateGps(){
