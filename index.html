@@ -115,11 +115,11 @@
 
     <section class="vehiclePanel glass" aria-label="Mi Ibiza">
       <div class="vehHeading"><div><strong>Mi Ibiza</strong><small>SEAT 6J · 5 puertas</small></div><div class="vehTools"><button class="conceptEntry" type="button" data-action="concept-360" aria-label="Abrir doce vistas conceptuales del Ibiza">12 VISTAS</button><button class="smallAction" data-action="vehicle" title="Ver fotografías reales" aria-label="Ver fotografías reales"><svg class="icon"><use href="#i-expand"/></svg></button></div></div>
-      <button class="carView" id="vehicleView" data-action="vehicle" title="Ver mi Ibiza" aria-label="Ver fotografías originales del Ibiza">
-        <img src="assets/ibiza_frente_original.webp" id="vehiclePhoto" alt="Fotografía frontal real del SEAT Ibiza blanco con boca negra y placa protegida"/>
-        <span class="carChip" id="carChip">FRENTE · FOTO ORIGINAL</span>
+      <button class="carView isCutout" id="vehicleView" data-action="vehicle" title="Ver mi Ibiza" aria-label="Ver el SEAT Ibiza recortado sin fondo">
+        <img src="assets/ibiza_frente_sin_fondo.png" id="vehiclePhoto" alt="SEAT Ibiza blanco aislado, vista frontal de tres cuartos, con placa protegida"/>
+        <span class="carChip" id="carChip">RECORTE TRANSPARENTE · FRENTE</span>
       </button>
-      <div class="photoDots"><button class="on" id="carDot0" data-action="car-front" title="Frente" aria-label="Ver foto frontal original"></button><button id="carDot1" data-action="car-rear" title="Trasera" aria-label="Ver foto trasera original"></button><button id="carDot2" data-action="car-cutout" title="Recorte opcional" aria-label="Ver recorte transparente opcional"></button><span>2 fotos + recorte · no 360°</span></div>
+      <div class="photoDots"><button class="on" id="carDot0" data-action="car-front-cutout" title="Frente sin fondo" aria-label="Ver recorte frontal del Ibiza"></button><button id="carDot1" data-action="car-rear-cutout" title="Trasera sin fondo" aria-label="Ver recorte trasero del Ibiza"></button><button id="carDot2" data-action="car-front" title="Frente original" aria-label="Ver foto frontal original"></button><button id="carDot3" data-action="car-rear" title="Trasera original" aria-label="Ver foto trasera original"></button><span>2 recortes + 2 fotos originales · no 360°</span></div>
       <div class="vehicleStats">
         <div><svg class="icon"><use href="#i-fuel"/></svg><strong>—</strong><span>Autonomía OBD-II</span></div>
         <div><svg class="icon"><use href="#i-speed"/></svg><strong id="speed">— <small>km/h</small></strong><span id="speedLabel">GPS no activado</span></div>
@@ -177,7 +177,7 @@
   </div>
 </aside></div>
 
-<div class="screenveil" id="vehicleVeil" hidden><div class="vehicleModal glass" role="dialog" aria-modal="true" aria-label="Fotos de mi Ibiza"><header><div><h2>Mi Ibiza original</h2><p>Dos fotos reales + recorte opcional · placas protegidas</p></div><div class="vehTools"><button type="button" class="conceptToGallery" data-action="concept-360" aria-label="Abrir las doce vistas conceptuales">12 VISTAS</button><button class="closeBtn" data-action="close-vehicle" aria-label="Cerrar"><svg class="icon"><use href="#i-x"/></svg></button></div></header><div class="modalPhoto"><img id="modalCar" src="assets/ibiza_frente_original.webp" alt="Fotografía frontal real del SEAT Ibiza"/></div><div class="modalActions"><button data-action="car-prev">‹ Vista anterior</button><span id="modalLabel">Frontal</span><button data-action="car-next">Vista siguiente ›</button></div><div class="disclaimer">Giro 360° pendiente de modelo 3D correcto. No se simula un giro falso.</div></div></div>
+<div class="screenveil" id="vehicleVeil" hidden><div class="vehicleModal glass" role="dialog" aria-modal="true" aria-label="Fotos de mi Ibiza"><header><div><h2>Mi Ibiza original</h2><p>Dos recortes transparentes + fotos originales · placas protegidas</p></div><div class="vehTools"><button type="button" class="conceptToGallery" data-action="concept-360" aria-label="Abrir las doce vistas conceptuales">12 VISTAS</button><button class="closeBtn" data-action="close-vehicle" aria-label="Cerrar"><svg class="icon"><use href="#i-x"/></svg></button></div></header><div class="modalPhoto"><img id="modalCar" src="assets/ibiza_frente_sin_fondo.png" alt="SEAT Ibiza blanco aislado, vista frontal de tres cuartos"/></div><div class="modalActions"><button data-action="car-prev">‹ Vista anterior</button><span id="modalLabel">Frontal — recorte transparente</span><button data-action="car-next">Vista siguiente ›</button></div><div class="disclaimer">Giro 360° pendiente de modelo 3D correcto. No se simula un giro falso.</div></div></div>
 <div class="screenveil" id="conceptVeil" hidden>
 <section class="conceptModal" role="dialog" aria-modal="true" aria-label="Ibiza: doce vistas conceptuales">
   <header class="conceptModalHeader">

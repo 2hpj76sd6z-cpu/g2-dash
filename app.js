@@ -6,9 +6,10 @@
   const KEY = 'g2dash.v02.preferences';
   const defaults = { theme:'auto', timeFormat:'24h', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', widgetBlur:8, performance:'normal', customWallpaper:null };
   const pictures = [
-    {path:'assets/ibiza_frente_original.webp',name:'Frontal — foto original',alt:'Fotografía frontal real del SEAT Ibiza blanco con boca negra y placa protegida'},
+    {path:'assets/ibiza_frente_sin_fondo.png',name:'Frontal — recorte transparente',alt:'SEAT Ibiza blanco aislado, vista frontal de tres cuartos, con placa protegida',cutout:true},
+    {path:'assets/ibiza_trasera_sin_fondo.png',name:'Trasera — recorte transparente',alt:'SEAT Ibiza blanco aislado, vista trasera de tres cuartos, con placa protegida',cutout:true},
+    {path:'assets/ibiza_frente_original.webp',name:'Frontal — foto original',alt:'Fotografía frontal real del SEAT Ibiza blanco con boca negra y placa protegida',personalSource:true},
     {path:'assets/ibiza_trasera_original.webp',name:'Trasera — foto original',alt:'Fotografía trasera real del SEAT Ibiza blanco con placa protegida'},
-    {path:'assets/ibiza_real_recortado.svg',name:'Recorte transparente — fotografía real',alt:'Recorte opcional del SEAT Ibiza basado en la fotografía frontal real',cutout:true},
   ];
   let settings = {...defaults};
   try {settings={...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')}} catch(_){}
@@ -95,7 +96,7 @@
   function photoChange(index){
     currentPhoto=(index+pictures.length)%pictures.length;
     const pic=pictures[currentPhoto];
-    const isPersonal=currentPhoto===0&&Boolean(settings.personalCar);
+    const isPersonal=Boolean(pic.personalSource&&settings.personalCar);
     const path=isPersonal?settings.personalCar:pic.path;
     const isCutout=Boolean(pic.cutout||isPersonal);
     $('#vehiclePhoto').src=path;$('#modalCar').src=path;
@@ -103,9 +104,9 @@
     $('#modalCar').alt=isPersonal?'Imagen personal del SEAT Ibiza':pic.alt;
     $('#vehicleView').classList.toggle('isCutout',isCutout);
     $('.modalPhoto').classList.toggle('isCutout',isCutout);
-    $('#carChip').textContent=isPersonal?'IMAGEN PERSONAL':pic.cutout?'RECORTE · OPCIONAL':currentPhoto===0?'FRENTE · FOTO ORIGINAL':'TRASERA · FOTO ORIGINAL';
+    $('#carChip').textContent=isPersonal?'IMAGEN PERSONAL':pic.cutout?(currentPhoto===0?'RECORTE TRANSPARENTE · FRENTE':'RECORTE TRANSPARENTE · TRASERA'):(currentPhoto===2?'FRENTE · FOTO ORIGINAL':'TRASERA · FOTO ORIGINAL');
     $('#modalLabel').textContent=isPersonal?'Imagen personal — guardada en este dispositivo':pic.name;
-    document.querySelectorAll('#carDot0, #carDot1, #carDot2').forEach((b,i)=>b.classList.toggle('on',i===currentPhoto));
+    document.querySelectorAll('#carDot0, #carDot1, #carDot2, #carDot3').forEach((b,i)=>b.classList.toggle('on',i===currentPhoto));
   }
   // Native Android Activity lifecycle, not a vehicle ignition sensor.
   // The third argument is ONLY for clearly labeled WEB screenshot tests.
@@ -257,12 +258,14 @@
         break;
       case 'close-settings':closeScreen('#settingsVeil');break;
       case 'vehicle':window.G2Concept?.close();openScreen('#vehicleVeil');break;
-      case 'vehicle-real':window.G2Concept?.close();photoChange(0);openScreen('#vehicleVeil');break;
+      case 'vehicle-real':window.G2Concept?.close();photoChange(2);openScreen('#vehicleVeil');break;
       case 'concept-360':closeScreen('#vehicleVeil');window.G2Concept?.open();break;
       case 'close-vehicle':closeScreen('#vehicleVeil');break;
-      case 'car-front':photoChange(0);break;
-      case 'car-rear':photoChange(1);break;
-      case 'car-cutout':photoChange(2);break;
+      case 'car-front-cutout':photoChange(0);break;
+      case 'car-rear-cutout':photoChange(1);break;
+      case 'car-front':photoChange(2);break;
+      case 'car-rear':photoChange(3);break;
+      case 'car-cutout':photoChange(0);break;
       case 'car-prev':photoChange(currentPhoto-1);break;
       case 'car-next':photoChange(currentPhoto+1);break;
       case 'gps':activateGps();break;
@@ -317,7 +320,7 @@
         canvas.height=Math.round(img.naturalHeight*ratio);
         canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
         settings.personalCar=canvas.toDataURL('image/png');
-        photoChange(0);save();showToast('Imagen del Ibiza aplicada sin cambiar el fondo');
+        photoChange(2);save();showToast('Imagen del Ibiza aplicada sobre fondo transparente');
       };
       img.onerror=()=>showToast('No se pudo abrir la imagen');
       img.src=reader.result;
