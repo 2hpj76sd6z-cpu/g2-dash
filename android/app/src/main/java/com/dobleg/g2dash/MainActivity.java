@@ -1,6 +1,8 @@
 package com.dobleg.g2dash;
 
 import android.Manifest;
+import android.location.Address;
+import android.location.Geocoder;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -31,6 +33,12 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import android.widget.Toast;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -55,6 +63,8 @@ public class MainActivity extends Activity {
 
     private WebView webView;
     private WebView mapWebView;
+    private MapView nativeMapView;
+    private GoogleMap nativeGoogleMap;
     private Button closeMapButton;
     private FrameLayout root;
     private G2MediaBridge mediaBridge;
@@ -66,6 +76,7 @@ public class MainActivity extends Activity {
     private GeolocationPermissions.Callback pendingGeo;
     private String pendingGeoOrigin;
     private android.webkit.ValueCallback<Uri[]> uploadCallback;
+    private boolean nativeLocationPending = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,6 +100,28 @@ public class MainActivity extends Activity {
         root.addView(mapWebView, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
+
+        if (isNativeMapsConfigured()) {
+            nativeMapView = new MapView(this);
+            nativeMapView.setVisibility(View.GONE);
+            root.addView(nativeMapView, new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT));
+            nativeMapView.onCreate(savedInstanceState);
+            nativeMapView.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap map) {
+                    nativeGoogleMap = map;
+                    map.getUiSettings().setZoomControlsEnabled(true);
+                    map.getUiSettings().setCompassEnabled(true);
+                    map.getUiSettings().setMapToolbarEnabled(false);
+                    if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        try { map.setMyLocationEnabled(true); } catch (SecurityException ignored) { }
+                    }
+                }
+            });
+        }
 
         closeMapButton = new Button(this);
         closeMapButton.setText("×  Cerrar mapa");
@@ -261,6 +294,11 @@ public class MainActivity extends Activity {
         }
     }
 
+    private boolean isNativeMapsConfigured() {
+        return BuildConfig.GOOGLE_MAPS_API_KEY != null
+                && !BuildConfig.GOOGLE_MAPS_API_KEY.trim().isEmpty();
+    }
+
     private boolean isMapHost(String host) {
         if (host == null) return false;
         String h = host.toLowerCase(Locale.US);
@@ -284,6 +322,22 @@ public class MainActivity extends Activity {
     }
 
     private void showMapOverlay(String destination) {
+        if (nativeMapView != null && nativeGoogleMap != null) {
+            webView.setVisibility(View.GONE);
+            mapWebView.setVisibility(View.GONE);
+            nativeMapView.setVisibility(View.VISIBLE);
+            closeMapButton.setVisibility(View.VISIBLE);
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                try { nativeGoogleMap.setMyLocationEnabled(true); } catch (SecurityException ignored) { }
+            } else {
+                nativeLocationPending = true;
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        LOCATION_REQUEST);
+            }
+            centerNativeMap(destination == null ? "" : destination.trim());
+            return;
+        }
         if (mapWebView == null) return;
         String query = destination == null ? "" : destination.trim();
         Uri uri = Uri.parse(query.isEmpty()
@@ -296,12 +350,47 @@ public class MainActivity extends Activity {
     }
 
     private void closeMapOverlay() {
-        if (mapWebView == null || mapWebView.getVisibility() != View.VISIBLE) return;
-        mapWebView.stopLoading();
+        boolean nativeVisible = nativeMapView != null
+                && nativeMapView.getVisibility() == View.VISIBLE;
+        boolean webVisible = mapWebView != null
+                && mapWebView.getVisibility() == View.VISIBLE;
+        if (!nativeVisible && !webVisible) return;
+        if (webVisible) mapWebView.stopLoading();
+        if (nativeMapView != null) nativeMapView.setVisibility(View.GONE);
         mapWebView.setVisibility(View.GONE);
         closeMapButton.setVisibility(View.GONE);
         webView.setVisibility(View.VISIBLE);
         webView.requestFocus();
+    }
+
+    private void centerNativeMap(String query) {
+        if (nativeGoogleMap == null) return;
+        if (query == null || query.trim().isEmpty()) {
+            nativeGoogleMap.clear();
+            return;
+        }
+        final String term = query.trim();
+        new Thread(() -> {
+            try {
+                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                List<Address> matches = geocoder.getFromLocationName(term, 1);
+                if (matches == null || matches.isEmpty()) return;
+                Address address = matches.get(0);
+                final double lat = address.getLatitude();
+                final double lng = address.getLongitude();
+                runOnUiThread(() -> {
+                    if (nativeGoogleMap == null) return;
+                    LatLng point = new LatLng(lat, lng);
+                    nativeGoogleMap.clear();
+                    nativeGoogleMap.addMarker(new MarkerOptions().position(point).title(term));
+                    nativeGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 15f));
+                });
+            } catch (Exception ignored) {
+                runOnUiThread(() -> Toast.makeText(this,
+                        "No se pudo centrar el destino; puedes mover el mapa",
+                        Toast.LENGTH_SHORT).show());
+            }
+        }).start();
     }
 
     private void openMap(String destination) {
@@ -522,11 +611,17 @@ public class MainActivity extends Activity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] perms, int[] results) {
         super.onRequestPermissionsResult(requestCode, perms, results);
-        if (requestCode == LOCATION_REQUEST && pendingGeo != null) {
+        if (requestCode == LOCATION_REQUEST) {
             boolean granted = results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED;
-            pendingGeo.invoke(pendingGeoOrigin, granted, false);
-            pendingGeo = null;
-            pendingGeoOrigin = null;
+            if (pendingGeo != null) {
+                pendingGeo.invoke(pendingGeoOrigin, granted, false);
+                pendingGeo = null;
+                pendingGeoOrigin = null;
+            }
+            if (granted && nativeLocationPending && nativeGoogleMap != null) {
+                try { nativeGoogleMap.setMyLocationEnabled(true); } catch (SecurityException ignored) { }
+            }
+            nativeLocationPending = false;
         }
     }
 
@@ -540,8 +635,15 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (nativeMapView != null) nativeMapView.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onBackPressed() {
-        if (mapWebView != null && mapWebView.getVisibility() == View.VISIBLE) {
+        if ((mapWebView != null && mapWebView.getVisibility() == View.VISIBLE)
+                || (nativeMapView != null && nativeMapView.getVisibility() == View.VISIBLE)) {
             closeMapOverlay();
             return;
         }
@@ -565,6 +667,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
+        if (nativeMapView != null) nativeMapView.onStart();
         if (mediaBridge != null) mediaBridge.start();
     }
 
@@ -574,6 +677,7 @@ public class MainActivity extends Activity {
         showImmersive();
         if (webView != null) webView.onResume();
         if (mapWebView != null) mapWebView.onResume();
+        if (nativeMapView != null) nativeMapView.onResume();
         if (wasPaused) {
             wasPaused = false;
             resumeCount++;
@@ -585,6 +689,7 @@ public class MainActivity extends Activity {
     protected void onPause() {
         if (webView != null) webView.onPause();
         if (mapWebView != null) mapWebView.onPause();
+        if (nativeMapView != null) nativeMapView.onPause();
         wasPaused = true;
         super.onPause();
     }
@@ -605,6 +710,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onStop() {
+        if (nativeMapView != null) nativeMapView.onStop();
         if (mediaBridge != null) mediaBridge.stop();
         super.onStop();
     }
@@ -618,6 +724,9 @@ public class MainActivity extends Activity {
         }
         if (mapWebView != null) {
             mapWebView.destroy();
+        }
+        if (nativeMapView != null) {
+            nativeMapView.onDestroy();
         }
         super.onDestroy();
     }

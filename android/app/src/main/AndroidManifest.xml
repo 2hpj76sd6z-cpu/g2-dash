@@ -21,6 +21,9 @@
         android:usesCleartextTraffic="false"
         android:theme="@style/Theme.G2Dash"
         android:icon="@drawable/ic_g2dash">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${GOOGLE_MAPS_API_KEY}" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

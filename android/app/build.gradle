@@ -2,6 +2,9 @@ plugins {
     id 'com.android.application'
 }
 
+def googleMapsApiKey = System.getenv("GOOGLE_MAPS_API_KEY") ?: ""
+def escapedGoogleMapsApiKey = googleMapsApiKey.replace("\\", "\\\\").replace("\"", "\\\"")
+
 android {
     namespace 'com.dobleg.g2dash'
     compileSdk 35
@@ -12,12 +15,18 @@ android {
         targetSdk 35
         versionCode 18
         versionName '0.5.8-dev'
+        buildConfigField "String", "GOOGLE_MAPS_API_KEY", "\"${escapedGoogleMapsApiKey}\""
+        manifestPlaceholders = [GOOGLE_MAPS_API_KEY: googleMapsApiKey]
     }
 
     buildTypes {
         release {
             minifyEnabled false
         }
+    }
+
+    buildFeatures {
+        buildConfig true
     }
 
     compileOptions {
@@ -47,4 +56,5 @@ tasks.named('preBuild').configure {
 
 dependencies {
     implementation 'androidx.webkit:webkit:1.14.0'
+    implementation 'com.google.android.gms:play-services-maps:20.1.0'
 }
