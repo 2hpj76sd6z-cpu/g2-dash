@@ -608,6 +608,10 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> MainActivity.this.openMap(destination));
         }
         @JavascriptInterface
+        public boolean hasNativeMaps() {
+            return MainActivity.this.isNativeMapsConfigured();
+        }
+        @JavascriptInterface
         public void mapZoom(float delta) {
             runOnUiThread(() -> MainActivity.this.zoomNativeMap(delta));
         }
