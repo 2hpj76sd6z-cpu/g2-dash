@@ -373,15 +373,36 @@ try {
     const style = getComputedStyle(el);
     return [style.backgroundColor, style.borderTopColor];
   };
+  const initialBlueWidget = await widget.evaluate(widgetAppearance);
+  if (initialBlueWidget[0] !== 'rgba(17, 32, 47, 0.035)' || !initialBlueWidget[1].startsWith('rgba(127, 189, 251,')) {
+    throw new Error('El tono azul no conservó la transparencia del widget: ' + initialBlueWidget.join(' / '));
+  }
+  const opacitySlider = page.locator('#opacity');
+  await opacitySlider.fill('0');
+  const noFill = await widget.evaluate(widgetAppearance);
+  if (!noFill[0].endsWith(', 0)') || noFill[1] !== initialBlueWidget[1]) {
+    throw new Error('Quitar el relleno alteró el contorno del widget');
+  }
+  await opacitySlider.fill('8.5');
   const blueWidget = await widget.evaluate(widgetAppearance);
-  if (blueWidget[0] !== 'rgba(17, 32, 47, 0.035)' || !blueWidget[1].startsWith('rgba(127, 189, 251,')) {
-    throw new Error('El tono azul no conservó la transparencia del widget: ' + blueWidget.join(' / '));
+  if (blueWidget[0] !== 'rgba(17, 32, 47, 0.085)' ||
+      await opacitySlider.getAttribute('aria-valuetext') !== '8.5%') {
+    throw new Error('La opacidad transparente no cambió con el control');
+  }
+  await page.locator('[data-widget-style="smoked"]').click();
+  if (await opacitySlider.inputValue() !== '54') {
+    throw new Error('Cambiar la opacidad del modo transparente alteró el modo ahumado');
+  }
+  await page.locator('[data-widget-style="transparent"]').click();
+  if (await opacitySlider.inputValue() !== '8.5') {
+    throw new Error('El estilo transparente perdió su propia opacidad');
   }
   await page.locator('[data-window-tone="green"]').click();
   if (await settingsWindow.evaluate(el => getComputedStyle(el).backgroundColor) !== 'rgb(17, 35, 33)' ||
       String(await widget.evaluate(widgetAppearance)) !== String(blueWidget)) {
     throw new Error('El tono verde de ventanas no se aplicó de manera independiente');
   }
+  await opacitySlider.scrollIntoViewIfNeeded();
   await capture('49-tonos-ajustes-verde');
   await page.locator('[data-action="close-settings"]').click();
   await capture('48-widgets-transparentes-azul');

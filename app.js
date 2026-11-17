@@ -5,7 +5,12 @@
   const $$ = (q) => [...document.querySelectorAll(q)];
   const KEY = 'g2dash.v02.preferences';
   const SETTINGS_SCHEMA_VERSION = 1;
-  const defaults = { theme:'auto', timeFormat:'24h', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', windowTint:'auto', widgetStyle:'smoked', widgetBlur:8, performance:'normal', customWallpaper:null };
+  const defaults = { theme:'auto', timeFormat:'24h', wall:'dusk', blur:14, opacity:54, transparentOpacity:3.5, accent:'steel', logo:'apex', widgetTint:'graphite', windowTint:'auto', widgetStyle:'smoked', widgetBlur:8, performance:'normal', customWallpaper:null };
+  const opacityControls = {
+    smoked: { key: 'opacity', min: 20, max: 88, step: 1 },
+    transparent: { key: 'transparentOpacity', min: 0, max: 12, step: 0.5 }
+  };
+  const opacityFormat = new Intl.NumberFormat('es-MX', { maximumFractionDigits: 1 });
   const tones = ['graphite', 'blue', 'green', 'warm', 'black'];
   const allowedSettings = {
     theme:['auto','night','day'],
@@ -24,7 +29,12 @@
       if(!allowedSettings[key].includes(next[key])) next[key]=defaults[key];
     });
     next.blur=Number.isFinite(Number(next.blur))?Math.max(0,Math.min(30,Number(next.blur))):defaults.blur;
-    next.opacity=Number.isFinite(Number(next.opacity))?Math.max(20,Math.min(88,Number(next.opacity))):defaults.opacity;
+    for (const { key, min, max, step } of Object.values(opacityControls)) {
+      const value = Number.parseFloat(next[key]);
+      next[key] = Number.isFinite(value)
+        ? Math.max(min, Math.min(max, Math.round(value / step) * step))
+        : defaults[key];
+    }
     next.widgetBlur=Number.isFinite(Number(next.widgetBlur))?Math.max(0,Math.min(16,Number(next.widgetBlur))):defaults.widgetBlur;
     if(next.customWallpaper!==null && typeof next.customWallpaper!=='string') next.customWallpaper=null;
     return next;
@@ -92,25 +102,39 @@
     }
     markToneSelection('data-window-tone',tone);
   }
+  function applyWidgetOpacity() {
+    const { key, min, max, step } = opacityControls[settings.widgetStyle];
+    const slider = $('#opacity');
+    const value = settings[key];
+    slider.min = min;
+    slider.max = max;
+    slider.step = step;
+    slider.value = value;
+    const formatted = opacityFormat.format(value) + '%';
+    slider.setAttribute('aria-valuetext', formatted);
+    $('#opacityValue').textContent = formatted;
+
+    const rootStyle = document.documentElement.style;
+    rootStyle.setProperty('--glassOpacity', settings.opacity / 100);
+    rootStyle.setProperty('--transparentOpacity', settings.transparentOpacity / 100);
+  }
   /* Aplicación ligera: mover sliders no repinta el fondo ni las fotos. */
   function applyWidgetSettings(){
-    const opacity=Number.isFinite(Number(settings.opacity))?Math.max(20,Math.min(88,Number(settings.opacity))):54;
     const widgetBlur=Number.isFinite(Number(settings.widgetBlur))?Math.max(0,Math.min(16,Number(settings.widgetBlur))):8;
     const tint=settings.widgetTint;
     document.body.dataset.widgetTint=tint;
     const widgetStyle=allowedSettings.widgetStyle.includes(settings.widgetStyle)?settings.widgetStyle:'smoked';
     document.body.dataset.widgetStyle=widgetStyle;
-    document.documentElement.style.setProperty('--glassOpacity',opacity/100);
+    applyWidgetOpacity();
     document.documentElement.style.setProperty('--widgetTintRgb',`var(--tone-${tint})`);
     document.documentElement.style.setProperty('--widgetEdgeRgb',`var(--tone-${tint}-edge)`);
     document.documentElement.style.setProperty('--widgetBlur',widgetBlur+'px');
-    $('#opacity').value=opacity;$('#opacityValue').textContent=`${opacity}%`;
     $('#widgetBlur').value=widgetBlur;$('#widgetBlurValue').textContent=`${widgetBlur} px`;
     markToneSelection('data-tint',tint);
     $$('[data-widget-style]').forEach(b=>{const chosen=b.dataset.widgetStyle===widgetStyle;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});
     const styleNote=$('#widgetStyleNote');
     if(styleNote)styleNote.textContent=widgetStyle==='transparent'
-      ? 'Transparente: el tono se aprecia en el contorno y el relleno queda casi invisible.'
+      ? 'Transparente: ajusta el relleno de 0 a 12 %. El contorno conserva el tono elegido.'
       : 'Ahumado: mantiene el vidrio oscuro y el desenfoque actual.';
   }
   function applyPerformanceMode(){
@@ -401,7 +425,12 @@
   }));
   $$('.logoChoices button[data-logo]').forEach(button=>button.addEventListener('click',()=>{settings.logo=button.dataset.logo;applySettings();save()}));
   $('#blur').addEventListener('input',(e)=>{settings.blur=Number(e.target.value);document.documentElement.style.setProperty('--wallBlur',`${settings.blur}px`);$('#blurValue').textContent=`${settings.blur} px`;save()});
-  $('#opacity').addEventListener('input',(e)=>{settings.opacity=Number(e.target.value);applyWidgetSettings();save()});
+  $('#opacity').addEventListener('input', event => {
+    const { key } = opacityControls[settings.widgetStyle];
+    settings[key] = event.target.valueAsNumber;
+    applyWidgetOpacity();
+  });
+  $('#opacity').addEventListener('change', save);
   $('#widgetBlur').addEventListener('input',(e)=>{settings.widgetBlur=Number(e.target.value);applyWidgetSettings();save()});
   $('#chooseCar').addEventListener('change',event=>{
     const file=event.target.files?.[0];if(!file)return;
