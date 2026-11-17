@@ -6,7 +6,7 @@
   const KEY = 'g2dash.v02.preferences';
   const defaults = { theme:'auto', timeFormat:'24h', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', widgetBlur:8, performance:'normal', customWallpaper:null };
   const pictures = [
-    {path:'assets/ibiza_frente_sin_fondo.png',name:'Frontal — recorte transparente',alt:'SEAT Ibiza blanco aislado, vista frontal de tres cuartos, con placa protegida',cutout:true},
+    {path:'assets/ibiza_frente_sin_fondo.webp',name:'Frontal — recorte transparente',alt:'SEAT Ibiza blanco aislado, vista frontal de tres cuartos, con placa protegida',cutout:true},
     {path:'assets/ibiza_trasera_sin_fondo.png',name:'Trasera — recorte transparente',alt:'SEAT Ibiza blanco aislado, vista trasera de tres cuartos, con placa protegida',cutout:true},
     {path:'assets/ibiza_frente_original.webp',name:'Frontal — foto original',alt:'Fotografía frontal real del SEAT Ibiza blanco con boca negra y placa protegida',personalSource:true},
     {path:'assets/ibiza_trasera_original.webp',name:'Trasera — foto original',alt:'Fotografía trasera real del SEAT Ibiza blanco con placa protegida'},
