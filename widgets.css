@@ -146,15 +146,15 @@ body[data-widget-style="transparent"] .dashboard .vehicleStats,
 body[data-widget-style="transparent"] .dashboard .destination,
 body[data-widget-style="transparent"] .dashboard .where,
 body[data-widget-style="transparent"] .dashboard .demoStamp{
-  background:rgba(var(--widgetTintRgb),.075)!important;
-  border-color:rgba(222,237,251,.19)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 24px rgba(0,0,0,.09)!important;
+  background:rgba(var(--widgetTintRgb),.035)!important;
+  border-color:rgba(222,237,251,.14)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 8px 22px rgba(0,0,0,.055)!important;
 }
 body[data-widget-style="transparent"] .dashboard .mapPanel{
-  background:rgba(var(--widgetTintRgb),.055)!important;
+  background:rgba(var(--widgetTintRgb),.022)!important;
 }
-body[data-widget-style="transparent"] .dashboard .mapArtwork{opacity:.42}
-body[data-widget-style="transparent"] .dashboard .vehicleStats>div+div{border-left-color:rgba(222,237,251,.16)}
+body[data-widget-style="transparent"] .dashboard .mapArtwork{opacity:.52}
+body[data-widget-style="transparent"] .dashboard .vehicleStats>div+div{border-left-color:rgba(222,237,251,.12)}
 body[data-widget-style="transparent"] .dashboard .destination input::placeholder{color:rgba(220,235,249,.68)}
 .widgetStylePicker{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .widgetStylePicker button{
