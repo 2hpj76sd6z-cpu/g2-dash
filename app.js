@@ -4,7 +4,28 @@
   const $ = (q) => document.querySelector(q);
   const $$ = (q) => [...document.querySelectorAll(q)];
   const KEY = 'g2dash.v02.preferences';
+  const SETTINGS_SCHEMA_VERSION = 1;
   const defaults = { theme:'auto', timeFormat:'24h', wall:'dusk', blur:14, opacity:54, accent:'steel', logo:'apex', widgetTint:'graphite', widgetBlur:8, performance:'normal', customWallpaper:null };
+  const allowedSettings = {
+    theme:['auto','night','day'],
+    timeFormat:['12h','24h'],
+    wall:['dusk','blue','gray'],
+    accent:['steel','blue','warm'],
+    logo:['apex','pulse','orbit'],
+    widgetTint:['graphite','blue','green','black'],
+    performance:['normal','light']
+  };
+  function normalizeSettings(candidate) {
+    const next={...defaults,...(candidate&&typeof candidate==='object'?candidate:{})};
+    Object.keys(allowedSettings).forEach(key=>{
+      if(!allowedSettings[key].includes(next[key])) next[key]=defaults[key];
+    });
+    next.blur=Number.isFinite(Number(next.blur))?Math.max(0,Math.min(30,Number(next.blur))):defaults.blur;
+    next.opacity=Number.isFinite(Number(next.opacity))?Math.max(20,Math.min(88,Number(next.opacity))):defaults.opacity;
+    next.widgetBlur=Number.isFinite(Number(next.widgetBlur))?Math.max(0,Math.min(16,Number(next.widgetBlur))):defaults.widgetBlur;
+    if(next.customWallpaper!==null && typeof next.customWallpaper!=='string') next.customWallpaper=null;
+    return next;
+  }
   const pictures = [
     {path:'assets/ibiza_frente_sin_fondo.webp',name:'Frontal — recorte transparente',alt:'SEAT Ibiza blanco aislado, vista frontal de tres cuartos, con placa protegida',cutout:true},
     {path:'assets/ibiza_trasera_sin_fondo.png',name:'Trasera — recorte transparente',alt:'SEAT Ibiza blanco aislado, vista trasera de tres cuartos, con placa protegida',cutout:true},
@@ -12,9 +33,14 @@
     {path:'assets/ibiza_trasera_original.webp',name:'Trasera — foto original',alt:'Fotografía trasera real del SEAT Ibiza blanco con placa protegida'},
   ];
   let settings = {...defaults};
-  try {settings={...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')}} catch(_){}
+  try {settings=normalizeSettings(JSON.parse(localStorage.getItem(KEY)||'{}'))} catch(_){}
   let currentPhoto=0, zoom=1, toastTimer=null;
-  function save(){try{localStorage.setItem(KEY,JSON.stringify(settings))}catch(_){showToast('No fue posible guardar los ajustes en este navegador')}}
+  function save(){
+    try {
+      settings=normalizeSettings(settings);
+      localStorage.setItem(KEY,JSON.stringify({...settings,schemaVersion:SETTINGS_SCHEMA_VERSION}));
+    } catch(_) {showToast('No fue posible guardar los ajustes en este navegador')}
+  }
   function showToast(message){const el=$('#toast');if(!el)return;el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3200)}
   function updateClock(){
     const now = new Date();
@@ -87,7 +113,7 @@
     $('#blur').value=settings.blur;$('#blurValue').textContent=`${settings.blur} px`;
     $$('[data-accent]').forEach(b=>b.classList.toggle('selected',b.dataset.accent===settings.accent));
     $$('[data-wall]').forEach(b=>b.classList.toggle('selected',b.dataset.wall===settings.wall));
-    const activeLogo=['apex','pulse','orbit'].includes(settings.logo)?settings.logo:'apex';
+    const activeLogo=allowedSettings.logo.includes(settings.logo)?settings.logo:'apex';
     $('#brandLogo').dataset.logo=activeLogo;
     $$('.logoChoices button[data-logo]').forEach(b=>{const selected=b.dataset.logo===activeLogo;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected));});
     $('#wallpaper').style.backgroundImage=settings.customWallpaper?`url(${JSON.stringify(settings.customWallpaper)})`:walls[settings.wall]||walls.dusk;

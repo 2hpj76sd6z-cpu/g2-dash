@@ -13,8 +13,8 @@
     launch.type='button';
     launch.className='mapsLaunch';
     launch.dataset.action='navigation';
-    launch.textContent='ABRIR GOOGLE MAPS';
-    launch.setAttribute('aria-label','Abrir Google Maps para navegación real');
+    launch.textContent='MAPA EN DASH';
+    launch.setAttribute('aria-label','Usar Google Maps dentro del DASH');
     const stamp=map.querySelector('.demoStamp');
     map.insertBefore(launch,stamp||null);
   }
@@ -53,7 +53,7 @@
     '<p class="hint">Selecciona una métrica y luego otra para intercambiarlas. Los valores GPS siguen siendo reales cuando el dispositivo los proporciona.</p>',
     '<div class="layoutMetricChoices" role="group" aria-label="Cambiar posición de métricas"></div></div>',
     '<button type="button" class="layoutReset">Restablecer distribución</button>',
-    '<p class="hint layoutEditorStatus" role="status">El mapa grande es ilustrativo; toca Navegación para abrir Google Maps.</p>'
+    '<p class="hint layoutEditorStatus" role="status">El mapa grande es ilustrativo; toca MAPA EN DASH para usar Google Maps sin salir del tablero.</p>'
   ].join('');
   const first = settings.querySelector('.settingActions');
   settings.insertBefore(container,first || null);
