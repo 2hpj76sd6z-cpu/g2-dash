@@ -241,12 +241,18 @@
       data.title !== 'Sin música activa' && data.title !== 'Conecta tu música';
     const playing = !preview && active && data.playing === true;
     const permission = $('#musicPermission');
+    const source = $('#songSource');
     permission.hidden = !window.G2Android || granted;
     $('#songName').textContent = preview ? musicText(data.title,'Pista de prueba') :
       (active ? musicText(data.title,'Sin título') : (granted?'Sin música activa':'Conecta tu música'));
     $('#songArtist').textContent = preview ? 'EJEMPLO VISUAL · NO REPRODUCE AUDIO' :
       (active ? musicText(data.artist,'Artista desconocido') :
        (granted?'Abre una app de música':'Autoriza música en Ajustes'));
+    if(source){
+      const sourceName=preview?'EJEMPLO VISUAL':active?(musicApps[data.package]||'ANDROID AUDIO'):'MÚSICA LOCAL';
+      source.textContent=sourceName;
+      source.dataset.source=String(data.package||'').toLowerCase();
+    }
     const art = $('#albumArt');
     if (active && !preview && typeof data.albumArt === 'string' &&
         data.albumArt.startsWith('data:image/jpeg;base64,') && data.albumArt.length < 400000) {
