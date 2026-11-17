@@ -393,6 +393,12 @@ public class MainActivity extends Activity {
         }).start();
     }
 
+    private void zoomNativeMap(float delta) {
+        if (Float.isNaN(delta) || Float.isInfinite(delta) || nativeGoogleMap == null) return;
+        float bounded = Math.max(-2f, Math.min(2f, delta));
+        nativeGoogleMap.animateCamera(CameraUpdateFactory.zoomBy(bounded));
+    }
+
     private void openMap(String destination) {
         showMapOverlay(destination);
     }
@@ -600,6 +606,10 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void openMap(String destination) {
             runOnUiThread(() -> MainActivity.this.openMap(destination));
+        }
+        @JavascriptInterface
+        public void mapZoom(float delta) {
+            runOnUiThread(() -> MainActivity.this.zoomNativeMap(delta));
         }
         @JavascriptInterface
         public void openHomeSettings() {
