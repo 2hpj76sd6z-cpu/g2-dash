@@ -249,7 +249,12 @@
     'deezer.android.app':'DEEZER',
     'org.videolan.vlc':'VLC',
     'com.maxmpz.audioplayer':'POWERAMP',
-    'in.krosbits.musicolet':'MUSICOLET'
+    'in.krosbits.musicolet':'MUSICOLET',
+    'com.amazon.mp3':'AMAZON MUSIC',
+    'com.samsung.android.app.music':'SAMSUNG MUSIC',
+    'com.sec.android.app.music':'SAMSUNG MUSIC',
+    'com.pandora.android':'PANDORA',
+    'com.soundcloud.android':'SOUNDCLOUD'
   };
   function musicText(value, fallback, max=160) {
     if (typeof value !== 'string' || !value.trim()) return fallback;
