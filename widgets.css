@@ -177,3 +177,9 @@ body[data-performance="light"] .bottomDock button{
   -webkit-backdrop-filter:none!important;
   backdrop-filter:none!important;
 }
+
+/* v0.5.8: make the Maps capability explicit without exposing the API key. */
+.mapApiStatus{display:block;margin-top:7px;color:#a9c4dc;font-size:10px;line-height:1.45}
+.mapApiStatus[data-state="ready"]{color:#8fe6ba}
+.mapApiStatus[data-state="fallback"]{color:#f1c98e}
+.mapApiStatus[data-state="web"]{color:#a9c4dc}
