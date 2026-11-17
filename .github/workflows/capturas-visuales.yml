@@ -2,7 +2,7 @@ name: G2 Dash - Capturas visuales
 
 on:
   push:
-    branches: [main]
+    branches: [main, test/v058-reviewed-apk]
   workflow_dispatch:
 
 permissions:
