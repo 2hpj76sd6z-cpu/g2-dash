@@ -385,9 +385,12 @@ try {
   }
   await opacitySlider.fill('8.5');
   const blueWidget = await widget.evaluate(widgetAppearance);
-  if (blueWidget[0] !== 'rgba(17, 32, 47, 0.085)' ||
-      await opacitySlider.getAttribute('aria-valuetext') !== '8.5%') {
-    throw new Error('La opacidad transparente no cambió con el control');
+  // El navegador puede redondear el color calculado a un canal alfa de 8 bits.
+  const appliedAlpha = Number(blueWidget[0].match(/, ([\d.]+)\)$/)?.[1]);
+  const accessibleValue = await opacitySlider.getAttribute('aria-valuetext');
+  if (!Number.isFinite(appliedAlpha) || Math.abs(appliedAlpha - 0.085) > 1 / 255 ||
+      accessibleValue?.replace(',', '.') !== '8.5%') {
+    throw new Error('Opacidad del widget inesperada: ' + blueWidget[0] + ' / ' + accessibleValue);
   }
   await page.locator('[data-widget-style="smoked"]').click();
   if (await opacitySlider.inputValue() !== '54') {
