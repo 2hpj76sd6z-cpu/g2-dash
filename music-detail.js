@@ -31,7 +31,10 @@
    const pos=Math.min(duration,Math.max(0,Number(data.positionMs)||0));
    const appNames={'io.github.jqssun.airplay':'AIRPLAY · IPHONE','com.spotify.music':'SPOTIFY','com.google.android.apps.youtube.music':'YOUTUBE MUSIC',
      'com.apple.android.music':'APPLE MUSIC','org.videolan.vlc':'VLC','com.maxmpz.audioplayer':'POWERAMP',
-     'com.aspiro.tidal':'TIDAL','deezer.android.app':'DEEZER'};
+     'com.aspiro.tidal':'TIDAL','deezer.android.app':'DEEZER',
+     'com.amazon.mp3':'AMAZON MUSIC','com.samsung.android.app.music':'SAMSUNG MUSIC',
+     'com.sec.android.app.music':'SAMSUNG MUSIC','com.pandora.android':'PANDORA',
+     'com.soundcloud.android':'SOUNDCLOUD'};
    const sourceName=preview?'EJEMPLO VISUAL':active?(appNames[data.package]||'ANDROID AUDIO'):'MÚSICA LOCAL';
    title.textContent=preview?'Pista de prueba':active?String(data.title||'Sin título').slice(0,160):granted?'Sin música activa':'Conecta tu música';
    artist.textContent=preview?'EJEMPLO · NO ES AUDIO REAL':active?String(data.artist||'Artista desconocido').slice(0,160):granted?'Abre el reproductor en este Android':'Autoriza el acceso a música en Android';
