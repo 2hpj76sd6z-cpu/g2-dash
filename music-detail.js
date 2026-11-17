@@ -53,6 +53,7 @@
    seek.disabled=!canSeek;
    seek.max=String(Math.max(1,Math.floor(duration)));
    if(!seek.matches(':active'))seek.value=String(Math.floor(pos));
+   seek.style.setProperty('--seek-progress',duration?((pos/duration)*100).toFixed(2)+'%':'0%');
    current.textContent=mmss(pos);total.textContent=mmss(duration);
    perm.hidden=!native||granted;
    status.textContent=preview?'Vista de integración: no se reproduce sonido real':
@@ -68,7 +69,7 @@
    expand.setAttribute('aria-label',expanded?'Restaurar tamaño del reproductor':'Expandir reproductor a pantalla completa');
    expand.title=expanded?'Restaurar tamaño':'Pantalla completa';
  }
- function open(){veil.hidden=false;setExpanded(false);update(last||{granted:false});$('musicDetailClose').focus()}
+ function open(expanded=false){veil.hidden=false;setExpanded(expanded);update(last||{granted:false});$('musicDetailClose').focus()}
  function close(){setExpanded(false);veil.hidden=true}
  function ctl(k){
    if(!window.G2Android||!last||last.preview===true)return;
@@ -81,8 +82,8 @@
  coverFrame.setAttribute('tabindex','0');
  coverFrame.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setExpanded(!veil.classList.contains('expanded'))}});
  if(miniAlbum){
-   miniAlbum.addEventListener('click',open);
-   miniAlbum.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
+   miniAlbum.addEventListener('click',()=>open(true));
+   miniAlbum.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open(true)}});
  }
  veil.addEventListener('click',e=>{if(e.target===veil)close()});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!veil.hidden){e.stopPropagation();close()}});
@@ -93,6 +94,7 @@
  seek.addEventListener('input',()=>{
    if(!canSeek)return;
    current.textContent=mmss(+seek.value);
+   seek.style.setProperty('--seek-progress',duration?((+seek.value/duration)*100).toFixed(2)+'%':'0%');
  });
  seek.addEventListener('change',()=>{
    if(!canSeek||!window.G2Android?.musicSeek)return;
