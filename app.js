@@ -83,8 +83,8 @@
     document.documentElement.style.setProperty('--widgetBlur',widgetBlur+'px');
     $('#opacity').value=opacity;$('#opacityValue').textContent=`${opacity}%`;
     $('#widgetBlur').value=widgetBlur;$('#widgetBlurValue').textContent=`${widgetBlur} px`;
-    $('[data-tint]').forEach(b=>{const chosen=b.dataset.tint===tint;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});
-    $('[data-widget-style]').forEach(b=>{const chosen=b.dataset.widgetStyle===widgetStyle;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});
+    $$('[data-tint]').forEach(b=>{const chosen=b.dataset.tint===tint;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});
+    $$('[data-widget-style]').forEach(b=>{const chosen=b.dataset.widgetStyle===widgetStyle;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});
     const styleNote=$('#widgetStyleNote');
     if(styleNote)styleNote.textContent=widgetStyle==='transparent'
       ? 'Transparente: se conserva solo un contorno sutil; los iconos y controles mantienen contraste.'
@@ -93,7 +93,7 @@
   function applyPerformanceMode(){
     const mode=settings.performance==='light'?'light':'normal';
     document.body.dataset.performance=mode;
-    $('.dashboard .glass, .sidebar.glass, .bottomDock button').forEach(el=>{
+    $$('.dashboard .glass, .sidebar.glass, .bottomDock button').forEach(el=>{
       if(mode==='light'){
         el.style.setProperty('backdrop-filter','none','important');
         el.style.setProperty('-webkit-backdrop-filter','none','important');
@@ -102,7 +102,7 @@
         el.style.removeProperty('-webkit-backdrop-filter');
       }
     });
-    $('[data-performance]').forEach(button=>{
+    $$('[data-performance]').forEach(button=>{
       const selected=button.dataset.performance===mode;
       button.classList.toggle('selected',selected);
       button.setAttribute('aria-pressed',String(selected));
@@ -346,9 +346,9 @@
   }));
   $$('[data-wall]').forEach(button=>button.addEventListener('click',()=>{settings.wall=button.dataset.wall;settings.customWallpaper=null;applySettings();save()}));
   $$('[data-accent]').forEach(button=>button.addEventListener('click',()=>{settings.accent=button.dataset.accent;applySettings();save()}));
-  $('[data-tint]').forEach(button=>button.addEventListener('click',()=>{settings.widgetTint=button.dataset.tint;applyWidgetSettings();save()}));
-  $('[data-widget-style]').forEach(button=>button.addEventListener('click',()=>{settings.widgetStyle=button.dataset.widgetStyle;applyWidgetSettings();save()}));
-  $('[data-performance]').forEach(button=>button.addEventListener('click',()=>{
+  $$('[data-tint]').forEach(button=>button.addEventListener('click',()=>{settings.widgetTint=button.dataset.tint;applyWidgetSettings();save()}));
+  $$('[data-widget-style]').forEach(button=>button.addEventListener('click',()=>{settings.widgetStyle=button.dataset.widgetStyle;applyWidgetSettings();save()}));
+  $$('[data-performance]').forEach(button=>button.addEventListener('click',()=>{
     settings.performance=button.dataset.performance==='light'?'light':'normal';
     applyPerformanceMode();save();
   }));
