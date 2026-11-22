@@ -247,6 +247,7 @@
     const hasDestination=Boolean($('#destination').value.trim());
     const panel=$('.mapPanel');
     panel.dataset.destination=hasDestination?'ready':'empty';
+    if(window.G2LiveMap){window.G2LiveMap.refreshLabel();return;}
     $('#mapStateTitle').textContent=hasDestination?'Destino preparado':'Mapa de demostración';
     const detail=$('#mapStateDetail');
     if(detail)detail.textContent=window.G2Android
@@ -289,6 +290,7 @@
   }
   // Etiquetas locales: nunca se descargan metadatos de servicios externos.
   const musicApps = {
+    'com.syu.carlink':'CARLINK 2.0',
     'io.github.jqssun.airplay':'AIRPLAY · IPHONE',
     'com.spotify.music':'SPOTIFY',
     'com.google.android.apps.youtube.music':'YOUTUBE MUSIC',
@@ -308,6 +310,13 @@
     if (typeof value !== 'string' || !value.trim()) return fallback;
     return value.trim().slice(0,max);
   }
+  const miniSeek=$('#miniSeek');
+  let scrubbing=false;
+  miniSeek.addEventListener('pointerdown',()=>{scrubbing=true;});
+  miniSeek.addEventListener('pointerup',()=>{scrubbing=false;});
+  miniSeek.addEventListener('pointercancel',()=>{scrubbing=false;});
+  miniSeek.addEventListener('input',()=>{$('#musicCurrent').textContent=mmss(+miniSeek.value);});
+  miniSeek.addEventListener('change',()=>{scrubbing=false;if(!miniSeek.disabled)window.G2Android?.musicSeek(+miniSeek.value);});
   window.G2MusicUpdate = function(data) {
     if (!data || typeof data !== 'object') return;
     const preview = data.preview === true;
@@ -322,9 +331,9 @@
       (active ? musicText(data.title,'Sin título') : (granted?'Sin música activa':'Conecta tu música'));
     $('#songArtist').textContent = preview ? 'EJEMPLO VISUAL · NO REPRODUCE AUDIO' :
       (active ? musicText(data.artist,'Artista desconocido') :
-       (granted?'Abre una app de música':'Autoriza música en Ajustes'));
+       (granted?'Abre CarLink y reproduce una canción':'Autoriza música en Ajustes'));
     if(source){
-      const sourceName=preview?'EJEMPLO VISUAL':active?(musicApps[data.package]||'ANDROID AUDIO'):'MÚSICA LOCAL';
+      const sourceName=preview?'EJEMPLO VISUAL':active?(data.carLink?'CARLINK 2.0':musicApps[data.package]||'ANDROID AUDIO'):'MÚSICA LOCAL';
       source.textContent=sourceName;
       source.dataset.source=String(data.package||'').toLowerCase();
     }
@@ -337,14 +346,20 @@
     }
     const duration = active || preview ? Math.max(0,Number(data.durationMs)||0) : 0;
     const position = Math.min(duration,Math.max(0,Number(data.positionMs)||0));
-    $('#musicCurrent').textContent=mmss(position);
+    const seekable=active && !preview && data.canSeek===true && duration>0 && Boolean(window.G2Android);
+    miniSeek.hidden=!seekable; miniSeek.disabled=!seekable;
+    $('#trackProgress').parentElement.hidden=seekable;
+    if (!scrubbing || !seekable) {
+      miniSeek.max=duration||1; miniSeek.value=position;
+      $('#musicCurrent').textContent=mmss(position);
+    }
     $('#musicDuration').textContent=mmss(duration);
     $('#trackProgress').style.width=duration > 0 ? Math.min(100,position/duration*100)+'%' : '0%';
     $('#play .icon use').setAttribute('href',playing?'#i-pause':'#i-play');
     $('#play').setAttribute('aria-label',playing?'Pausar música':'Reproducir música');
     const status = preview?'EJEMPLO VISUAL' : !granted?'Permiso pendiente' : !active?'Sin reproducción' : playing?'Reproduciendo':'En pausa';
     $('#musicStatus').textContent=status;
-    $('#musicSource').textContent=preview?'NO ES AUDIO REAL' : (active ? (musicApps[data.package]||'ANDROID AUDIO') : (granted?'ANDROID':'SIN CONECTAR'));
+    $('#musicSource').textContent=preview?'NO ES AUDIO REAL' : (active ? (data.carLink?'CARLINK 2.0':musicApps[data.package]||'ANDROID AUDIO') : (granted?'ANDROID':'SIN CONECTAR'));
     $('#deviceStatus').textContent = preview ? 'VISTA DE PRUEBA' : (granted?'ANDROID · MÚSICA':'ANDROID · v0.5.8');
     $('.musicPanel').dataset.media=preview?'preview':(!granted?'permission':(!active?'idle':(playing?'playing':'paused')));
     window.G2MusicDetail?.update(data);
@@ -383,7 +398,11 @@
       case 'car-cutout':photoChange(0);break;
       case 'car-prev':photoChange(currentPhoto-1);break;
       case 'car-next':photoChange(currentPhoto+1);break;
-      case 'gps':activateGps();break;
+      case 'carlink':window.G2Android?.openTarget('music');break;
+      case 'music':if(window.G2Android){if(['playing','paused'].includes($('.musicPanel').dataset.media))window.G2MusicDetail?.open(true);else window.G2Android.openTarget('music');}else window.G2MusicDetail?.open();break;
+      case 'choose-carlink':window.G2Android?.openTarget('choose-carlink');break;
+      case 'choose-gps':window.G2Android?.chooseLocationSource();break;
+      case 'gps':if(window.G2LiveMap)window.G2LiveMap.locate();else activateGps();break;
       case 'navigation':launchNavigation();break;
       case 'zoom-in':case 'zoom-out':{const delta=action==='zoom-in'?.75:-.75;if(window.G2Android?.mapZoom){window.G2Android.mapZoom(delta);showToast('Zoom de Google Maps aplicado');}else{zoom=Math.max(.8,Math.min(1.8,zoom+(action==='zoom-in'?.1:-.1)));$('#mapArtwork').style.transform=`scale(${zoom})`;showToast('Zoom ilustrativo: no sustituye navegación real');}break;}
       case 'music-access':if(window.G2Android)window.G2Android.openMusicAccess();else showToast('Solo en Android');break;
@@ -396,7 +415,7 @@
       case 'reset-settings':settings={...defaults};applySettings();updateClock();save();showToast('Ajustes restablecidos');break;
       case 'fullscreen':if(document.fullscreenElement){document.exitFullscreen?.()}else{document.documentElement.requestFullscreen?.().catch(()=>showToast('Pantalla completa no disponible'))}break;
       case 'apps':window.G2Apps?.open();break;
-      case 'phone':case 'bluetooth':case 'radio':case 'music':if(window.G2Android)window.G2Android.openTarget(action);else showToast('Acceso pendiente de integración nativa en Android');break;
+      case 'phone':case 'bluetooth':case 'radio':if(window.G2Android)window.G2Android.openTarget(action);else showToast('Acceso pendiente de integración nativa en Android');break;
       default:showToast('Función en desarrollo');
     }
   }

@@ -100,3 +100,30 @@
 .musicPanel .trackRow > .smallAction { grid-column: 3; }
 .mapBottom .where > div { min-width: 0; text-align: center; }
 .vehicleStats > div { justify-content: center; }
+
+/* La altura real del panel limita el reloj incluso con el escalado de texto del estéreo. */
+.dashboard { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+.clockPanel { align-items:center; gap:3px; padding:4px 7px; }
+.clockPanel .clockDisplay { align-items:baseline; max-width:100%; flex:none; }
+.clockPanel .digitalClock { font-size:var(--fit-clock, clamp(28px,6vw,78px)); line-height:1; }
+.clockPanel .clockPeriod { margin:0; font-size:clamp(9px,1vw,13px); line-height:1; }
+.clockPanel .calendarRow { flex:none; max-width:100%; margin:0; line-height:1.2; font-size:clamp(10px,1.15vw,15px); }
+.clockPanel .calendarRow .icon { width:1em; height:1em; }
+.clockPanel .underLine { margin:0; flex:none; }
+body[data-live-map] .mapPanel { display:flex; flex-direction:column; gap:4px; }
+body[data-live-map] .mapPanel :is(.mapArtwork,.zoomStack,.demoStamp,.mapsLaunch) { display:none; }
+body[data-live-map] .mapPanel .mapBar, body[data-live-map] .mapPanel .mapBottom { position:static; flex:none; }
+body[data-live-map] #liveMapSlot { order:1; flex:1; min-height:0; background:#1c2c37; }
+body[data-live-map] .mapPanel .mapBottom { order:2; }
+body[data-live-map] .mapPanel .where { max-width:calc(100% - 44px); }
+@media(max-height:510px) {
+ .dashboard .leftStack { grid-template-rows:minmax(66px,29%) minmax(0,1fr); }
+ .musicPanel .album {height:clamp(32px,9vh,50px);}
+ .musicPanel .trackRow {gap:2px;}
+ .musicPanel .musicControls button {min-height:24px;}
+ .musicPanel .musicControls .playButton {width:29px;height:29px;}
+ .dashboard .clockPanel .underLine {display:none;}
+}
+
+#miniSeek {width:100%; height:20px; margin:0; accent-color:var(--accent); display:block;}
+#miniSeek[hidden], .timelineBar[hidden] { display:none!important; }

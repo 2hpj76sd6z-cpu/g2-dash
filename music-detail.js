@@ -29,13 +29,13 @@
    const native=Boolean(window.G2Android);
    duration=(active||preview)&&Number.isFinite(+data.durationMs)?Math.min(24*60*60*1000,Math.max(0,+data.durationMs)):0;
    const pos=Math.min(duration,Math.max(0,Number(data.positionMs)||0));
-   const appNames={'io.github.jqssun.airplay':'AIRPLAY · IPHONE','com.spotify.music':'SPOTIFY','com.google.android.apps.youtube.music':'YOUTUBE MUSIC',
+   const appNames={'com.syu.carlink':'CARLINK 2.0','io.github.jqssun.airplay':'AIRPLAY · IPHONE','com.spotify.music':'SPOTIFY','com.google.android.apps.youtube.music':'YOUTUBE MUSIC',
      'com.apple.android.music':'APPLE MUSIC','org.videolan.vlc':'VLC','com.maxmpz.audioplayer':'POWERAMP',
      'com.aspiro.tidal':'TIDAL','deezer.android.app':'DEEZER',
      'com.amazon.mp3':'AMAZON MUSIC','com.samsung.android.app.music':'SAMSUNG MUSIC',
      'com.sec.android.app.music':'SAMSUNG MUSIC','com.pandora.android':'PANDORA',
      'com.soundcloud.android':'SOUNDCLOUD'};
-   const sourceName=preview?'EJEMPLO VISUAL':active?(appNames[data.package]||'ANDROID AUDIO'):'MÚSICA LOCAL';
+   const sourceName=preview?'EJEMPLO VISUAL':active?(data.carLink?'CARLINK 2.0':appNames[data.package]||'ANDROID AUDIO'):'MÚSICA LOCAL';
    title.textContent=preview?'Pista de prueba':active?String(data.title||'Sin título').slice(0,160):granted?'Sin música activa':'Conecta tu música';
    artist.textContent=preview?'EJEMPLO · NO ES AUDIO REAL':active?String(data.artist||'Artista desconocido').slice(0,160):granted?'Abre el reproductor en este Android':'Autoriza el acceso a música en Android';
    album.textContent=preview?'ÁLBUM DE PRUEBA':active?String(data.album||'Álbum no disponible').slice(0,160):'ÁLBUM NO DISPONIBLE';

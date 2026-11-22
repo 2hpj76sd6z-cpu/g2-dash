@@ -10,10 +10,10 @@ android {
     compileSdk 35
 
     defaultConfig {
-        applicationId 'com.dobleg.g2dash'
+        applicationId 'com.dobleg.g2dash.prueba20'
         minSdk 23
         targetSdk 35
-        versionCode 19
+        versionCode 20
         versionName '0.5.8-dev'
         buildConfigField "String", "GOOGLE_MAPS_API_KEY", "\"${escapedGoogleMapsApiKey}\""
         manifestPlaceholders = [GOOGLE_MAPS_API_KEY: googleMapsApiKey]
@@ -45,7 +45,7 @@ android {
 
 tasks.register('bundleG2Web', Copy) {
     from(rootProject.projectDir.parentFile) {
-        include 'index.html', 'style.css', 'brand.css', 'widgets.css', 'ibiza-cutout.css', 'media.css', 'adaptive.css', 'intro.css', 'intro.js', 'ibiza360.css', 'ibiza360.js', 'apps.css', 'apps.js', 'music-detail.css', 'music-detail.js', 'airplay.css', 'airplay.js', 'app.js', 'touch-studio.css', 'touch-studio.js', 'layout-controls.css', 'layout-controls.js', 'assets/**'
+        include 'index.html', 'style.css', 'brand.css', 'widgets.css', 'ibiza-cutout.css', 'media.css', 'adaptive.css', 'intro.css', 'intro.js', 'ibiza360.css', 'ibiza360.js', 'apps.css', 'apps.js', 'music-detail.css', 'music-detail.js', 'airplay.css', 'airplay.js', 'app.js', 'touch-studio.css', 'touch-studio.js', 'layout-controls.css', 'layout-controls.js', 'map-widget.js', 'assets/**'
     }
     into(layout.buildDirectory.dir('generated/g2web/www'))
 }

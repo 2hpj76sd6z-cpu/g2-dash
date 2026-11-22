@@ -483,6 +483,41 @@ try {
     ]
   };
   await writeFile(path.join(root, 'meta.json'), JSON.stringify(meta, null, 2) + '\n');
+  const stereo = await browser.newPage({viewport:{width:800,height:480},deviceScaleFactor:1.5});
+  await stereo.addInitScript(() => {
+    window.probe={bounds:[],actions:[],seek:0};
+    window.G2Android={hasNativeMaps:()=>false,usesPhoneGps:()=>true,
+      mapBounds:(...args)=>window.probe.bounds=args,openTarget:key=>window.probe.actions.push(key),
+      musicSeek:value=>window.probe.seek=value,getInstalledApps:()=>'[]'};
+  });
+  await stereo.goto(base);
+  await stereo.locator('#startupSkip').click();
+  await stereo.waitForFunction(()=>window.probe.bounds[2]>.1);
+  await stereo.evaluate(()=>window.G2LiveMap.phoneUpdate(true,32,'GPS del celular'));
+  if(await stereo.locator('#speedLabel').innerText()!=='GPS del celular' ||
+      await stereo.locator('.mapArtwork').isVisible())throw new Error('Origen de GPS o mapa de arranque incorrecto');
+  for (const [width,height] of [[800,480],[720,400],[1024,600],[1280,720]]) {
+    await stereo.setViewportSize({width,height});
+    await stereo.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+    const clipped=await stereo.evaluate(()=>{
+      const rect=s=>document.querySelector(s).getBoundingClientRect();
+      const tile=rect('.clockPanel'), date=rect('.calendarRow'), time=rect('.clockDisplay');
+      return date.bottom>tile.bottom || time.top<tile.top || date.top<time.bottom-1 ||
+        Math.abs((date.left+date.right-tile.left-tile.right)/2)>2;
+    });
+    if(clipped) throw new Error('Reloj o fecha cortados en '+width+'×'+height);
+  }
+  await stereo.locator('.bottomDock [data-action="music"]').click();
+  if(!(await stereo.evaluate(()=>window.probe.actions.includes('music')))) throw new Error('Falta conexión con CarLink');
+  await stereo.evaluate(()=>window.G2MusicUpdate({granted:true,playing:true,title:'Prueba de controles',
+    package:'com.syu.carlink',canSeek:true,durationMs:180000,positionMs:10000}));
+  await stereo.locator('#miniSeek').fill('80000');
+  if(await stereo.evaluate(()=>window.probe.seek)!==80000)throw new Error('El segundero no envió la posición');
+  await stereo.locator('.bottomDock [data-action="music"]').click();
+  await stereo.waitForFunction(()=>window.probe.bounds[2]===0);
+  await stereo.locator('#musicDetailClose').click();
+  await stereo.waitForFunction(()=>window.probe.bounds[2]>.1);
+  await stereo.close();
   if (errors.length) throw new Error('Errores JS de la interfaz: ' + errors.join(' | '));
 } finally {
   await browser.close();

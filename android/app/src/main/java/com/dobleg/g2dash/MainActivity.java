@@ -76,6 +76,17 @@ public class MainActivity extends Activity {
     private GeolocationPermissions.Callback pendingGeo;
     private String pendingGeoOrigin;
     private android.webkit.ValueCallback<Uri[]> uploadCallback;
+    private final PhoneGps phoneGps = new PhoneGps();
+    private boolean foreground, expanded, mapStarted, preferWeb, tilesReady;
+    private boolean followMap = true;
+    private boolean webFailed;
+    private LatLng lastFix, lastWebFix;
+    private long lastWebAt;
+    private long phoneAt;
+
+    private com.google.android.gms.maps.model.Marker phoneMarker;
+    private String mapQuery = "";
+    private FrameLayout.LayoutParams inlineBounds;
     private boolean nativeLocationPending = false;
 
     @Override
@@ -112,12 +123,21 @@ public class MainActivity extends Activity {
                 @Override
                 public void onMapReady(GoogleMap map) {
                     nativeGoogleMap = map;
+                    map.setOnMapLoadedCallback(() -> tilesReady = true);
+                    map.setOnCameraMoveStartedListener(reason -> {
+                        if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) followMap = false;
+                    });
                     map.getUiSettings().setZoomControlsEnabled(true);
                     map.getUiSettings().setCompassEnabled(true);
                     map.getUiSettings().setMapToolbarEnabled(false);
-                    if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                    if (!usingPhone() && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
                         try { map.setMyLocationEnabled(true); } catch (SecurityException ignored) { }
+                    }
+                    if (mapStarted && !preferWeb) {
+                        renderMap();
+                        if (!mapQuery.isEmpty()) centerNativeMap(mapQuery);
+                        else if (lastFix != null) map.moveCamera(CameraUpdateFactory.newLatLngZoom(lastFix, 16));
                     }
                 }
             });
@@ -177,6 +197,7 @@ public class MainActivity extends Activity {
                 super.onPageFinished(view, url);
                 if (!HOME_URL.equals(url)) return;
                 pageReady = true;
+                startPhone();
                 emitLifecycle(restoredInstance ? "restored" : "cold_start");
                 restoredInstance = false;
             }
@@ -231,7 +252,20 @@ public class MainActivity extends Activity {
         mapSettings.setGeolocationEnabled(true);
         mapSettings.setMediaPlaybackRequiresUserGesture(true);
         mapWebView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        mapWebView.setOnTouchListener((view,event) -> {
+            if (event.getActionMasked() == android.view.MotionEvent.ACTION_MOVE) followMap = false;
+            return false;
+        });
         mapWebView.setWebViewClient(new WebViewClient() {
+            @Override public void onPageFinished(WebView view,String url) {
+                if (!webFailed) webView.evaluateJavascript("window.G2LiveMap?.mapLoaded()",null);
+            }
+            @Override public void onReceivedError(WebView view, WebResourceRequest req,
+                    android.webkit.WebResourceError error) {
+                if (!req.isForMainFrame()) return;
+                webFailed = true;
+                webView.evaluateJavascript("window.G2LiveMap?.mapError()", null);
+            }
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) {
                 Uri u = req.getUrl();
@@ -246,7 +280,7 @@ public class MainActivity extends Activity {
             @Override
             public void onGeolocationPermissionsShowPrompt(
                     String origin, GeolocationPermissions.Callback callback) {
-                if (!isMapOrigin(origin)) {
+                if (usingPhone() || !isMapOrigin(origin)) {
                     callback.invoke(origin, false, false);
                     return;
                 }
@@ -321,46 +355,126 @@ public class MainActivity extends Activity {
                 && isMapHost(uri.getHost());
     }
 
-    private void showMapOverlay(String destination) {
-        if (nativeMapView != null && nativeGoogleMap != null) {
-            webView.setVisibility(View.GONE);
-            mapWebView.setVisibility(View.GONE);
-            nativeMapView.setVisibility(View.VISIBLE);
-            closeMapButton.setVisibility(View.VISIBLE);
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                try { nativeGoogleMap.setMyLocationEnabled(true); } catch (SecurityException ignored) { }
-            } else {
-                nativeLocationPending = true;
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                        LOCATION_REQUEST);
+    private boolean usingPhone() {
+        return !getPreferences(MODE_PRIVATE).getString("gpsHost", "").isEmpty();
+    }
+
+    private void renderMap() {
+        boolean visible = expanded || inlineBounds != null;
+        boolean nativeMode = nativeMapView != null && !preferWeb;
+        View surface = nativeMode ? nativeMapView : mapWebView;
+        if (nativeMapView != null && !nativeMode) nativeMapView.setVisibility(View.GONE);
+        if (nativeMode) mapWebView.setVisibility(View.GONE);
+        closeMapButton.setVisibility(expanded ? View.VISIBLE : View.GONE);
+        if (!visible) { surface.setVisibility(View.GONE); return; }
+        surface.setLayoutParams(expanded ? new FrameLayout.LayoutParams(-1, -1) : inlineBounds);
+        surface.setVisibility(View.VISIBLE);
+        if (mapStarted) return;
+        mapStarted = true;
+        if (!nativeMode) loadWebMap();
+        else root.postDelayed(() -> {
+            if (!tilesReady && !isFinishing() && !isDestroyed()) {
+                preferWeb = true;
+                renderMap();
+                loadWebMap();
             }
-            centerNativeMap(destination == null ? "" : destination.trim());
-            return;
+        }, 12000);
+    }
+
+    private void loadWebMap() {
+        String url = "https://www.google.com/maps/@?api=1&map_action=map";
+        if (!mapQuery.isEmpty()) url = "https://www.google.com/maps/search/?api=1&query=" + Uri.encode(mapQuery);
+        else if (lastFix != null) url += "&zoom=16&center=" + lastFix.latitude + "," + lastFix.longitude;
+        lastWebFix = lastFix;
+        lastWebAt = android.os.SystemClock.elapsedRealtime();
+        webFailed = false;
+        mapWebView.loadUrl(url);
+    }
+
+    private void position(double lat, double lon, boolean center) {
+        if (Double.isNaN(lat) || Double.isNaN(lon) || Math.abs(lat)>90 || Math.abs(lon)>180) return;
+        boolean first = lastFix == null;
+        lastFix = new LatLng(lat, lon);
+        if (center) { followMap = true; mapQuery = ""; }
+        if (nativeGoogleMap != null && !preferWeb) {
+            if (usingPhone()) {
+                if (phoneMarker == null) phoneMarker = nativeGoogleMap.addMarker(new MarkerOptions().position(lastFix).title("GPS del celular"));
+                else phoneMarker.setPosition(lastFix);
+            } else if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                nativeGoogleMap.setMyLocationEnabled(true);
+            }
+            if (followMap && mapQuery.isEmpty()) {
+                if (first || center) nativeGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastFix, 16));
+                else nativeGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(lastFix));
+            }
+        } else if ((nativeMapView == null || preferWeb) && mapStarted && mapQuery.isEmpty()
+                && (first || center || (followMap && lastWebFix != null
+                    && android.os.SystemClock.elapsedRealtime()-lastWebAt >= 20000
+                    && (Math.abs(lastWebFix.latitude-lat)+Math.abs(lastWebFix.longitude-lon) > .0005)))) {
+            loadWebMap();
         }
-        if (mapWebView == null) return;
+    }
+
+    private void showMapOverlay(String destination) {
         String query = destination == null ? "" : destination.trim();
-        Uri uri = Uri.parse(query.isEmpty()
-                ? "https://www.google.com/maps/"
-                : "https://www.google.com/maps/search/?api=1&query=" + Uri.encode(query));
-        webView.setVisibility(View.GONE);
-        mapWebView.setVisibility(View.VISIBLE);
-        closeMapButton.setVisibility(View.VISIBLE);
-        mapWebView.loadUrl(uri.toString());
+        if (query.isEmpty()) expanded = true;
+        else { mapQuery = query; followMap = false; }
+        renderMap();
+        if (!query.isEmpty()) {
+            if (nativeGoogleMap != null && !preferWeb) centerNativeMap(query);
+            else loadWebMap();
+        } else if (webFailed) loadWebMap();
     }
 
     private void closeMapOverlay() {
-        boolean nativeVisible = nativeMapView != null
-                && nativeMapView.getVisibility() == View.VISIBLE;
-        boolean webVisible = mapWebView != null
-                && mapWebView.getVisibility() == View.VISIBLE;
-        if (!nativeVisible && !webVisible) return;
-        if (webVisible) mapWebView.stopLoading();
-        if (nativeMapView != null) nativeMapView.setVisibility(View.GONE);
-        mapWebView.setVisibility(View.GONE);
-        closeMapButton.setVisibility(View.GONE);
-        webView.setVisibility(View.VISIBLE);
+        expanded = false;
+        renderMap();
         webView.requestFocus();
+    }
+
+    private void startPhone() {
+        phoneGps.stop();
+        if (!foreground || !pageReady || !usingPhone()) return;
+        phoneGps.start(getPreferences(MODE_PRIVATE).getString("gpsHost",""),
+            getPreferences(MODE_PRIVATE).getInt("gpsPort", 11123), (lat, lon, speed, status) -> {
+                boolean valid = "GPS del celular".equals(status);
+                if (valid) { phoneAt=android.os.SystemClock.elapsedRealtime(); position(lat, lon, false); }
+                webView.evaluateJavascript("window.G2LiveMap?.phoneUpdate(" + valid + "," +
+                        (Double.isNaN(speed) || Double.isInfinite(speed) ? -1 : speed) + "," + JSONObject.quote(status) + ")", null);
+            });
+    }
+
+    private void locationSettings() {
+        android.widget.EditText endpoint = new android.widget.EditText(this);
+        endpoint.setSingleLine(true);
+        endpoint.setHint("192.168.1.25:11123");
+        if (usingPhone()) endpoint.setText(getPreferences(MODE_PRIVATE).getString("gpsHost","") + ":" +
+                getPreferences(MODE_PRIVATE).getInt("gpsPort",11123));
+        AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Fuente de ubicación")
+                .setMessage("Para usar el GPS del celular, activa un emisor NMEA TCP con mensajes RMC en el teléfono. Conecta ambos a la misma red privada e introduce la IP y el puerto que muestra el emisor.")
+                .setView(endpoint).setPositiveButton("GPS del celular", null)
+                .setNeutralButton("GPS del estéreo", (d,w) -> changeSource("",0))
+                .setNegativeButton("Cancelar", null).create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            String[] parts = endpoint.getText().toString().trim().split(":", -1);
+            int port = 0;
+            try { if (parts.length == 2) port = Integer.parseInt(parts[1]); } catch (NumberFormatException ignored) {}
+            if (port < 1 || port > 65535 || !PhoneGps.localAddress(parts[0])) {
+                endpoint.setError("Escribe una IPv4 privada y un puerto del 1 al 65535"); return;
+            }
+            changeSource(parts[0],port);
+            dialog.dismiss();
+        });
+    }
+
+    private void changeSource(String host, int port) {
+        getPreferences(MODE_PRIVATE).edit().putString("gpsHost",host).putInt("gpsPort",port).apply();
+        lastFix = null; followMap = true; mapQuery = "";
+        if (phoneMarker != null) { phoneMarker.remove(); phoneMarker = null; }
+        if (nativeGoogleMap != null) nativeGoogleMap.setMyLocationEnabled(false);
+        webView.evaluateJavascript("window.G2LiveMap?.sourceChanged()",null);
+        startPhone();
     }
 
     private void centerNativeMap(String query) {
@@ -379,9 +493,10 @@ public class MainActivity extends Activity {
                 final double lat = address.getLatitude();
                 final double lng = address.getLongitude();
                 runOnUiThread(() -> {
-                    if (nativeGoogleMap == null) return;
+                    if (nativeGoogleMap == null || !term.equals(mapQuery)) return;
                     LatLng point = new LatLng(lat, lng);
                     nativeGoogleMap.clear();
+                    phoneMarker = null;
                     nativeGoogleMap.addMarker(new MarkerOptions().position(point).title(term));
                     nativeGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 15f));
                 });
@@ -412,12 +527,10 @@ public class MainActivity extends Activity {
                 openExternal(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
                 break;
             case "music":
-                try {
-                    openExternal(Intent.makeMainSelectorActivity(Intent.ACTION_MAIN,
-                            Intent.CATEGORY_APP_MUSIC));
-                } catch (Exception ex) {
-                    showInstalledApps();
-                }
+                openCarLink(false);
+                break;
+            case "choose-carlink":
+                openCarLink(true);
                 break;
             case "radio":
             case "apps":
@@ -428,6 +541,34 @@ public class MainActivity extends Activity {
         }
     }
 
+
+    private void openCarLink(boolean choose) {
+        Intent query = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
+        PackageManager pm = getPackageManager();
+        List<ResolveInfo> apps = new ArrayList<>(pm.queryIntentActivities(query, 0));
+        java.util.Iterator<ResolveInfo> iterator = apps.iterator();
+        while (iterator.hasNext()) {
+            ResolveInfo a = iterator.next();
+            if (a.activityInfo == null || a.activityInfo.packageName.equals(getPackageName())) iterator.remove();
+        }
+        String saved = getPreferences(MODE_PRIVATE).getString("carlinkApp", "");
+        ResolveInfo known = null;
+        for (ResolveInfo info : apps) {
+            String pkg = info.activityInfo.packageName;
+            if (!choose && pkg.equals(saved)) { launchValidatedApp(pkg,info.activityInfo.name); return; }
+            String label = info.loadLabel(pm).toString().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]","");
+            if (pkg.equals("com.syu.carlink") || (known == null && label.matches("carlink(20|2)?"))) known = info;
+        }
+        if (!choose && known != null) { launchValidatedApp(known.activityInfo.packageName,known.activityInfo.name); return; }
+        apps.sort(Comparator.comparing(a -> a.loadLabel(pm).toString()));
+        CharSequence[] labels = new CharSequence[apps.size()];
+        for (int i=0;i<apps.size();i++) labels[i]=apps.get(i).loadLabel(pm);
+        new AlertDialog.Builder(this).setTitle("Elige la app CarLink de tu estéreo").setItems(labels,(d,index)->{
+            ResolveInfo a=apps.get(index);
+            getPreferences(MODE_PRIVATE).edit().putString("carlinkApp",a.activityInfo.packageName).apply();
+            launchValidatedApp(a.activityInfo.packageName,a.activityInfo.name);
+        }).setNegativeButton("Cancelar",null).show();
+    }
 
     private void showInstalledApps() {
         Intent filter = new Intent(Intent.ACTION_MAIN);
@@ -567,6 +708,29 @@ public class MainActivity extends Activity {
     }
 
     private class AndroidBridge {
+        @JavascriptInterface public void retryWidgetMap() {runOnUiThread(() -> {
+            if (nativeMapView == null || preferWeb) loadWebMap();
+        });}
+        @JavascriptInterface public boolean usesPhoneGps() { return usingPhone(); }
+        @JavascriptInterface public void chooseLocationSource() { runOnUiThread(() -> locationSettings()); }
+        @JavascriptInterface public void centerFix(double lat, double lon, boolean center) {
+            runOnUiThread(() -> { if (!usingPhone()) position(lat,lon,center); });
+        }
+        @JavascriptInterface public void recenterPhone() {
+            runOnUiThread(() -> { if (usingPhone() && lastFix != null && android.os.SystemClock.elapsedRealtime()-phoneAt < 30000) position(lastFix.latitude,lastFix.longitude,true); });
+        }
+        @JavascriptInterface public void mapBounds(double x,double y,double w,double h) {
+            runOnUiThread(() -> {
+                inlineBounds = null;
+                if (w > 0 && h > 0 && x >= 0 && y >= 0 && x+w <= 1.002 && y+h <= 1.002) {
+                    int width = webView.getWidth(), height = webView.getHeight();
+                    inlineBounds = new FrameLayout.LayoutParams(Math.max(1,(int)(w*width)), Math.max(1,(int)(h*height)));
+                    inlineBounds.leftMargin = (int)Math.round(x*width);
+                    inlineBounds.topMargin = (int)Math.round(y*height);
+                }
+                renderMap();
+            });
+        }
         @JavascriptInterface
         public String getAirPlaySupport() {
             return getAirPlaySupportJson();
@@ -656,8 +820,7 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if ((mapWebView != null && mapWebView.getVisibility() == View.VISIBLE)
-                || (nativeMapView != null && nativeMapView.getVisibility() == View.VISIBLE)) {
+        if (expanded) {
             closeMapOverlay();
             return;
         }
@@ -681,6 +844,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
+        foreground = true;
+        startPhone();
         if (nativeMapView != null) nativeMapView.onStart();
         if (mediaBridge != null) mediaBridge.start();
     }
@@ -724,6 +889,8 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onStop() {
+        foreground = false;
+        phoneGps.stop();
         if (nativeMapView != null) nativeMapView.onStop();
         if (mediaBridge != null) mediaBridge.stop();
         super.onStop();

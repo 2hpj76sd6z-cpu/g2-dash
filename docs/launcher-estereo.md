@@ -18,3 +18,11 @@ El GPS requiere permiso de ubicación precisa. La música usa los datos y accion
 ## Criterios para entregar una APK de prueba
 
 GitHub Actions debe compilar el APK, validar su firma, comprobar el paquete, la actividad principal y los recursos empacados. Las pruebas visuales deben decodificar las dos fotografías y comprobar su centrado en tres tamaños, el cambio de fondo y la persistencia de los ajustes. El montaje con el estéreo y un teléfono conectado completa la verificación de GPS, multimedia y retorno desde CarLink.
+
+## Prueba en estéreo · compilación 20
+
+La edición G² Dash 20 se instala junto a la compilación 19 con ajustes independientes. Al mostrar el tablero monta una superficie interactiva de Google Maps en el widget. Requiere internet para cargar calles. El SDK nativo usa su clave configurada y la vista web de Google Maps sirve de respaldo. El buscador centra un destino. La visualización de una ruta ya iniciada en CarPlay pertenece a CarLink.
+
+Música abre CarLink para conectar e iniciar reproducción. Si hay una sesión con metadatos, Música abre el reproductor de Dash. La portada abre el reproductor ampliado. El botón de conexión del reproductor abre CarLink. En Personalización se puede seleccionar otro nombre de receptor. La barra permite adelantar cuando la sesión publica duración y la acción de búsqueda.
+
+En Personalización → Fuente de ubicación se elige GPS del estéreo o GPS del celular. Para el celular, ambos equipos deben poder comunicarse por la misma red privada. Usa en el teléfono un emisor GPS en modo servidor TCP con sentencias NMEA RMC y suma de comprobación. Escribe su dirección IPv4 privada y puerto en Dash. Concede ubicación al emisor y mantenlo activo según las opciones de tu teléfono. Dash recuerda el destino de conexión y reintenta al volver al tablero. El transporte NMEA TCP de esta opción es local y sin cifrar. Dash descarta datos inválidos o caducados y distingue ambos orígenes en pantalla.

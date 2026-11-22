@@ -118,7 +118,7 @@ final class G2MediaBridge {
         for (MediaController item : all) {
             if (item == null) continue;
             PlaybackState state = item.getPlaybackState();
-            if ("io.github.jqssun.airplay".equals(item.getPackageName())
+            if (("com.syu.carlink".equals(item.getPackageName()) || activity.getPreferences(0).getString("carlinkApp","").equals(item.getPackageName()))
                     && state != null && state.getState() == PlaybackState.STATE_PLAYING) return item;
         }
         for (MediaController item : all) {
@@ -137,7 +137,14 @@ final class G2MediaBridge {
         }
         MediaController item = preferredSession();
         if (item == null) {
-            Toast.makeText(activity, "Abre primero una app de música", Toast.LENGTH_SHORT).show();
+            android.media.AudioManager audio=(android.media.AudioManager)activity.getSystemService(Context.AUDIO_SERVICE);
+            int key="toggle".equals(action)?android.view.KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                    "next".equals(action)?android.view.KeyEvent.KEYCODE_MEDIA_NEXT:
+                    "previous".equals(action)?android.view.KeyEvent.KEYCODE_MEDIA_PREVIOUS:0;
+            if (audio!=null && key!=0) {
+                audio.dispatchMediaKeyEvent(new android.view.KeyEvent(android.view.KeyEvent.ACTION_DOWN,key));
+                audio.dispatchMediaKeyEvent(new android.view.KeyEvent(android.view.KeyEvent.ACTION_UP,key));
+            }
             return;
         }
         PlaybackState state = item.getPlaybackState();
@@ -146,7 +153,7 @@ final class G2MediaBridge {
         switch (action) {
             case "toggle":
                 if (state != null && state.getState() == PlaybackState.STATE_PLAYING) {
-                    if ((actions & PlaybackState.ACTION_PAUSE) != 0) transport.pause();
+                    if ((actions & (PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_PLAY_PAUSE)) != 0) transport.pause();
                     else Toast.makeText(activity, "Pausar no disponible", Toast.LENGTH_SHORT).show();
                 } else {
                     if ((actions & PlaybackState.ACTION_PLAY) != 0 || (actions & PlaybackState.ACTION_PLAY_PAUSE) != 0) transport.play();
@@ -191,14 +198,35 @@ final class G2MediaBridge {
         return value.toString();
     }
 
+    private Bitmap readLocalCover(MediaMetadata meta) {
+        android.net.Uri uri=meta.getDescription().getIconUri();
+        if (uri==null || !"content".equals(uri.getScheme())) return null;
+        try {
+            android.graphics.BitmapFactory.Options opts=new android.graphics.BitmapFactory.Options();
+            opts.inJustDecodeBounds=true;
+            try(java.io.InputStream in=activity.getContentResolver().openInputStream(uri)) {
+                android.graphics.BitmapFactory.decodeStream(in,null,opts);
+            }
+            if (opts.outWidth<=0 || opts.outHeight<=0) return null;
+            opts.inSampleSize=1;
+            while (Math.max(opts.outWidth,opts.outHeight)/opts.inSampleSize>640) opts.inSampleSize*=2;
+            opts.inJustDecodeBounds=false;
+            try(java.io.InputStream in=activity.getContentResolver().openInputStream(uri)) {
+                return android.graphics.BitmapFactory.decodeStream(in,null,opts);
+            }
+        } catch(Exception unavailable) { return null; }
+    }
+
     private String albumArt(MediaMetadata metadata, String key) {
-        if (key.equals(lastArtworkId)) return lastArtworkData;
+        if (key.equals(lastArtworkId) && !lastArtworkData.isEmpty()) return lastArtworkData;
         lastArtworkId = key;
         lastArtworkData = "";
         if (metadata == null) return lastArtworkData;
         Bitmap bitmap = metadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
         if (bitmap == null) bitmap = metadata.getBitmap(MediaMetadata.METADATA_KEY_ART);
         if (bitmap == null) bitmap = metadata.getBitmap(MediaMetadata.METADATA_KEY_DISPLAY_ICON);
+        if (bitmap == null) bitmap = metadata.getDescription().getIconBitmap();
+        if (bitmap == null) bitmap = readLocalCover(metadata);
         if (bitmap == null || bitmap.getWidth() < 1 || bitmap.getHeight() < 1) return "";
         try {
             int target = 320;
@@ -253,6 +281,10 @@ final class G2MediaBridge {
                             safeText(meta.getText(MediaMetadata.METADATA_KEY_ALBUM), "Álbum no disponible");
                     long duration = meta == null ? 0 : Math.max(0, meta.getLong(MediaMetadata.METADATA_KEY_DURATION));
                     long position = state == null ? 0 : Math.max(0, state.getPosition());
+                    if (playing && state.getLastPositionUpdateTime() > 0) {
+                        long elapsed=android.os.SystemClock.elapsedRealtime()-state.getLastPositionUpdateTime();
+                        if (elapsed >= 0) position+=Math.round(elapsed*state.getPlaybackSpeed());
+                    }
                     if (duration > 0) position = Math.min(position, duration);
                     data.put("title", title);
                     data.put("artist", artist);
@@ -269,6 +301,8 @@ final class G2MediaBridge {
                             ? (actions & (PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_PLAY_PAUSE)) != 0
                             : (actions & (PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE)) != 0);
                     data.put("package", current.getPackageName());
+                    data.put("carLink", "com.syu.carlink".equals(current.getPackageName())
+                            || current.getPackageName().equals(activity.getPreferences(0).getString("carlinkApp","")));
                     data.put("albumArt", albumArt(meta, current.getPackageName() + "|" + title + "|" + artist));
                     data.put("durationMs", duration);
                     data.put("positionMs", position);

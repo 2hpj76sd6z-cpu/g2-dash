@@ -28,6 +28,7 @@ on:
       - 'touch-studio.js'
       - 'layout-controls.css'
       - 'layout-controls.js'
+      - 'map-widget.js'
       - 'assets/**'
       - '.github/workflows/android-apk.yml'
 
@@ -67,6 +68,12 @@ jobs:
           test -s layout-controls.css
           test -s android/app/build.gradle
           grep -q "versionName '0.5.8-dev'" android/app/build.gradle
+      - name: Verificar recepción de GPS del teléfono
+        run: |
+          mkdir -p "$RUNNER_TEMP/nmea"
+          androidjar="$ANDROID_HOME/platforms/android-35/android.jar"
+          javac -cp "$androidjar" -d "$RUNNER_TEMP/nmea" android/app/src/main/java/com/dobleg/g2dash/PhoneGps.java scripts/CheckPhoneGps.java
+          java -cp "$RUNNER_TEMP/nmea:$androidjar" com.dobleg.g2dash.CheckPhoneGps
       - name: Build debug APK
         run: gradle -p android --no-daemon :app:assembleDebug
       - name: Verificar firma, launcher y recursos empacados
@@ -76,9 +83,9 @@ jobs:
           build_tools="$ANDROID_HOME/build-tools/35.0.0"
           "$build_tools/apksigner" verify --verbose "$apk"
           "$build_tools/aapt" dump badging "$apk" > "$RUNNER_TEMP/g2-package.txt"
-          grep -F "package: name='com.dobleg.g2dash' versionCode='19'" "$RUNNER_TEMP/g2-package.txt"
+          grep -F "package: name='com.dobleg.g2dash.prueba20' versionCode='20'" "$RUNNER_TEMP/g2-package.txt"
           grep -F "launchable-activity: name='com.dobleg.g2dash.MainActivity'" "$RUNNER_TEMP/g2-package.txt"
-          for asset in index.html layout-controls.css app.js assets/ibiza_frente_sin_fondo.webp assets/ibiza_trasera_sin_fondo.png assets/seat_emblema_oficial.svg; do
+          for asset in index.html layout-controls.css map-widget.js app.js assets/ibiza_frente_sin_fondo.webp assets/ibiza_trasera_sin_fondo.png assets/seat_emblema_oficial.svg; do
             unzip -p "$apk" "assets/www/$asset" | cmp - "$asset"
           done
       - name: Upload APK
@@ -87,3 +94,41 @@ jobs:
           name: G2-Dash-v0.5.8-Android-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+
+  stereo:
+    needs: apk
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: G2-Dash-v0.5.8-Android-debug
+      - uses: android-actions/setup-android@v4
+      - name: Arrancar un estéreo Android virtual e instalar la APK entregada
+        shell: bash
+        run: |
+          sudo chmod 666 /dev/kvm
+          sdkmanager "platform-tools" "emulator" "system-images;android-30;google_apis;x86_64"
+          echo no | avdmanager create avd -n dash -k "system-images;android-30;google_apis;x86_64"
+          "$ANDROID_HOME/emulator/emulator" -avd dash -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect >"$RUNNER_TEMP/emulator.log" 2>&1 &
+          adb wait-for-device
+          for n in $(seq 1 150); do
+            if adb shell getprop sys.boot_completed | grep -q 1; then break; fi
+            sleep 2
+          done
+          adb shell getprop sys.boot_completed | grep -q 1
+          adb shell input keyevent 82
+          adb shell wm size 480x800
+          adb install -g app-debug.apk
+          adb shell am start -W -n com.dobleg.g2dash.prueba20/com.dobleg.g2dash.MainActivity
+          sleep 20
+          adb shell pidof com.dobleg.g2dash.prueba20
+          adb shell dumpsys activity activities | grep -E 'mResumedActivity.*com.dobleg.g2dash.prueba20'
+          adb shell uiautomator dump /sdcard/g2-window.xml
+          adb pull /sdcard/g2-window.xml "$RUNNER_TEMP/window.xml"
+          grep -q 'Mi Ibiza' "$RUNNER_TEMP/window.xml"
+          adb exec-out screencap -p > inicio-android.png
+      - uses: actions/upload-artifact@v4
+        with:
+          name: G2-Dash-inicio-Android
+          path: inicio-android.png
