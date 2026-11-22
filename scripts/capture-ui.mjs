@@ -91,6 +91,25 @@ try {
   };
   await inspectViewport('1280×720');
 
+  // Ambas imágenes deben decodificarse y conservar el centro visible del coche.
+  for (const [width, height] of [[1280, 720], [1024, 600], [960, 540]]) {
+    await page.setViewportSize({width, height});
+    for (const [dot, cx, cy] of [[0, .501, .4813], [1, .4817, .5145]]) {
+      await page.locator('#carDot' + dot).click();
+      const centered = await page.locator('#vehiclePhoto').evaluate(async (photo, [cx, cy]) => {
+        await photo.decode();
+        const image = photo.getBoundingClientRect();
+        const stage = photo.parentElement.getBoundingClientRect();
+        return Math.abs(image.left + image.width * cx - (stage.left + stage.width / 2)) < 2
+          && Math.abs(image.top + image.height * cy - (stage.top + stage.height / 2)) < 2
+          && image.width > 80 && image.height > 60
+          && Math.abs(image.width / image.height - photo.naturalWidth / photo.naturalHeight) < .02;
+      }, [cx, cy]);
+      if (!centered) throw new Error('Recorte ' + dot + ' descentrado o deformado en ' + width + '×' + height);
+    }
+  }
+  await page.setViewportSize({width: 1280, height: 720});
+  await page.locator('#carDot0').click();
   await capture('01-inicio-1280x720');
   await capture('02-encabezado', '.topline');
   await capture('03-reloj', '.clockPanel');
@@ -363,6 +382,16 @@ try {
   await page.locator('[data-theme="night"]').click();
   const widget = page.locator('.clockPanel');
   const settingsWindow = page.locator('.settings[role="dialog"]');
+  await page.locator('[data-wall="blue"]').click();
+  const blueWallpaper = await page.locator('#wallpaper').evaluate(el => el.style.backgroundImage);
+  await page.reload({waitUntil: 'networkidle'});
+  await page.locator('#startup').waitFor({state: 'hidden', timeout: 8000});
+  await page.locator('[data-action="open-settings"]').first().click();
+  if (await page.locator('[data-wall="blue"]').getAttribute('aria-pressed') !== 'true'
+      || await page.locator('#wallpaper').evaluate(el => el.style.backgroundImage) !== blueWallpaper) {
+    throw new Error('El fondo elegido no se conservó al volver al launcher');
+  }
+  await page.locator('[data-wall="dusk"]').click();
   const windowColor = await settingsWindow.evaluate(el => getComputedStyle(el).backgroundColor);
   await page.locator('[data-widget-style="transparent"]').click();
   await page.locator('[data-tint="blue"]').click();

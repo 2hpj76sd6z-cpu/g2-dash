@@ -69,6 +69,18 @@ jobs:
           grep -q "versionName '0.5.8-dev'" android/app/build.gradle
       - name: Build debug APK
         run: gradle -p android --no-daemon :app:assembleDebug
+      - name: Verificar firma, launcher y recursos empacados
+        shell: bash
+        run: |
+          apk=android/app/build/outputs/apk/debug/app-debug.apk
+          build_tools="$ANDROID_HOME/build-tools/35.0.0"
+          "$build_tools/apksigner" verify --verbose "$apk"
+          "$build_tools/aapt" dump badging "$apk" > "$RUNNER_TEMP/g2-package.txt"
+          grep -F "package: name='com.dobleg.g2dash' versionCode='19'" "$RUNNER_TEMP/g2-package.txt"
+          grep -F "launchable-activity: name='com.dobleg.g2dash.MainActivity'" "$RUNNER_TEMP/g2-package.txt"
+          for asset in index.html layout-controls.css app.js assets/ibiza_frente_sin_fondo.webp assets/ibiza_trasera_sin_fondo.png assets/seat_emblema_oficial.svg; do
+            unzip -p "$apk" "assets/www/$asset" | cmp - "$asset"
+          done
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:

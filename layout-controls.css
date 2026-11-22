@@ -58,3 +58,45 @@
 
 .mapPanel .mapsLaunch{position:absolute;top:83px;left:17px;z-index:2;min-height:39px;padding:8px 13px;border:1px solid rgba(110,224,157,.65);border-radius:11px;background:rgba(13,64,43,.87);color:#e4fff0;font-size:11px;font-weight:750;letter-spacing:.035em;box-shadow:0 8px 17px rgba(0,0,0,.2)}
 @media(max-width:1149px){.mapPanel .mapsLaunch{top:60px;left:10px;min-height:34px;font-size:10px;padding:6px 9px}}
+
+/* La fila inferior reserva sitio para la leyenda fuera de la fotografía. */
+.vehiclePanel .carView {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  row-gap: 4px;
+}
+.carStage {
+  display: grid;
+  place-items: center;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  min-height: 0;
+  min-width: 0;
+}
+.vehiclePanel .carStage #vehiclePhoto {
+  width: auto;
+  height: auto;
+  max-width: 95%;
+  max-height: 94%;
+  padding: 0;
+  object-fit: contain;
+}
+/* Compensan el margen transparente desigual de cada recorte original. */
+.vehiclePanel .carStage img[src$="ibiza_frente_sin_fondo.webp"] { transform: translate(-.1%, 1.87%); }
+.vehiclePanel .carStage img[src$="ibiza_trasera_sin_fondo.png"] { transform: translate(1.83%, -1.45%); }
+.carView .carChip {
+  position: static;
+  justify-self: center;
+  max-width: 100%;
+  text-align: center;
+  white-space: normal;
+}
+.vehHeading { flex-direction: column; align-items: center; gap: 5px; text-align: center; }
+.clockPanel { text-align: center; }
+.clockPanel .clockDisplay, .clockPanel .calendarRow { justify-content: center; }
+.clockPanel .underLine { align-self: center; }
+.musicPanel .trackRow { grid-template-columns: 30px minmax(0,1fr) 30px; }
+.musicPanel .trackText { grid-column: 2; text-align: center; overflow-wrap: anywhere; }
+.musicPanel .musicExpand { grid-column: 1; }
+.musicPanel .trackRow > .smallAction { grid-column: 3; }
+.mapBottom .where > div { min-width: 0; text-align: center; }
+.vehicleStats > div { justify-content: center; }

@@ -116,7 +116,7 @@
     <section class="vehiclePanel glass" aria-label="Mi Ibiza">
       <div class="vehHeading"><div><strong>Mi Ibiza</strong><small>SEAT 6J · 5 puertas</small></div><div class="vehTools"><button class="conceptEntry" type="button" data-action="concept-360" aria-label="Abrir doce vistas conceptuales del Ibiza">12 VISTAS</button><button class="smallAction" data-action="vehicle" title="Ver fotografías reales" aria-label="Ver fotografías reales"><svg class="icon"><use href="#i-expand"/></svg></button></div></div>
       <button class="carView isCutout" id="vehicleView" data-action="vehicle" title="Ver mi Ibiza" aria-label="Ver el SEAT Ibiza recortado sin fondo">
-        <img src="assets/ibiza_frente_sin_fondo.webp" id="vehiclePhoto" alt="SEAT Ibiza blanco aislado, vista frontal de tres cuartos, con placa protegida"/>
+        <span class="carStage"><img src="assets/ibiza_frente_sin_fondo.webp" id="vehiclePhoto" alt="SEAT Ibiza blanco aislado, vista frontal de tres cuartos, con placa protegida"/></span>
         <span class="carChip" id="carChip">RECORTE TRANSPARENTE · FRENTE</span>
       </button>
       <div class="photoDots"><button class="on" id="carDot0" data-action="car-cutout" title="Frente sin fondo" aria-label="Ver recorte frontal del Ibiza"></button><button id="carDot1" data-action="car-rear-cutout" title="Trasera sin fondo" aria-label="Ver recorte trasero del Ibiza"></button><button id="carDot2" data-action="car-front" title="Frente original" aria-label="Ver foto frontal original"></button><button id="carDot3" data-action="car-rear" title="Trasera original" aria-label="Ver foto trasera original"></button><span>2 recortes + 2 fotos originales · no 360°</span></div>
@@ -157,25 +157,25 @@
     <p id="performanceNote" class="hint" aria-live="polite">Visual normal: conserva los desenfoques y los ajustes elegidos.</p>
     <label>Tono de los widgets</label>
     <div class="tintPicker" role="group" aria-label="Tono de los widgets">
-      <button type="button" data-tint="graphite" class="selected" aria-pressed="true"><span class="tintSwatch" aria-hidden="true"></span>Grafito</button>
+      <button type="button" data-tint="graphite" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Grafito</button>
       <button type="button" data-tint="blue" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Azul humo</button>
-      <button type="button" data-tint="green" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Verde humo</button>
+      <button type="button" data-tint="green" class="selected" aria-pressed="true"><span class="tintSwatch" aria-hidden="true"></span>Verde humo</button>
       <button type="button" data-tint="warm" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Arena</button>
       <button type="button" data-tint="black" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Negro</button>
     </div>
     <label>Tono de las ventanas</label>
     <div class="tintPicker tintPickerWindows" role="group" aria-label="Tono de las ventanas">
-      <button type="button" data-window-tone="auto" class="selected" aria-pressed="true"><span class="tintSwatch" aria-hidden="true"></span>Original</button>
+      <button type="button" data-window-tone="auto" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Original</button>
       <button type="button" data-window-tone="graphite" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Grafito</button>
       <button type="button" data-window-tone="blue" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Azul humo</button>
-      <button type="button" data-window-tone="green" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Verde humo</button>
+      <button type="button" data-window-tone="green" class="selected" aria-pressed="true"><span class="tintSwatch" aria-hidden="true"></span>Verde humo</button>
       <button type="button" data-window-tone="warm" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Arena</button>
       <button type="button" data-window-tone="black" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Negro</button>
     </div>
     <label>Estilo de widgets</label>
     <div class="widgetStylePicker" role="group" aria-label="Estilo de fondos de widgets">
       <button type="button" data-widget-style="smoked" class="selected" aria-pressed="true">Ahumado</button>
-      <button type="button" data-widget-style="transparent" aria-pressed="false">Transparente</button>
+      <button type="button" data-widget-style="transparent" aria-pressed="false">Cristal transparente</button>
     </div>
     <p id="widgetStyleNote" class="hint">Ahumado: mantiene el vidrio oscuro y el desenfoque actual.</p>
     <label for="opacity">Opacidad del relleno <span id="opacityValue" class="settingValue" aria-hidden="true">54%</span></label><input id="opacity" type="range" min="20" max="88" step="1" value="54" aria-valuetext="54%"/>

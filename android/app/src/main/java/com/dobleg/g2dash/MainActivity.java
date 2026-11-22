@@ -196,7 +196,7 @@ public class MainActivity extends Activity {
                     pendingGeo = callback;
                     pendingGeoOrigin = origin;
                     requestPermissions(
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                             LOCATION_REQUEST);
                 }
             }
@@ -257,7 +257,7 @@ public class MainActivity extends Activity {
                     pendingGeo = callback;
                     pendingGeoOrigin = origin;
                     requestPermissions(
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                             LOCATION_REQUEST);
                 }
             }
@@ -332,7 +332,7 @@ public class MainActivity extends Activity {
                 try { nativeGoogleMap.setMyLocationEnabled(true); } catch (SecurityException ignored) { }
             } else {
                 nativeLocationPending = true;
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                         LOCATION_REQUEST);
             }
             centerNativeMap(destination == null ? "" : destination.trim());
@@ -626,7 +626,7 @@ public class MainActivity extends Activity {
     public void onRequestPermissionsResult(int requestCode, String[] perms, int[] results) {
         super.onRequestPermissionsResult(requestCode, perms, results);
         if (requestCode == LOCATION_REQUEST) {
-            boolean granted = results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED;
+            boolean granted = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
             if (pendingGeo != null) {
                 pendingGeo.invoke(pendingGeoOrigin, granted, false);
                 pendingGeo = null;

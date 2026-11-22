@@ -5,7 +5,7 @@
   const $$ = (q) => [...document.querySelectorAll(q)];
   const KEY = 'g2dash.v02.preferences';
   const SETTINGS_SCHEMA_VERSION = 1;
-  const defaults = { theme:'auto', timeFormat:'24h', wall:'dusk', blur:14, opacity:54, transparentOpacity:3.5, accent:'steel', logo:'apex', widgetTint:'graphite', windowTint:'auto', widgetStyle:'smoked', widgetBlur:8, performance:'normal', customWallpaper:null };
+  const defaults = { theme:'auto', timeFormat:'24h', wall:'dusk', blur:14, opacity:54, transparentOpacity:3.5, accent:'steel', logo:'apex', widgetTint:'green', windowTint:'green', widgetStyle:'smoked', widgetBlur:8, performance:'normal', customWallpaper:null };
   const opacityControls = {
     smoked: { key: 'opacity', min: 20, max: 88, step: 1 },
     transparent: { key: 'transparentOpacity', min: 0, max: 12, step: 0.5 }
@@ -177,7 +177,7 @@
     applyClockFormat();
     $('#blur').value=settings.blur;$('#blurValue').textContent=`${settings.blur} px`;
     $$('[data-accent]').forEach(b=>b.classList.toggle('selected',b.dataset.accent===settings.accent));
-    $$('[data-wall]').forEach(b=>b.classList.toggle('selected',b.dataset.wall===settings.wall));
+    markToneSelection('data-wall', settings.customWallpaper ? null : settings.wall);
     const activeLogo=allowedSettings.logo.includes(settings.logo)?settings.logo:'apex';
     $('#brandLogo').dataset.logo=activeLogo;
     $$('.logoChoices button[data-logo]').forEach(b=>{const selected=b.dataset.logo===activeLogo;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected));});
@@ -345,7 +345,7 @@
     const status = preview?'EJEMPLO VISUAL' : !granted?'Permiso pendiente' : !active?'Sin reproducción' : playing?'Reproduciendo':'En pausa';
     $('#musicStatus').textContent=status;
     $('#musicSource').textContent=preview?'NO ES AUDIO REAL' : (active ? (musicApps[data.package]||'ANDROID AUDIO') : (granted?'ANDROID':'SIN CONECTAR'));
-    $('#deviceStatus').textContent = preview ? 'VISTA DE PRUEBA' : (granted?'ANDROID · MÚSICA':'ANDROID · v0.5.3');
+    $('#deviceStatus').textContent = preview ? 'VISTA DE PRUEBA' : (granted?'ANDROID · MÚSICA':'ANDROID · v0.5.8');
     $('.musicPanel').dataset.media=preview?'preview':(!granted?'permission':(!active?'idle':(playing?'playing':'paused')));
     window.G2MusicDetail?.update(data);
     window.G2AirPlay?.updateMedia(data);
@@ -470,6 +470,6 @@
   $('#destination').addEventListener('input',updateMapDestinationState);
   $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();launchNavigation()}});
   document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close();window.G2Apps?.close();window.G2MusicDetail?.close();window.G2AirPlay?.close()}});
-  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.5';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
+  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.8';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
   photoChange(0);updateMapDestinationState();applySettings();updateClock();setInterval(updateClock,20000);
 })();
