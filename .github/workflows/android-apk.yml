@@ -141,6 +141,11 @@ jobs:
           adb shell "run-as $pkg sh -c 'cat > shared_prefs/com.dobleg.g2dash.MainActivity.xml'" < "$RUNNER_TEMP/gps.xml"
           adb install receiver-debug.apk
           adb shell cmd notification allow_listener "$pkg/com.dobleg.g2dash.G2MediaListener"
+          # Allow the Android notification manager to bind the listener before posting both fixture notifications.
+          for n in $(seq 1 20); do
+            if adb shell dumpsys notification | grep -F 'com.dobleg.g2dash.prueba23/com.dobleg.g2dash.G2MediaListener' > /dev/null; then break; fi
+            sleep 1
+          done
           adb shell am start -W -n com.dobleg.testreceiver/.ReceiverActivity
           adb shell am start -W -n com.dobleg.g2dash.prueba23/com.dobleg.g2dash.MainActivity
           adb emu geo fix -99.1332 19.4326

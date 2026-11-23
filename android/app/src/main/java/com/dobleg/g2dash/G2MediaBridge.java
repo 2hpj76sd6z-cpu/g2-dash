@@ -280,6 +280,7 @@ final class G2MediaBridge {
     void emit() {
         if (webView == null || !visible) return;
         boolean granted = accessGranted();
+        if(granted)G2MediaListener.synchronize(listenerComponent);
         JSONObject data = new JSONObject();
         try {
             data.put("granted", granted);

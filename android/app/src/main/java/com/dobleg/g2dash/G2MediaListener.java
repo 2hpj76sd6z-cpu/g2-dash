@@ -9,6 +9,18 @@ public final class G2MediaListener extends NotificationListenerService
         implements SharedPreferences.OnSharedPreferenceChangeListener {
     static final String MAPS = "com.google.android.apps.maps";
     static final String CARLINK = "com.syu.carlink";
+    private static G2MediaListener connected;
+    private static long checked;
+    // All listener and Activity callbacks are delivered on the main looper.
+    static void synchronize(android.content.ComponentName component) {
+        long now=android.os.SystemClock.elapsedRealtime();
+        if(now-checked<10000)return;
+        checked=now;
+        if(connected!=null){connected.refresh();return;}
+        if(android.os.Build.VERSION.SDK_INT>=24)try{
+            NotificationListenerService.requestRebind(component);
+        }catch(RuntimeException ignored){}
+    }
     private static volatile String instruction = "";
     private static volatile String source = "";
     private SharedPreferences preferences;
@@ -28,6 +40,8 @@ public final class G2MediaListener extends NotificationListenerService
     static String source() { return source; }
 
     @Override public void onListenerConnected() {
+        connected=this;
+        checked=0;
         preferences = getSharedPreferences(MainActivity.class.getName(), MODE_PRIVATE);
         preferences.registerOnSharedPreferenceChangeListener(this);
         refresh();
@@ -45,6 +59,9 @@ public final class G2MediaListener extends NotificationListenerService
     private void disconnect() {
         if (preferences != null) preferences.unregisterOnSharedPreferenceChangeListener(this);
         preferences = null;
+        if(connected!=this)return;
+        connected=null;
+        checked=0;
         media=null;
         clear();
     }
