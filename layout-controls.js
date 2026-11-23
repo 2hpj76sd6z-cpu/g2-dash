@@ -53,9 +53,9 @@
     '<p class="hint">Selecciona una métrica y luego otra para intercambiarlas. Los valores GPS siguen siendo reales cuando el dispositivo los proporciona.</p>',
     '<div class="layoutMetricChoices" role="group" aria-label="Cambiar posición de métricas"></div></div>',
     '<button type="button" class="layoutReset">Restablecer distribución</button>',
-    '<p class="hint layoutEditorStatus" role="status">El mapa grande es ilustrativo; toca MAPA EN DASH para usar Google Maps sin salir del tablero.</p>'
+    '<p class="hint layoutEditorStatus" role="status">Elige el tamaño del mapa y su posición en el tablero.</p>'
   ].join('');
-  const first = settings.querySelector('.settingActions');
+  const first = settings.querySelector(':scope > .settingActions');
   settings.insertBefore(container,first || null);
   const metricButtons = container.querySelector('.layoutMetricChoices');
   const status = container.querySelector('.layoutEditorStatus');
@@ -74,7 +74,7 @@
       btn.classList.toggle('selected',active);
       btn.setAttribute('aria-pressed',String(active));
     });
-    metricButtons.replaceChildren();
+    metricButtons.textContent='';
     state.metricOrder.forEach((id,pos)=>{
       const btn=document.createElement('button');
       btn.type='button';

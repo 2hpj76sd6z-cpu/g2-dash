@@ -127,3 +127,10 @@ body[data-live-map] .mapPanel .where { max-width:calc(100% - 44px); }
 
 #miniSeek {width:100%; height:20px; margin:0; accent-color:var(--accent); display:block;}
 #miniSeek[hidden], .timelineBar[hidden] { display:none!important; }
+
+body[data-live-map] .mapBottom [data-action="carlink"] {
+  flex:0 1 auto; min-width:44px; min-height:36px; padding:4px 6px;
+  border:1px solid rgba(218,233,255,.26); border-radius:10px;
+  background:rgba(16,32,39,.8); color:white; font-size:clamp(10px,1vw,13px);
+}
+body[data-live-map] .mapBottom .where { flex:1 1 60px; }

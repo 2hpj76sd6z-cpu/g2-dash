@@ -35,7 +35,7 @@
   list.append(box);
  }
  function render(){
-  list.replaceChildren();
+  list.textContent='';
   const q=search.value.trim().toLocaleLowerCase('es');
   const visible=apps.filter(a=>(!onlyFavorites||favs.includes(a.id)) &&
      (!q||a.name.toLocaleLowerCase('es').includes(q)));
@@ -92,7 +92,7 @@
           id:a.packageName+'/'+a.activityName,icon:a.icon||''}));
       apps.sort((a,b)=>a.name.localeCompare(b.name,'es',{sensitivity:'base'}));
       render();
-   }catch(_){apps=[];list.replaceChildren();empty('No se pudo consultar Android',
+   }catch(_){apps=[];list.textContent='';empty('No se pudo consultar Android',
        'Revisa que tengas instalada la versión actual de G² Dash.');count.textContent='0 aplicaciones'}
  }
  function open(){

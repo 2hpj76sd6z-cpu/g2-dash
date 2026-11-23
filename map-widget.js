@@ -32,6 +32,10 @@
     if (!btn.querySelector('svg')) btn.textContent='Abrir CarLink';
   });
   document.querySelector('.musicPanel .trackRow > .smallAction').dataset.action='carlink';
+  const phoneRoute=document.createElement('button');
+  phoneRoute.type='button'; phoneRoute.dataset.action='carlink'; phoneRoute.textContent='Ruta del celular';
+  phoneRoute.title='Ver la navegación del teléfono en CarLink';
+  panel.querySelector('.mapBottom').insertBefore(phoneRoute,gps);
   const footer=document.querySelector('.musicDetailFooter > span');
   if(footer) footer.textContent='Música del teléfono mediante CarLink y sesiones multimedia del estéreo';
 

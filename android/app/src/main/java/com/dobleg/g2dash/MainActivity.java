@@ -99,6 +99,7 @@ public class MainActivity extends Activity {
                 .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
                 .build();
 
+        if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true);
         webView = new WebView(this);
         root = new FrameLayout(this);
         root.setBackgroundColor(Color.BLACK);

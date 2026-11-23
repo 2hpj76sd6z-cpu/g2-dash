@@ -39,7 +39,7 @@
   help.setAttribute('role','status');
   help.textContent = 'Pulsa Editar, toca dos iconos para intercambiarlos y termina con Listo.';
   panel.append(edit,reset);
-  const anchor = settings.querySelector('.settingActions');
+  const anchor = settings.querySelector(':scope > .settingActions');
   settings.insertBefore(label,anchor || null);
   settings.insertBefore(panel,anchor || null);
   settings.insertBefore(help,anchor || null);
