@@ -42,8 +42,8 @@
   let lastBounds='', frame=0, watch=null, sourceEpoch=0, staleTimer, lastFix=null, firstShow=true;
   let detail='', mapError=false, phone=false;
   function refreshLabel() {
-    byId('mapStateTitle').textContent=mapError?'Mapa sin conexión':'Google Maps';
-    byId('mapStateDetail').textContent=mapError?'Comprueba internet y toca centrar':detail;
+    byId('mapStateTitle').textContent=mapError?'Mapa pendiente':'Google Maps';
+    byId('mapStateDetail').textContent=mapError?'Toca centrar para reintentar':detail;
   }
   function status(text, kmh=-1) {
     detail=text;

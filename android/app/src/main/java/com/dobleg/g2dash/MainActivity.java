@@ -412,6 +412,10 @@ public class MainActivity extends Activity {
         String probe="(function(){var c=document.querySelectorAll('canvas,img[src*=tile],img[src*=mapsvt],img[src*=khms],"
                 + "[role=application],#scene,[aria-label*=Zoom],form[action*=consent]');"
                 + "for(var i=0;i<c.length;i++){var b=c[i].getBoundingClientRect();if(b.width>8&&b.height>8)return true;}"
+                + "var tiles=document.querySelectorAll('img[src^=blob]');"
+                + "for(var j=0;j<tiles.length;j++){var t=tiles[j],r=t.getBoundingClientRect();"
+                + "if(t.complete&&t.naturalWidth>=128&&t.naturalHeight>=128&&r.width>=96&&r.height>=96"
+                + "&&r.right>0&&r.bottom>0&&r.left<innerWidth&&r.top<innerHeight)return true;}"
                 + "return location.hostname==='consent.google.com';})()";
         mapWebView.evaluateJavascript(probe, result -> {
             if (id!=webLoadId || isDestroyed() || !"true".equals(result)) return;
