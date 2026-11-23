@@ -284,7 +284,7 @@ public class MainActivity extends Activity {
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) {
                 Uri u = req.getUrl();
                 if (isMapUrl(u)) return false;
-                if (req.isForMainFrame()) Toast.makeText(MainActivity.this, "Este enlace sale de Google Maps", Toast.LENGTH_SHORT).show();
+                if (req.isForMainFrame() && req.hasGesture()) Toast.makeText(MainActivity.this, "Este enlace sale de Google Maps", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });

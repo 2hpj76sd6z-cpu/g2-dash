@@ -36,6 +36,7 @@ try {
     capture('tablero-compartido.png');
     await click('miniAlbum');
     await verify("document.getElementById('musicDetailVeil').classList.contains('expanded') && document.getElementById('musicDetailCoverImage').naturalWidth>0");
+    await delay(850);
     capture('reproductor-compartido.png');
     await click('musicDetailPlay');
     await verify("document.getElementById('musicDetailMode').textContent==='EN PAUSA'");

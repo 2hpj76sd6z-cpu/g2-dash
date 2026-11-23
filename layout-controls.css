@@ -208,3 +208,10 @@ body[data-live-map] .hasTurn .where strong {display:-webkit-box;-webkit-line-cla
  .musicDetailVeil.expanded .musicDetailFooter {width:100%;}
 }
 @media(prefers-reduced-motion:reduce){.musicPanel .album,.musicDetailCover{transition:none;}}
+
+body[data-live-map][data-mode="day"] .topline {background:rgba(228,240,238,.92);border-radius:12px;padding-inline:10px;}
+body[data-live-map][data-mode="day"] .topline .brandWord,
+body[data-live-map][data-mode="day"] .topline .iconButton,
+body[data-live-map][data-mode="day"] .topline .statusIcon,
+body[data-live-map][data-mode="day"] .topline .header-date {color:#213b39;}
+body[data-live-map][data-mode="day"] .topline .brandMark {color:#176d46;}
