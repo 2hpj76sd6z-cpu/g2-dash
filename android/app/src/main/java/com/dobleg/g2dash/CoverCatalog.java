@@ -33,13 +33,16 @@ final class CoverCatalog {
             String result="";
             boolean temporaryFailure=false;
             try{
-                String query="recording:"+phrase(title)+" AND artist:"+phrase(artist);
-                if(!album.isEmpty())query+=" AND release:"+phrase(album);
-                byte[] json=load("https://musicbrainz.org/ws/2/recording/?fmt=json&limit=8&query="+URLEncoder.encode(query,"UTF-8"),650000);
-                for(String release:releases(new JSONObject(new String(json,"UTF-8")),title,artist,album)){
+                boolean namedAlbum=!album.isEmpty();
+                String resource=namedAlbum?"release-group":"recording";
+                String query=(namedAlbum?"releasegroup:"+phrase(album):"recording:"+phrase(title))+" AND artist:"+phrase(artist);
+                String address="https://musicbrainz.org/ws/2/"+resource+"/?fmt=json&limit=8&query="+URLEncoder.encode(query,"UTF-8");
+                JSONObject json=new JSONObject(new String(load(address,650000),"UTF-8"));
+                java.util.List<String> matches=namedAlbum?albums(json,artist,album):releases(json,title,artist,album);
+                for(String release:matches){
                   if(!key.equals(desired))break;
                   try{
-                    byte[] bytes=load("https://coverartarchive.org/release/"+release+"/front-250",600000);
+                    byte[] bytes=load("https://coverartarchive.org/"+(namedAlbum?"release-group/":"release/")+release+"/front-250",600000);
                     BitmapFactory.Options bounds=new BitmapFactory.Options();bounds.inJustDecodeBounds=true;
                     BitmapFactory.decodeByteArray(bytes,0,bytes.length,bounds);
                     if(bounds.outWidth>0 && bounds.outHeight>0 && Math.max(bounds.outWidth,bounds.outHeight)<=1500){
@@ -63,6 +66,25 @@ final class CoverCatalog {
     }
     private static String phrase(String s){return "\""+s.replace("\\","\\\\").replace("\"","\\\"")+"\"";}
     private static String norm(String s){return s.trim().replace("’","'").toLowerCase(Locale.ROOT);}
+    private static boolean matchesArtist(JSONObject row,String artist){
+        JSONArray credits=row.optJSONArray("artist-credit");if(credits==null)return false;
+        StringBuilder names=new StringBuilder();
+        for(int i=0;i<credits.length();i++){
+            JSONObject c=credits.optJSONObject(i);if(c!=null)names.append(c.optString("name")).append(c.optString("joinphrase"));
+        }
+        return norm(artist).equals(norm(names.toString()));
+    }
+    private static java.util.List<String> albums(JSONObject json,String artist,String album){
+        java.util.List<String> result=new java.util.ArrayList<>();
+        JSONArray groups=json.optJSONArray("release-groups");
+        if(groups!=null)for(int i=0;i<groups.length()&&result.size()<3;i++){
+            JSONObject row=groups.optJSONObject(i);
+            if(row==null||!matchesArtist(row,artist)||!norm(album).equals(norm(row.optString("title"))))continue;
+            String id=row.optString("id");
+            if(id.matches("[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}"))result.add(id);
+        }
+        return result;
+    }
     static java.util.List<String> releases(JSONObject response,String title,String artist,String album){
         JSONArray rows=response.optJSONArray("recordings");
         java.util.Map<String,Integer> editions=new java.util.LinkedHashMap<>();
@@ -70,13 +92,7 @@ final class CoverCatalog {
         for(int i=0;i<rows.length();i++){
             JSONObject rec=rows.optJSONObject(i);
             if(rec==null || rec.optBoolean("video") || !norm(title).equals(norm(rec.optString("title"))))continue;
-            JSONArray credits=rec.optJSONArray("artist-credit");if(credits==null)continue;
-            StringBuilder names=new StringBuilder();
-            for(int k=0;k<credits.length();k++){
-                JSONObject c=credits.optJSONObject(k);if(c==null)continue;
-                names.append(c.optString("name")).append(c.optString("joinphrase"));
-            }
-            if(!norm(artist).equals(norm(names.toString())))continue;
+            if(!matchesArtist(rec,artist))continue;
             JSONArray releases=rec.optJSONArray("releases");if(releases==null)continue;
             for(int k=0;k<releases.length();k++){
                 JSONObject r=releases.optJSONObject(k);if(r==null)continue;
