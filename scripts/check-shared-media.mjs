@@ -18,7 +18,7 @@ function evaluate(expression) {
             if(r.result?.exceptionDetails)reject(Error(JSON.stringify(r.result.exceptionDetails)));
             else resolve(r.result?.result?.value);
         };
-        socket.send(JSON.stringify({id:expected,method:'Runtime.evaluate',params:{expression,returnByValue:true}}));
+        socket.send(JSON.stringify({id:expected,method:'Runtime.evaluate',params:{expression,returnByValue:true,awaitPromise:true}}));
     });
 }
 async function verify(expression) {
@@ -34,16 +34,30 @@ const click=id=>evaluate("document.getElementById("+JSON.stringify(id)+").click(
 try {
     await verify("document.getElementById('albumArt').naturalWidth>0 && document.getElementById('mapStateTitle').textContent.includes('Gira a la derecha')");
     capture('tablero-compartido.png');
-    await click('miniAlbum');
+    const point=await evaluate("(()=>{const r=document.getElementById('miniAlbum').getBoundingClientRect();return [Math.round(r.x+r.width/2),Math.round(r.y+r.height/2)];})()");
+    execFileSync('adb',['shell','input','tap',...point.map(String)]);
     await verify("document.getElementById('musicDetailVeil').classList.contains('expanded') && document.getElementById('musicDetailCoverImage').naturalWidth>0");
     await verify("['musicDetailPlay','musicDetailCover','musicDetailClose'].every(id=>{const target=document.getElementById(id);const r=target.getBoundingClientRect();const hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return r.width>25 && r.height>25 && r.left>=0 && r.top>=0 && r.bottom<=innerHeight+1 && r.right<=innerWidth+1 && target.contains(hit);})");
     await verify("document.getElementById('musicDetailCover').getBoundingClientRect().height >= innerHeight*0.32");
-    await delay(850);
-    capture('reproductor-compartido.png');
+
     await click('musicDetailPlay');
     await verify("document.getElementById('musicDetailMode').textContent==='EN PAUSA'");
     await evaluate("const slider=document.getElementById('musicSeek');slider.value='77000';slider.dispatchEvent(new Event('change'));");
     await verify("document.getElementById('musicDetailCurrent').textContent==='01:17'");
+    // Read the actual dashboard WebView compositor after seeking has settled.
+    await evaluate("new Promise(ok=>requestAnimationFrame(()=>requestAnimationFrame(ok)))");
+    const photo=await new Promise((resolve,reject)=>{
+        const expected=++id;
+        const timer=setTimeout(()=>reject(Error('Captura del reproductor')),8000);
+        socket.onmessage=e=>{
+            const result=JSON.parse(e.data);
+            if(result.id!==expected)return;
+            clearTimeout(timer);
+            if(!result.result?.data)reject(Error('Captura vacía'));else resolve(result.result.data);
+        };
+        socket.send(JSON.stringify({id:expected,method:'Page.captureScreenshot',params:{format:'png',fromSurface:true}}));
+    });
+    writeFileSync('reproductor-compartido.png',Buffer.from(photo,'base64'));
     await click('musicDetailNext');
     await verify("document.getElementById('musicDetailTitle').textContent==='Segunda pista' && !document.querySelector('.mapPanel').classList.contains('hasTurn')");
     await click('musicDetailPrev');

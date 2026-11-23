@@ -382,7 +382,14 @@ public class MainActivity extends Activity {
         if (nativeMapView != null && !nativeMode) nativeMapView.setVisibility(View.GONE);
         if (nativeMode) mapWebView.setVisibility(View.GONE);
         closeMapButton.setVisibility(expanded ? View.VISIBLE : View.GONE);
-        if (!visible) { surface.setVisibility(View.GONE); webMapStatus.setVisibility(View.GONE); return; }
+        if (!visible) {
+            surface.setVisibility(View.GONE);
+            webMapStatus.setVisibility(View.GONE);
+            webView.postVisualStateCallback(0, new WebView.VisualStateCallback() {
+                @Override public void onComplete(long requestId) { webView.postInvalidateOnAnimation(); }
+            });
+            return;
+        }
         surface.setLayoutParams(expanded ? new FrameLayout.LayoutParams(-1, -1) : inlineBounds);
         surface.setVisibility(View.VISIBLE);
         webMapStatus.setLayoutParams(surface.getLayoutParams());
