@@ -5,13 +5,13 @@
   const $$ = (q) => [...document.querySelectorAll(q)];
   const KEY = 'g2dash.v02.preferences';
   const SETTINGS_SCHEMA_VERSION = 1;
-  const defaults = { theme:'auto', timeFormat:'24h', wall:'dusk', blur:14, opacity:54, transparentOpacity:3.5, accent:'steel', logo:'apex', widgetTint:'green', windowTint:'green', widgetStyle:'smoked', widgetBlur:8, performance:'normal', customWallpaper:null };
+  const defaults = { theme:'auto', timeFormat:'24h', wall:'dusk', blur:14, opacity:54, transparentOpacity:3.5, accent:'steel', logo:'apex', widgetTint:'green', windowTint:'green', windowFinish:'smoked', windowSmoke:78, windowClear:25, widgetStyle:'smoked', widgetBlur:8, performance:'normal', customWallpaper:null };
   const opacityControls = {
     smoked: { key: 'opacity', min: 20, max: 88, step: 1 },
     transparent: { key: 'transparentOpacity', min: 0, max: 12, step: 0.5 }
   };
   const opacityFormat = new Intl.NumberFormat('es-MX', { maximumFractionDigits: 1 });
-  const tones = ['graphite', 'blue', 'green', 'warm', 'black'];
+  const tones = ['graphite', 'blue', 'green', 'warm', 'black', 'violet', 'wine', 'teal', 'amber'];
   const allowedSettings = {
     theme:['auto','night','day'],
     timeFormat:['12h','24h'],
@@ -19,6 +19,7 @@
     accent:['steel','blue','warm'],
     logo:['apex','pulse','orbit'],
     widgetTint:tones,
+    windowFinish:['smoked','clear'],
     windowTint:['auto', ...tones],
     widgetStyle:['smoked','transparent'],
     performance:['normal','light']
@@ -90,6 +91,12 @@
     });
   }
   function applyWindowTone(){
+    const finish=settings.windowFinish==='clear'?'clear':'smoked';
+    const val=Number(settings[finish==='clear'?'windowClear':'windowSmoke']);
+    const alpha=Number.isFinite(val)?Math.max(5,Math.min(95,val)):(finish==='clear'?25:78);
+    document.body.dataset.windowFinish=finish;
+    document.documentElement.style.setProperty('--windowAlpha',alpha/100);
+    $('#windowFinish').value=finish;$('#windowAlpha').value=alpha;$('#windowAlphaValue').textContent=alpha+'%';
     const tone=settings.windowTint;
     document.body.dataset.windowTint=tone;
     const rootStyle=document.documentElement.style;
@@ -184,7 +191,45 @@
     $('#wallpaper').style.backgroundImage=settings.customWallpaper?`url(${JSON.stringify(settings.customWallpaper)})`:walls[settings.wall]||walls.dusk;
     applyTheme(false);
   }
+  const profileKey='g2dash.vehicle.v1';
+  let profile={name:'',photos:[]};
+  try {
+    const item=JSON.parse(localStorage.getItem(profileKey)||'null');
+    if(item && typeof item.name==='string' && Array.isArray(item.photos)) profile={name:item.name.slice(0,32),photos:item.photos.filter(p=>typeof p==='string' && /^data:image[/](webp|jpeg|png);base64,/.test(p)).slice(0,4)};
+  } catch (_) {}
+  function saveProfile(next){
+    try{localStorage.setItem(profileKey,JSON.stringify(next));profile=next;photoChange(0);return true;}
+    catch(_){showToast('Almacenamiento lleno. Prueba con menos fotos.');return false;}
+  }
   function photoChange(index){
+    const custom=profile.photos.length>0;
+    const name=profile.name||(custom?'Mi vehículo':'Mi Ibiza');
+    $('.vehHeading strong').textContent=name;
+    $('.vehHeading small').textContent=custom?'Mis fotografías':'SEAT 6J · 5 puertas';
+    $('.vehiclePanel').setAttribute('aria-label',name);
+    $('.vehicleModal header h2').textContent=name;
+    $('#carName').value=profile.name;
+    document.querySelectorAll('.vehiclePanel .conceptEntry,.vehicleModal .conceptToGallery').forEach(el=>el.hidden=custom);
+    $('.vehicleModal header p').textContent=custom?'Mis fotografías':'Dos recortes transparentes y dos fotografías originales';
+    $('.vehicleModal .disclaimer').hidden=custom;
+    $('.photoDots span').textContent=custom?(profile.photos.length+' fotos'):'2 recortes + 2 fotos originales';
+    for(let i=0;i<4;i++){
+      const dot=$('#carDot'+i);
+      dot.hidden=custom && i>=profile.photos.length;
+      dot.setAttribute('aria-label',custom?'Ver foto '+(i+1):['Ver recorte frontal','Ver recorte trasero','Ver foto frontal','Ver foto trasera'][i]);
+      dot.title=dot.getAttribute('aria-label');
+    }
+    if(custom){
+      currentPhoto=(index+profile.photos.length)%profile.photos.length;
+      const caption='Foto '+(currentPhoto+1)+' de '+profile.photos.length;
+      for(const img of [$('#vehiclePhoto'),$('#modalCar')]){ img.src=profile.photos[currentPhoto];img.alt=name+' · '+caption; }
+      $('#vehicleView').setAttribute('aria-label','Ver fotos de '+name);
+      $('#vehicleView').classList.add('isCutout');$('.modalPhoto').classList.add('isCutout');
+      $('#carChip').textContent=caption;$('#modalLabel').textContent=caption;
+      for(let i=0;i<4;i++)$('#carDot'+i).classList.toggle('on',i===currentPhoto);
+      return;
+    }
+    $('#vehicleView').setAttribute('aria-label','Ver fotos de '+name);
     currentPhoto=(index+pictures.length)%pictures.length;
     const pic=pictures[currentPhoto];
     const isPersonal=Boolean(pic.personalSource&&settings.personalCar);
@@ -450,27 +495,31 @@
     applyWidgetOpacity();
   });
   $('#opacity').addEventListener('change', save);
+  $('#windowFinish').addEventListener('change',e=>{settings.windowFinish=e.target.value;applyWindowTone();save();});
+  $('#windowAlpha').addEventListener('input',e=>{settings[settings.windowFinish==='clear'?'windowClear':'windowSmoke']=Number(e.target.value);applyWindowTone();save();});
   $('#widgetBlur').addEventListener('input',(e)=>{settings.widgetBlur=Number(e.target.value);applyWidgetSettings();save()});
-  $('#chooseCar').addEventListener('change',event=>{
-    const file=event.target.files?.[0];if(!file)return;
-    if(!['image/png','image/webp'].includes(file.type)){showToast('Selecciona un PNG o WebP');return}
-    if(file.size>8000000){showToast('Selecciona una imagen menor a 8 MB');return}
-    const reader=new FileReader();
-    reader.onload=()=>{
-      const img=new Image();
-      img.onload=()=>{
-        const ratio=Math.min(1,900/img.naturalWidth,500/img.naturalHeight);
-        const canvas=document.createElement('canvas');
-        canvas.width=Math.round(img.naturalWidth*ratio);
-        canvas.height=Math.round(img.naturalHeight*ratio);
-        canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
-        settings.personalCar=canvas.toDataURL('image/png');
-        photoChange(2);save();showToast('Imagen del Ibiza aplicada sobre fondo transparente');
-      };
-      img.onerror=()=>showToast('No se pudo abrir la imagen');
-      img.src=reader.result;
-    };
-    reader.readAsDataURL(file);
+  $('#carName').addEventListener('change',e=>saveProfile({...profile,name:e.target.value.trim().slice(0,32)}));
+  let uploadId=0;
+  $('#restoreIbiza').addEventListener('click',()=>{uploadId++;if(saveProfile({name:'',photos:[]}))showToast('Ibiza original seleccionado');});
+  $('#chooseCar').addEventListener('change',async event=>{
+    const files=Array.from(event.target.files||[]);event.target.value='';const id=++uploadId;
+    if(!files.length)return;
+    if(files.length>4||files.some(f=>f.size>16*1024*1024)){showToast('Selecciona hasta 4 imágenes de menos de 16 MB cada una');return;}
+    try{
+      const photos=[];
+      for(const file of files){
+        const url=URL.createObjectURL(file);
+        try{
+          const img=new Image();
+          await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src=url;});
+          const ratio=Math.min(1,880/img.naturalWidth,580/img.naturalHeight);
+          const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.naturalWidth*ratio));canvas.height=Math.max(1,Math.round(img.naturalHeight*ratio));
+          canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+          photos.push(canvas.toDataURL('image/webp',.78));
+        }finally{URL.revokeObjectURL(url);}
+      }
+      if(id===uploadId && saveProfile({...profile,photos}))showToast('Fotos del vehículo guardadas');
+    }catch(_){if(id===uploadId)showToast('No se pudo leer la imagen. Usa JPG, PNG o WebP.');}
   });
   $('#chooseWall').addEventListener('change',(event)=>{
     const file=event.target.files?.[0];if(!file)return;

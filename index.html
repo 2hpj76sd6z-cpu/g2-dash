@@ -62,7 +62,6 @@
 <div class="wallpaper" id="wallpaper" aria-hidden="true"></div><div class="wallShade" aria-hidden="true"></div>
 <div id="app" class="app">
   <header class="topline">
-    <button type="button" class="iconButton hamburger" data-action="open-settings" title="Abrir ajustes" aria-label="Abrir ajustes"><svg class="icon"><use href="#i-menu"/></svg></button>
     <div class="brand" id="brandLogo" data-logo="apex" aria-label="G al cuadrado Dash"><span class="brandMark">G<sup>2</sup></span><span class="brandWord">DASH</span></div>
     <span class="header-rule" aria-hidden="true"></span>
     <time class="header-date" id="dateShort" datetime="">Fecha</time>
@@ -70,7 +69,7 @@
       <span class="deviceTag" id="deviceStatus">MODO DEMO</span>
       <svg class="icon statusIcon"><use href="#i-wifi"/></svg><svg class="icon statusIcon"><use href="#i-bluetooth"/></svg>
       <button class="iconButton" data-action="gps" aria-label="Activar GPS" title="Obtener velocidad por GPS"><svg class="icon"><use href="#i-map-pin"/></svg></button>
-      <button class="iconButton" data-action="open-settings" aria-label="Personalizar"><svg class="icon"><use href="#i-settings"/></svg></button>
+      <button class="iconButton" data-action="open-settings" aria-label="Ajustes" title="Ajustes"><svg class="icon"><use href="#i-settings"/></svg></button>
     </div>
   </header>
 
@@ -81,7 +80,6 @@
       <button data-action="music" title="Música" aria-label="Música"><svg class="icon"><use href="#i-music"/></svg></button>
       <button data-action="phone" title="Teléfono" aria-label="Teléfono"><svg class="icon"><use href="#i-phone"/></svg></button>
       <button data-action="apps" title="Aplicaciones" aria-label="Aplicaciones"><svg class="icon"><use href="#i-apps"/></svg></button>
-      <button data-action="open-settings" title="Ajustes" aria-label="Ajustes"><svg class="icon"><use href="#i-settings"/></svg></button>
     </nav>
 
     <section class="leftStack" aria-label="Reloj y música">
@@ -122,9 +120,7 @@
       </button>
       <div class="photoDots"><button class="on" id="carDot0" data-action="car-cutout" title="Frente sin fondo" aria-label="Ver recorte frontal del Ibiza"></button><button id="carDot1" data-action="car-rear-cutout" title="Trasera sin fondo" aria-label="Ver recorte trasero del Ibiza"></button><button id="carDot2" data-action="car-front" title="Frente original" aria-label="Ver foto frontal original"></button><button id="carDot3" data-action="car-rear" title="Trasera original" aria-label="Ver foto trasera original"></button><span>2 recortes + 2 fotos originales · no 360°</span></div>
       <div class="vehicleStats">
-        <div><svg class="icon"><use href="#i-fuel"/></svg><strong>—</strong><span>Autonomía OBD-II</span></div>
         <div><svg class="icon"><use href="#i-speed"/></svg><strong id="speed">— <small>km/h</small></strong><span id="speedLabel">GPS no activado</span></div>
-        <div><svg class="icon"><use href="#i-battery"/></svg><strong>—</strong><span>Voltaje OBD-II</span></div>
       </div>
     </section>
   </main>
@@ -135,8 +131,6 @@
     <button data-action="phone"><svg class="icon"><use href="#i-phone"/></svg><span>Teléfono</span></button>
     <button data-action="apps"><svg class="icon"><use href="#i-apps"/></svg><span>Apps</span></button>
     <button data-action="bluetooth"><svg class="icon"><use href="#i-bluetooth"/></svg><span>Bluetooth</span></button>
-    <button data-action="radio"><svg class="icon"><use href="#i-radio"/></svg><span>Radio</span></button>
-    <button data-action="open-settings"><svg class="icon"><use href="#i-settings"/></svg><span>Ajustes</span></button>
   </nav>
   <footer class="footer"><span class="footerLine"></span><b>G<sup>2</sup></b><span class="footerLine"></span><span class="ver">v0.5.8</span></footer>
 </div>
@@ -146,7 +140,10 @@
     <label>Modo de apariencia</label><div class="segments"><button data-theme="auto" class="selected">Automático</button><button data-theme="night">Noche</button><button data-theme="day">Día</button></div>
     <label>Formato de hora</label><div class="segments" role="group" aria-label="Formato del reloj"><button type="button" data-time-format="24h" class="selected" aria-pressed="true">24 h</button><button type="button" data-time-format="12h" aria-pressed="false">12 h</button></div>
     <label>Logo oficial G² DASH</label><div class="logoChoices" role="group" aria-label="Seleccionar logo oficial y propuestas visuales"><button type="button" data-logo="apex" aria-pressed="true" class="selected"><span class="brand" data-logo="apex" aria-hidden="true"><span class="brandMark">G<sup>2</sup></span><span class="brandWord">DASH</span></span><small>OFICIAL</small></button><button type="button" data-logo="pulse" aria-pressed="false"><span class="brand" data-logo="pulse" aria-hidden="true"><span class="brandMark">G<sup>2</sup></span><span class="brandWord">DASH</span></span><small>PROPUESTA PULSE</small></button><button type="button" data-logo="orbit" aria-pressed="false"><span class="brand" data-logo="orbit" aria-hidden="true"><span class="brandMark">G<sup>2</sup></span><span class="brandWord">DASH</span></span><small>PROPUESTA ORBIT</small></button></div><p class="hint">El logo marcado como OFICIAL es el aprobado para la versión pública; la elección se guarda en este estéreo.</p>
-    <label>Imagen personal de mi Ibiza (PNG o WebP sin fondo)</label><input type="file" id="chooseCar" accept="image/png,image/webp"/><p class="hint">Opcional: carga tu PNG aprobado. Se guarda una copia reducida en este navegador; las fotos originales nunca se modifican. La vista sin fondo está lista sin necesidad de cargar nada.</p>
+    <label for="carName">Nombre del vehículo</label><input id="carName" type="text" maxlength="32" placeholder="Mi Ibiza"/>
+    <label for="chooseCar">Fotos de mi vehículo</label><input type="file" id="chooseCar" accept="image/jpeg,image/png,image/webp" multiple/>
+    <p class="hint">Selecciona de 1 a 4 fotos JPG, PNG o WebP. Se guardan en el estéreo.</p>
+    <button type="button" id="restoreIbiza">Usar el Ibiza original</button>
     <div id="connections" hidden><label>Conexión con el celular</label><div class="settingActions"><button data-action="choose-carlink">Elegir CarLink</button><button data-action="choose-gps">Fuente de ubicación</button></div></div>
     <label>Fondo de pantalla</label><div class="wallChoices"><button data-wall="dusk" class="selected"><span class="p-dusk"></span>Atardecer</button><button data-wall="blue"><span class="p-blue"></span>Azul humo</button><button data-wall="gray"><span class="p-gray"></span>Grafito</button></div>
     <label for="chooseWall">Tu propia imagen</label><input type="file" id="chooseWall" accept="image/*"/><p class="hint">La imagen se procesa localmente para ahorrar memoria y se guarda solo en este dispositivo.</p>
@@ -163,6 +160,10 @@
       <button type="button" data-tint="blue" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Azul humo</button>
       <button type="button" data-tint="green" class="selected" aria-pressed="true"><span class="tintSwatch" aria-hidden="true"></span>Verde humo</button>
       <button type="button" data-tint="warm" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Arena</button>
+      <button type="button" data-tint="violet" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Violeta</button>
+      <button type="button" data-tint="wine" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Borgoña</button>
+      <button type="button" data-tint="teal" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Turquesa</button>
+      <button type="button" data-tint="amber" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Ámbar</button>
       <button type="button" data-tint="black" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Negro</button>
     </div>
     <label>Tono de las ventanas</label>
@@ -172,8 +173,16 @@
       <button type="button" data-window-tone="blue" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Azul humo</button>
       <button type="button" data-window-tone="green" class="selected" aria-pressed="true"><span class="tintSwatch" aria-hidden="true"></span>Verde humo</button>
       <button type="button" data-window-tone="warm" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Arena</button>
+      <button type="button" data-window-tone="violet" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Violeta</button>
+      <button type="button" data-window-tone="wine" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Borgoña</button>
+      <button type="button" data-window-tone="teal" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Turquesa</button>
+      <button type="button" data-window-tone="amber" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Ámbar</button>
       <button type="button" data-window-tone="black" aria-pressed="false"><span class="tintSwatch" aria-hidden="true"></span>Negro</button>
     </div>
+    <label for="windowFinish">Acabado de las ventanas</label>
+    <select id="windowFinish"><option value="smoked">Ahumado</option><option value="clear">Cristal transparente</option></select>
+    <label for="windowAlpha">Opacidad de ventanas <output id="windowAlphaValue"></output></label>
+    <input type="range" id="windowAlpha" min="5" max="95" step="1"/>
     <label>Estilo de widgets</label>
     <div class="widgetStylePicker" role="group" aria-label="Estilo de fondos de widgets">
       <button type="button" data-widget-style="smoked" class="selected" aria-pressed="true">Ahumado</button>

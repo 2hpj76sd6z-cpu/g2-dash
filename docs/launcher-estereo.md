@@ -26,3 +26,9 @@ La edición G² Dash 20 se instala junto a la compilación 19 con ajustes indepe
 Música abre CarLink para conectar e iniciar reproducción. Si hay una sesión con metadatos, Música abre el reproductor de Dash. La portada abre el reproductor ampliado. El botón de conexión del reproductor abre CarLink. En Personalización se puede seleccionar otro nombre de receptor. La barra permite adelantar cuando la sesión publica duración y la acción de búsqueda.
 
 En Personalización → Fuente de ubicación se elige GPS del estéreo o GPS del celular. Para el celular, ambos equipos deben poder comunicarse por la misma red privada. Usa en el teléfono un emisor GPS en modo servidor TCP con sentencias NMEA RMC y suma de comprobación. Escribe su dirección IPv4 privada y puerto en Dash. Concede ubicación al emisor y mantenlo activo según las opciones de tu teléfono. Dash recuerda el destino de conexión y reintenta al volver al tablero. El transporte NMEA TCP de esta opción es local y sin cifrar. Dash descarta datos inválidos o caducados y distingue ambos orígenes en pantalla.
+
+## Distribución y apariencia · compilación 21
+
+El engranaje superior abre Ajustes. En Editar widgets se pueden activar de uno a cuatro módulos, arrastrarlos en la vista previa y redimensionarlos con la esquina inferior derecha o los botones Ancho y Alto. El tablero guarda la composición. Cuando falta espacio, reajusta los módulos vecinos y mantiene un área independiente para cada uno. La tarjeta del vehículo muestra su fotografía y la velocidad GPS en km/h.
+
+En Fotos de mi vehículo se pueden seleccionar hasta cuatro fotos y escribir el nombre del vehículo. Usar el Ibiza original recupera su galería. Hay nueve tonos de ventanas y widgets. Los acabados de las ventanas y su opacidad se ajustan independientemente de los widgets. Radio se ha retirado del dock.

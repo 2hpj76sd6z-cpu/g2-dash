@@ -242,6 +242,7 @@ public class MainActivity extends Activity {
                 try {
                     Intent picker = params.createIntent();
                     picker.addCategory(Intent.CATEGORY_OPENABLE);
+                    picker.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, params.getMode()==FileChooserParams.MODE_OPEN_MULTIPLE);
                     startActivityForResult(picker, FILE_REQUEST);
                     return true;
                 } catch (ActivityNotFoundException ex) {
@@ -401,7 +402,7 @@ public class MainActivity extends Activity {
     private void markWebFailure() {
         webFailed = true;
         webReady = false;
-        webMapStatus.setText("Google Maps no cargó.\\nToca para reintentar o usa Ruta del celular.");
+        webMapStatus.setText("Google Maps no cargó.\nToca para reintentar o usa Ruta del celular.");
         webMapStatus.setVisibility(mapWebView.getVisibility());
         webView.evaluateJavascript("window.G2LiveMap?.mapError()",null);
     }
@@ -456,8 +457,8 @@ public class MainActivity extends Activity {
             }
         } else if ((nativeMapView == null || preferWeb) && mapStarted && mapQuery.isEmpty()
                 && (first || center || (followMap && lastWebFix != null
-                    && android.os.SystemClock.elapsedRealtime()-lastWebAt >= 20000
-                    && (Math.abs(lastWebFix.latitude-lat)+Math.abs(lastWebFix.longitude-lon) > .0005)))) {
+                    && android.os.SystemClock.elapsedRealtime()-lastWebAt >= 8000
+                    && (Math.abs(lastWebFix.latitude-lat)+Math.abs(lastWebFix.longitude-lon) > .00018)))) {
             loadWebMap();
         }
     }

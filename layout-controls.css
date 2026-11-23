@@ -135,3 +135,41 @@ body[data-live-map] .mapBottom [data-action="carlink"] {
   background:rgba(16,32,39,.8); color:white; font-size:clamp(10px,1vw,13px);
 }
 body[data-live-map] .mapBottom .where { flex:1 1 60px; }
+
+.dashboard.editableDashboard { grid-template-columns:clamp(40px,4.7vw,60px) minmax(0,1fr); grid-template-rows:minmax(0,1fr); }
+.editableDashboard > .sidebar {grid-area:1/1;}
+.widgetBoard,.gridPreview {display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));}
+.widgetBoard {grid-area:1/2;min-width:0;min-height:0;gap:clamp(4px,.65vw,10px);}
+.widgetBoard > [data-card] {min-width:0;min-height:0;overflow:hidden;}
+.widgetBoard [hidden], .gridPreview [hidden],.vehiclePanel [hidden],.vehicleModal [hidden] {display:none!important;}
+.bottomDock {grid-template-columns:repeat(5,minmax(0,1fr));}
+.vehicleStats {grid-template-columns:minmax(0,1fr);padding:5px 3px;}
+.vehicleStats > div {display:flex;flex-flow:row wrap;align-items:center;justify-content:center;gap:4px;}
+.vehicleStats #speedLabel {display:block;width:100%;text-align:center;}
+.vehiclePanel .vehHeading strong {max-width:100%;overflow-wrap:anywhere;}
+.widgetBoard .shortCard.vehiclePanel {padding:5px;gap:2px;}
+.vehiclePanel.shortCard .vehTools,.vehiclePanel.shortCard .vehHeading small,.vehiclePanel.shortCard .carChip,
+.vehiclePanel.tinyCard .vehHeading,.vehiclePanel.tinyCard .photoDots,.vehiclePanel.tinyCard #speedLabel {display:none;}
+.widgetBoard .shortCard.musicPanel {padding:5px;gap:2px;justify-content:space-around;}
+.musicPanel.shortCard .album {height:clamp(24px,6vh,46px);}
+.musicPanel.shortCard .mediaStatusRow,.musicPanel.shortCard .trackText #songSource {display:none;}
+.musicPanel.thinCard .trackRow {grid-template-columns:minmax(0,1fr);}
+.musicPanel.thinCard .trackText,.musicPanel.thinCard .album {grid-column:1;}
+.musicPanel.thinCard .trackRow>.smallAction,.musicPanel.thinCard .musicExpand,
+.musicPanel.tinyCard .songMeta,.musicPanel.tinyCard .trackText span,.musicPanel.tinyCard .musicControls button:first-child,
+.musicPanel.tinyCard .musicControls button:last-child {display:none;}
+.musicPanel.tinyCard .musicControls {justify-content:space-evenly;}
+.widgetBoard .thinCard.mapPanel,.widgetBoard .shortCard.mapPanel {padding:4px;gap:2px;}
+.mapPanel.thinCard .mapBar>.mapCircle,.mapPanel.thinCard .mapBottom .where,
+.mapPanel.tinyCard .mapBottom .where,.mapPanel.tinyCard .mapBar>.mapCircle {display:none;}
+.mapPanel.tinyCard .mapBar .destination {height:28px;min-height:28px;}
+.mapPanel.tinyCard .mapBottom .mapCircle,.mapPanel.tinyCard .mapBottom [data-action] {min-height:25px;height:25px;}
+.mapPanel.tinyCard .mapBottom [data-action="carlink"] {flex:1;}
+.gridPreview {flex:none;min-height:110px;height:clamp(110px,27vh,220px);width:100%;gap:2px;background:rgba(8,18,26,.55);border-radius:8px;touch-action:none;}
+.layoutEditor .gridPreview button {position:relative;overflow:hidden;min-height:0;min-width:0;padding:4px 0;font-size:clamp(9px,1vw,12px);border:1px solid #748f93;background:#283c44;color:#fff;touch-action:none;}
+.layoutEditor .gridPreview button[aria-pressed="true"] {background:#245248;border:2px solid #8dedd0;}
+.resizeGrip {position:absolute;bottom:0;right:0;width:28px;height:26px;display:grid;place-items:center;cursor:nwse-resize;background:rgba(0,0,0,.32);border-radius:8px 0 0;color:#fff;}
+.widgetChoices,.editTools,.gridSteps {display:flex;gap:5px;align-items:center;flex-wrap:wrap;}
+.widgetChoices label {display:inline-flex;align-items:center;gap:3px;margin:0;padding:4px;}
+.gridSteps button {flex:1 0 auto;}
+.editTools select,#windowFinish,#carName {border:1px solid #79918e;border-radius:8px;background:#1b2a32;color:white;padding:7px;}

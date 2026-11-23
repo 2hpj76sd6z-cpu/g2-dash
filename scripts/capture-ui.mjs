@@ -65,7 +65,7 @@ try {
   const qa = [];
   const inspectViewport = async label => {
     const data = await page.evaluate(() => {
-      const names=['.topline','.dashboard','.sidebar','.leftStack','.musicPanel','.mapPanel','.vehiclePanel','.bottomDock','.footer'];
+      const names=['.topline','.dashboard','.sidebar','.widgetBoard','.musicPanel','.mapPanel','.vehiclePanel','.bottomDock','.footer'];
       const boxes={};
       for(const selector of names){
         const el=document.querySelector(selector);
@@ -128,30 +128,32 @@ try {
   if(mapWidth <= carWidth || cover.width < 125 || cover.fit !== 'contain') {
     throw new Error('v0.5.8: mapa o portada no tienen las proporciones objetivo a 1280x720');
   }
-  if(!await page.locator('.mapPanel .mapsLaunch').isVisible())
+  if(!await page.locator('.mapPanel .searchGo').isVisible())
     throw new Error('Falta el acceso a Google Maps real');
   await capture('46-v058-inicio-mapa-amplio-1280x720');
   await page.locator('[data-action="open-settings"]').first().click();
-  await page.locator('[data-map-side="right"]').click();
-  if(await page.locator('.dashboard').getAttribute('data-map-side') !== 'right')
-    throw new Error('El mapa no se movió a la derecha');
-  await page.locator('[data-map-size="balanced"]').click();
-  if(await page.locator('.dashboard').getAttribute('data-map-size') !== 'balanced')
-    throw new Error('No aplicó el modo equilibrado');
-  const originalMetrics = await page.locator('.vehicleStats > div').evaluateAll(els=>els.map(el=>el.dataset.metric));
-  await page.locator('[data-metric-id="1"]').click();
-  await page.locator('[data-metric-id="0"]').click();
-  const reordered = await page.locator('.vehicleStats > div').evaluateAll(els=>els.map(el=>el.dataset.metric));
-  if(JSON.stringify(originalMetrics) === JSON.stringify(reordered))
-    throw new Error('No se intercambiaron las métricas');
+  if(await page.locator('[data-action="open-settings"]').count()!==1 || await page.locator('.bottomDock [data-action="radio"]').count() || await page.locator('.vehicleStats>div').count()!==1)throw new Error('Accesos duplicados o métricas adicionales');
+  const gridEditor=page.locator('.layoutEditor');
+  await gridEditor.locator('[data-show="vehicle"]').uncheck();
+  if(await page.locator('.vehiclePanel').isVisible())throw new Error('Ocultar widget no funcionó');
+  await gridEditor.locator('#tileSelect').selectOption('map');
+  await gridEditor.locator('[data-step="short"]').click();
+  await gridEditor.locator('[data-step="narrow"]').click();
+  await gridEditor.locator('[data-step="right"]').click();
+  const geometry=await page.locator('.mapPanel').evaluate(e=>[e.style.gridRow,e.style.gridColumn]);
+  if(!geometry[0].includes('span 7')||!geometry[1].includes('span 5'))throw new Error('No cambió ancho o alto del widget');
+  const grip=gridEditor.locator('[data-tile="map"] .resizeGrip');
+  await grip.scrollIntoViewIfNeeded();
+  const gripBox=await grip.boundingBox(), previewBox=await gridEditor.locator('.gridPreview').boundingBox();
+  await page.mouse.move(gripBox.x+gripBox.width/2,gripBox.y+gripBox.height/2);
+  await page.mouse.down();await page.mouse.move(gripBox.x+gripBox.width/2-previewBox.width/12,gripBox.y+gripBox.height/2-previewBox.height/8,{steps:3});await page.mouse.up();
+  const resized=await page.locator('.mapPanel').evaluate(e=>[e.style.gridRow,e.style.gridColumn]);
+  if(!resized[0].includes('span 6')||!resized[1].includes('span 4'))throw new Error('No funciona arrastrar la esquina del widget');
   await capture('47-v058-ajustes-distribucion-1280x720');
   await page.reload({waitUntil:'networkidle'});
   await page.locator('#startup').waitFor({state:'hidden',timeout:9000});
-  const persistent = await page.locator('.vehicleStats > div').evaluateAll(els=>els.map(el=>el.dataset.metric));
-  if(JSON.stringify(persistent) !== JSON.stringify(reordered) ||
-     await page.locator('.dashboard').getAttribute('data-map-side') !== 'right')
-    throw new Error('No persistió la organización del tablero');
-  await page.locator('[data-action="open-settings"]').first().click();
+  if(await page.locator('.vehiclePanel').isVisible() || String(resized)!==String(await page.locator('.mapPanel').evaluate(e=>[e.style.gridRow,e.style.gridColumn])))throw new Error('No se conservó la distribución');
+  await page.locator('[data-action="open-settings"]').click();
   await page.locator('.layoutReset').click();
   await page.locator('[data-action="close-settings"]').click();
   await inspectViewport('1280×720 · distribución restaurada');
@@ -430,7 +432,7 @@ try {
     throw new Error('El estilo transparente perdió su propia opacidad');
   }
   await page.locator('[data-window-tone="green"]').click();
-  if (await settingsWindow.evaluate(el => getComputedStyle(el).backgroundColor) !== 'rgb(17, 35, 33)' ||
+  if (await settingsWindow.evaluate(el => getComputedStyle(el).backgroundColor) !== 'rgba(17, 35, 33, 0.78)' ||
       String(await widget.evaluate(widgetAppearance)) !== String(blueWidget)) {
     throw new Error('El tono verde de ventanas no se aplicó de manera independiente');
   }
@@ -446,11 +448,25 @@ try {
     throw new Error('Los tonos o el acabado transparente no se restauraron al recargar');
   }
   await page.locator('[data-action="music-detail"]').click();
-  if (await page.locator('.musicDetailModal').evaluate(el => getComputedStyle(el).backgroundColor) !== 'rgb(17, 35, 33)') {
+  if (await page.locator('.musicDetailModal').evaluate(el => getComputedStyle(el).backgroundColor) !== 'rgba(17, 35, 33, 0.78)') {
     throw new Error('El reproductor no heredó el tono de ventanas');
   }
   await capture('50-reproductor-tono-verde');
   await page.locator('#musicDetailClose').click();
+  await page.locator('[data-action="open-settings"]').click();
+  await page.locator('#windowFinish').selectOption('clear');
+  await page.locator('#windowAlpha').fill('20');
+  await page.locator('[data-window-tone="violet"]').click();
+  if(await settingsWindow.evaluate(el=>getComputedStyle(el).backgroundColor)!=='rgba(57, 34, 82, 0.2)')throw new Error('Cristal de las ventanas');
+  await page.locator('#carName').fill('Mi otro carro');await page.locator('#carName').press('Tab');
+  await page.locator('#chooseCar').setInputFiles(['assets/ibiza_frente_original.webp','assets/ibiza_trasera_original.webp']);
+  await page.waitForFunction(()=>document.querySelector('#vehiclePhoto').src.startsWith('data:image/'));
+  await page.reload({waitUntil:'networkidle'});
+  await page.locator('#startup').waitFor({state:'hidden',timeout:9000});
+  await page.locator('#carDot1').click();
+  if(await page.locator('#carChip').innerText()!=='Foto 2 de 2' || await page.locator('.vehHeading strong').innerText()!=='Mi otro carro')throw new Error('Perfil del vehículo no persistió');
+  await page.locator('[data-action="open-settings"]').click();await page.locator('#restoreIbiza').click();
+  await page.locator('[data-action="close-settings"]').click();
   await writeFile(path.join(root,'qa-layout.json'),JSON.stringify({source_commit:process.env.G2_COMMIT||'local',checked:qa},null,2)+'\n');
 
   const meta = {

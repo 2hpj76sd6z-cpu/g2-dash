@@ -14,7 +14,8 @@
   }
   function restore() {
     try {
-      const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+      let saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if(Array.isArray(saved))saved=saved.filter(k=>original.includes(k));
       if (!Array.isArray(saved) || saved.length !== original.length ||
           new Set(saved).size !== original.length || !original.every(x => saved.includes(x))) return;
       saved.forEach(name => {
@@ -65,7 +66,7 @@
       if (button) dock.appendChild(button);
     });
     clear(); save();
-    help.textContent = 'Restaurado el orden original de los siete accesos.';
+    help.textContent = 'Restaurado el orden original de los accesos.';
   });
   // Capture evita que app.js ejecute el acceso cuando se está editando.
   dock.addEventListener('click', event => {

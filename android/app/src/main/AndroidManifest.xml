@@ -17,7 +17,7 @@
     </queries>
 
     <application
-        android:label="G² Dash 20"
+        android:label="G² Dash 21"
         android:allowBackup="false"
         android:supportsRtl="true"
         android:usesCleartextTraffic="false"

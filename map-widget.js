@@ -86,7 +86,7 @@
   }
   function measure() {
     frame=0;
-    const blocked=document.hidden||!byId('startup').hidden||document.querySelector('.screenveil:not([hidden])');
+    const blocked=panel.hidden||document.hidden||!byId('startup').hidden||document.querySelector('.screenveil:not([hidden])');
     const b=slot.getBoundingClientRect();
     const coords=blocked?[0,0,0,0]:[b.left/innerWidth,b.top/innerHeight,b.width/innerWidth,b.height/innerHeight];
     const key=coords.join('/');
@@ -98,6 +98,7 @@
       attributeFilter:['hidden','data-map-side','data-map-size']});
   if(window.ResizeObserver)new ResizeObserver(schedule).observe(slot);
   window.addEventListener('resize',schedule);
+  window.addEventListener('g2-layout',schedule);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stopWatch();else if(!firstShow)sourceChanged();schedule();});
   window.G2LiveMap={locate,refreshLabel,sourceChanged,mapError(){mapError=true;refreshLabel();},
     mapLoaded(){mapError=false;refreshLabel();},
