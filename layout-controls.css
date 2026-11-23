@@ -173,3 +173,11 @@ body[data-live-map] .mapBottom .where { flex:1 1 60px; }
 .widgetChoices label {display:inline-flex;align-items:center;gap:3px;margin:0;padding:4px;}
 .gridSteps button {flex:1 0 auto;}
 .editTools select,#windowFinish,#carName {border:1px solid #79918e;border-radius:8px;background:#1b2a32;color:white;padding:7px;}
+
+.widgetBoard .musicPanel.tinyCard {display:grid;grid-template-rows:minmax(0,1fr) auto;gap:1px;}
+.musicPanel.tinyCard .trackRow {display:grid;grid-template: minmax(0,1fr) / minmax(20px,.7fr) minmax(0,1fr);height:100%;}
+.musicPanel.tinyCard .trackRow .album {grid-area:1/1;height:100%;width:100%;min-height:0;}
+.musicPanel.tinyCard .trackRow .trackText {grid-area:1/2;}
+.musicPanel.tinyCard .musicExpand,.musicPanel.tinyCard .trackRow>.smallAction,.musicPanel.tinyCard .musicPermission {display:none;}
+.musicPanel.tinyCard .musicControls .playButton {width:26px;height:26px;}
+.musicPanel.tinyCard .musicControls button {min-width:20px;min-height:22px;}

@@ -36,7 +36,7 @@ for (const t of targets.filter(t => t !== dashboard && /^https:/.test(t.url))) {
       remote.onmessage=e=>{const m=JSON.parse(e.data);if(m.id===2){clearTimeout(timer);resolve(m.result);}};
     });
     remote.send(JSON.stringify({id:2,method:'Runtime.evaluate',params:{returnByValue:true,
-      expression:"({state:document.readyState,canvases:document.querySelectorAll('canvas').length,images:document.images.length,forms:document.forms.length,characters:document.body?.innerText.length,title:document.title.slice(0,100)})"}}));
+      expression:"({state:document.readyState,canvases:document.querySelectorAll('canvas').length,images:document.images.length,forms:document.forms.length,characters:document.body?.innerText.length,title:document.title.slice(0,100),summary:document.body?.innerText.slice(0,700),imagePaths:[...document.images].slice(0,20).map(i=>{try{return new URL(i.src).pathname.slice(0,80)}catch{return ''}})})"}}));
     console.log('Estado de la página pública de Maps', (await report)?.result?.value);
   } finally {remote.close();}
 }

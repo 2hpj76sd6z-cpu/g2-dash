@@ -423,9 +423,10 @@ public class MainActivity extends Activity {
 
     private void loadWebMap() {
         final int id=++webLoadId;
+        boolean alreadyVisible=webReady;
         webReady=false;
         webMapStatus.setText("Cargando Google Maps…");
-        webMapStatus.setVisibility(mapWebView.getVisibility());
+        webMapStatus.setVisibility(alreadyVisible ? View.GONE : mapWebView.getVisibility());
         for(int delay:new int[]{1500,4000,8500,14000,22000,35000}) {
             root.postDelayed(() -> { if (id==webLoadId && !webReady) inspectGooglePage(id); },delay);
         }
@@ -456,7 +457,7 @@ public class MainActivity extends Activity {
                 else nativeGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(lastFix));
             }
         } else if ((nativeMapView == null || preferWeb) && mapStarted && mapQuery.isEmpty()
-                && (first || center || (followMap && lastWebFix != null
+                && (first || center || (webReady && followMap && lastWebFix != null
                     && android.os.SystemClock.elapsedRealtime()-lastWebAt >= 8000
                     && (Math.abs(lastWebFix.latitude-lat)+Math.abs(lastWebFix.longitude-lon) > .00018)))) {
             loadWebMap();
