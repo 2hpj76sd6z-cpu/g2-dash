@@ -29,6 +29,8 @@ on:
       - 'layout-controls.css'
       - 'layout-controls.js'
       - 'map-widget.js'
+      - 'scripts/check-shared-media.mjs'
+      - 'scripts/check-android-view.mjs'
       - 'assets/**'
       - '.github/workflows/android-apk.yml'
 
@@ -158,3 +160,4 @@ jobs:
             inicio-android.png
             tablero-compartido.png
             reproductor-compartido.png
+            ruta-en-dash.png

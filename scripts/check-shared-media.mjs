@@ -56,6 +56,8 @@ try {
         await delay(350);
     }
     if(!routed)throw Error('No se abrió la ruta dentro del WebView de Dash');
+    await delay(9000);
+    capture('ruta-en-dash.png');
     await evaluate("document.querySelector('.dashRoute').click()");
     await verify("document.querySelector('.dashRoute').textContent==='Trazar ruta'");
     console.log('Portada, instrucciones, pausa, avance, pistas y ruta dentro de Dash verificados.');

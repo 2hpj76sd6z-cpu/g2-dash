@@ -522,6 +522,13 @@ try {
         Math.abs((date.left+date.right-tile.left-tile.right)/2)>2;
     });
     if(clipped) throw new Error('Reloj o fecha cortados en '+width+'×'+height);
+    const misaligned=await stereo.locator('.bottomDock button').evaluateAll(buttons=>buttons.some(button=>{
+      const box=button.getBoundingClientRect(), icon=button.querySelector('svg').getBoundingClientRect(), label=button.querySelector('span').getBoundingClientRect();
+      return Math.abs(icon.left+icon.width/2-box.left-box.width/2)>2 ||
+        Math.abs(label.left+label.width/2-box.left-box.width/2)>2 || label.bottom>box.bottom+1;
+    }));
+    if(misaligned) throw Error('Icono o texto del dock descentrado en '+width+'×'+height);
+
   }
   await stereo.locator('.bottomDock [data-action="music"]').click();
   if (!(await stereo.locator('#musicDetailVeil').isVisible()) || (await stereo.evaluate(()=>window.probe.actions.length))) throw new Error('Música salió de Dash sin sesión');

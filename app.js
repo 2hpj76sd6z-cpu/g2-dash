@@ -282,7 +282,8 @@
   }
   function launchNavigation(){
     const term=$('#destination').value.trim();
-    if(window.G2Android)window.G2Android.openMap(term);
+    if(window.G2LiveMap)window.G2Android.openMap('');
+    else if(window.G2Android)window.G2Android.openMap(term);
     else openMap();
   }
   function nativeMapsAvailable(){
@@ -542,7 +543,7 @@
     };reader.readAsDataURL(file);
   });
   $('#destination').addEventListener('input',updateMapDestinationState);
-  $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();launchNavigation()}});
+  $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();if(window.G2LiveMap)window.G2LiveMap.startRoute();else launchNavigation()}});
   document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close();window.G2Apps?.close();window.G2MusicDetail?.close();window.G2AirPlay?.close()}});
   if(window.G2Android){$('#musicSource').textContent='ANDROID';const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.8';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
   photoChange(0);updateMapDestinationState();applySettings();updateClock();setInterval(updateClock,20000);

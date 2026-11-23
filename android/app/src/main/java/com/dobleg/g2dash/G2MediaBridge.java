@@ -59,6 +59,7 @@ final class G2MediaBridge {
     }
 
     void start() {
+        previousPayload = "";
         visible = true;
         handler.removeCallbacks(tick);
         handler.post(tick);

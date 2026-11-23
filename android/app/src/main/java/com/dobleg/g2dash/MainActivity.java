@@ -211,6 +211,7 @@ public class MainActivity extends Activity {
                 super.onPageFinished(view, url);
                 if (!HOME_URL.equals(url)) return;
                 pageReady = true;
+                if (foreground && mediaBridge != null) mediaBridge.start();
                 startPhone();
                 emitLifecycle(restoredInstance ? "restored" : "cold_start");
                 restoredInstance = false;

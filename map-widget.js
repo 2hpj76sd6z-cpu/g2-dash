@@ -39,14 +39,21 @@
     routeActive=false;
     route.textContent='Trazar ruta';
     bridge.endDashRoute();
+    refreshLabel();
   }
-  route.addEventListener('click',()=>{
-    if(routeActive){stopRoute();return;}
+  function startRoute(){
     if(!destination.value.trim()){destination.focus();return;}
     bridge.routeInDash(destination.value.trim());
     routeActive=true;
     route.textContent='Cerrar ruta';
-  });
+    refreshLabel();
+  }
+  route.addEventListener('click',()=>{if(routeActive)stopRoute();else startRoute();});
+  const go=panel.querySelector('.searchGo');
+  go.removeAttribute('data-action');
+  go.title='Trazar ruta al destino';
+  go.setAttribute('aria-label',go.title);
+  go.addEventListener('click',startRoute);
   destination.addEventListener('input',()=>{if(routeActive)stopRoute();});
   const turns=byId('shareTurns');
   turns.checked=bridge.sharedTurnsEnabled?.()===true;
@@ -57,9 +64,10 @@
   let lastBounds='', frame=0, watch=null, sourceEpoch=0, staleTimer, lastFix=null, firstShow=true;
   let detail='', mapError=false, phone=false;
   function refreshLabel() {
-    panel.classList.toggle('hasTurn',Boolean(turn));
-    byId('mapStateTitle').textContent=turn?turn:mapError?'Mapa pendiente':'Google Maps';
-    byId('mapStateDetail').textContent=turn?turnSource:mapError?'Toca centrar para reintentar':detail;
+    const sharedInstruction=routeActive?'':turn;
+    panel.classList.toggle('hasTurn',Boolean(sharedInstruction));
+    byId('mapStateTitle').textContent=sharedInstruction?sharedInstruction:mapError?'Mapa pendiente':'Google Maps';
+    byId('mapStateDetail').textContent=sharedInstruction?turnSource:mapError?'Toca centrar para reintentar':detail;
   }
   function status(text, kmh=-1) {
     detail=text;
@@ -116,7 +124,7 @@
   window.addEventListener('resize',schedule);
   window.addEventListener('g2-layout',schedule);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stopWatch();else if(!firstShow)sourceChanged();schedule();});
-  window.G2LiveMap={sharedTurn(text,source){turn=String(text||'');turnSource=String(source||'');refreshLabel();},locate,refreshLabel,sourceChanged,mapError(){mapError=true;refreshLabel();},
+  window.G2LiveMap={startRoute,sharedTurn(text,source){turn=String(text||'');turnSource=String(source||'');refreshLabel();},locate,refreshLabel,sourceChanged,mapError(){mapError=true;refreshLabel();},
     mapLoaded(){mapError=false;refreshLabel();},
     phoneUpdate(valid,speed,label){if(!phone)return;if(valid)fresh(label,speed);else status(label);}
   };
