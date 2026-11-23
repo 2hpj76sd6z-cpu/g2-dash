@@ -88,7 +88,7 @@ try {
     await verify("document.getElementById('songName').textContent==='Camino' && document.getElementById('songSource').textContent==='BLUETOOTH'");
     // A real public catalog request, using a known test track without any bitmap in its broadcast.
     execFileSync('adb',['shell','am','broadcast','-a','com.syu.bt.music.id3','-p','com.dobleg.g2dash.prueba23',
-        '--es','title',"'Midnight City'",'--es','artist','M83','--es','album',"'Midnight City'"]);
+        '--es','title',"'Midnight City'",'--es','artist','M83','--es','album',"'Hurry Up, We’re Dreaming'"]);
     await verify("document.getElementById('songName').textContent==='Midnight City' && document.getElementById('albumArt').hidden");
     await evaluate("document.getElementById('catalogCovers').click()");
     let catalogArt=false;

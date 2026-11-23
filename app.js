@@ -392,6 +392,7 @@
       art.hidden = true; art.removeAttribute('src');
     }
     const duration = active || preview ? Math.max(0,Number(data.durationMs)||0) : 0;
+    if(window.G2Android)$('.musicPanel .songMeta').hidden=active && duration===0;
     const position = Math.min(duration,Math.max(0,Number(data.positionMs)||0));
     const seekable=active && !preview && data.canSeek===true && duration>0 && Boolean(window.G2Android);
     miniSeek.hidden=!seekable; miniSeek.disabled=!seekable;

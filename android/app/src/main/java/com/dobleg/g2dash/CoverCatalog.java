@@ -14,7 +14,8 @@ final class CoverCatalog {
     private final ExecutorService worker=Executors.newSingleThreadExecutor();
     private final Handler main=new Handler(Looper.getMainLooper());
     private final LruCache<String,String> cache=new LruCache<>(12);
-    private String desired="",busy="",failed="";
+    private volatile String desired="";
+    private String busy="",failed="";
     private long retryAt, lastRequest;
     boolean searching(){return !busy.isEmpty() && busy.equals(desired);}
     void clear(){desired="";}
@@ -30,11 +31,13 @@ final class CoverCatalog {
         busy=key;lastRequest=now;
         worker.execute(()->{
             String result="";
+            boolean temporaryFailure=false;
             try{
                 String query="recording:"+phrase(title)+" AND artist:"+phrase(artist);
                 if(!album.isEmpty())query+=" AND release:"+phrase(album);
                 byte[] json=load("https://musicbrainz.org/ws/2/recording/?fmt=json&limit=8&query="+URLEncoder.encode(query,"UTF-8"),650000);
                 for(String release:releases(new JSONObject(new String(json,"UTF-8")),title,artist,album)){
+                  if(!key.equals(desired))break;
                   try{
                     byte[] bytes=load("https://coverartarchive.org/release/"+release+"/front-250",600000);
                     BitmapFactory.Options bounds=new BitmapFactory.Options();bounds.inJustDecodeBounds=true;
@@ -45,12 +48,13 @@ final class CoverCatalog {
                     }
                   }catch(FileNotFoundException missing){/* Another edition may have artwork. */}
                 }
-            }catch(Exception unavailable){/* Offline, no matching release, or the archive has no cover. */}
+            }catch(Exception unavailable){temporaryFailure=true;}
             final String data=result;
+            final long backoff=temporaryFailure?30000:300000;
             main.post(()->{
                 busy="";
                 if(worker.isShutdown()||!key.equals(desired))return;
-                if(data.isEmpty()){failed=key;retryAt=SystemClock.elapsedRealtime()+300000;}
+                if(data.isEmpty()){failed=key;retryAt=SystemClock.elapsedRealtime()+backoff;}
                 else cache.put(key,data);
                 refresh.run();
             });
@@ -58,14 +62,14 @@ final class CoverCatalog {
         return "";
     }
     private static String phrase(String s){return "\""+s.replace("\\","\\\\").replace("\"","\\\"")+"\"";}
-    private static String norm(String s){return s.trim().toLowerCase(Locale.ROOT);}
+    private static String norm(String s){return s.trim().replace("’","'").toLowerCase(Locale.ROOT);}
     static java.util.List<String> releases(JSONObject response,String title,String artist,String album){
         JSONArray rows=response.optJSONArray("recordings");
         java.util.Map<String,Integer> editions=new java.util.LinkedHashMap<>();
         if(rows==null)return java.util.Collections.emptyList();
         for(int i=0;i<rows.length();i++){
             JSONObject rec=rows.optJSONObject(i);
-            if(rec==null || !norm(title).equals(norm(rec.optString("title"))))continue;
+            if(rec==null || rec.optBoolean("video") || !norm(title).equals(norm(rec.optString("title"))))continue;
             JSONArray credits=rec.optJSONArray("artist-credit");if(credits==null)continue;
             StringBuilder names=new StringBuilder();
             for(int k=0;k<credits.length();k++){

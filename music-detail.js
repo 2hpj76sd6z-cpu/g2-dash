@@ -54,6 +54,7 @@
    action.setAttribute('aria-label',playing?'Pausar':'Reproducir');
    canSeek=active&&native&&!preview&&data.canSeek===true&&duration>0;
    seek.disabled=!canSeek;
+   if(native)seek.parentElement.hidden=active && duration===0;
    seek.max=String(Math.max(1,Math.floor(duration)));
    if(!seek.matches(':active'))seek.value=String(Math.floor(pos));
    seek.style.setProperty('--seek-progress',duration?((pos/duration)*100).toFixed(2)+'%':'0%');
