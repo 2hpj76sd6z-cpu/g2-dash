@@ -379,7 +379,7 @@
       (active ? musicText(data.artist,'Artista desconocido') :
        (granted?'Reproduce música en tu iPhone':'Autoriza música en Ajustes'));
     if(source){
-      const sourceName=preview?'EJEMPLO VISUAL':active?(data.carLink?'CARLINK 2.0':musicApps[data.package]||'ANDROID AUDIO'):'MÚSICA LOCAL';
+      const sourceName=preview?'EJEMPLO VISUAL':active?(data.sourceLabel|| (data.carLink?'CARLINK 2.0':'') || musicApps[data.package]||'ANDROID AUDIO'):'MÚSICA LOCAL';
       source.textContent=sourceName;
       source.dataset.source=String(data.package||'').toLowerCase();
     }
@@ -406,13 +406,19 @@
     $('#play').setAttribute('aria-label',playing?'Pausar música':'Reproducir música');
     const status = preview?'EJEMPLO VISUAL' : !granted?'Permiso pendiente' : !active?'Sin reproducción' : playing?'Reproduciendo':'En pausa';
     $('#musicStatus').textContent=status;
-    $('#musicSource').textContent=preview?'NO ES AUDIO REAL' : (active ? (data.carLink?'CARLINK 2.0':musicApps[data.package]||'ANDROID AUDIO') : (granted?'ANDROID':'SIN CONECTAR'));
+    $('#musicSource').textContent=preview?'NO ES AUDIO REAL' : (active ? (data.sourceLabel|| (data.carLink?'CARLINK 2.0':'') || musicApps[data.package]||'ANDROID AUDIO') : (granted?'ANDROID':'SIN CONECTAR'));
     $('#deviceStatus').textContent = preview ? 'VISTA DE PRUEBA' : (granted?'ANDROID · MÚSICA':'ANDROID · v0.5.8');
     $('.musicPanel').dataset.media=preview?'preview':(!granted?'permission':(!active?'idle':(playing?'playing':'paused')));
     if (window.G2Android) {
       $('.musicControls [data-action="demo-prev"]').disabled=!active || data.canPrevious===false;
       $('.musicControls [data-action="demo-next"]').disabled=!active || data.canNext===false;
       $('#play').disabled=active && data.canPlay===false;
+    }
+    const report=$('#receiverReport');
+    if(report && data.native){
+      const music=data.channel?data.channel+' · '+data.coverStatus:(data.access?'El receptor aún no comparte la canción':'Falta autorizar acceso multimedia');
+      const nav=data.turn?'Giro recibido':$('#shareTurns')?.checked?'Esperando indicaciones del receptor':'Indicaciones compartidas desactivadas';
+      report.textContent=music+' · '+nav;
     }
     window.G2LiveMap?.sharedTurn(data.turn,data.turnSource);
     window.G2MusicDetail?.update(data);

@@ -8,7 +8,7 @@ import android.os.Bundle;
 
 /** Only built for emulator checks. Publishes through the same Android APIs as a receiver. */
 public class ReceiverActivity extends Activity {
-    private MediaSession session;
+    static MediaSession session;
     private long position = 12000;
     private boolean playing = true;
     private boolean second;
@@ -46,7 +46,11 @@ public class ReceiverActivity extends Activity {
         session.setMetadata(new MediaMetadata.Builder().putString(MediaMetadata.METADATA_KEY_TITLE,second?"Segunda pista":"Primera pista")
             .putString(MediaMetadata.METADATA_KEY_ARTIST,"Receptor de prueba")
             .putString(MediaMetadata.METADATA_KEY_ALBUM,"Sesiones de prueba")
-            .putLong(MediaMetadata.METADATA_KEY_DURATION,210000).putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART,cover).build());
+            .putLong(MediaMetadata.METADATA_KEY_DURATION,210000).build());
+        // Firmware variant: cover is published only in the music notification.
+        if(!second)notifications.notify(8,new Notification.Builder(this,"route")
+            .setSmallIcon(android.R.drawable.ic_media_play).setLargeIcon(cover)
+            .setCategory(Notification.CATEGORY_TRANSPORT).setContentTitle("Primera pista").setContentText("Receptor de prueba").build());
         long actions=PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_SEEK_TO
             | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS;
         session.setPlaybackState(new PlaybackState.Builder().setActions(actions)
@@ -54,6 +58,6 @@ public class ReceiverActivity extends Activity {
     }
 
     @Override public void onDestroy() {
-        notifications.cancel(7); session.release(); super.onDestroy();
+        notifications.cancel(7); notifications.cancel(8); session.release();session=null; super.onDestroy();
     }
 }

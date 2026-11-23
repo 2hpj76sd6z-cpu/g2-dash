@@ -458,7 +458,20 @@ public class MainActivity extends Activity {
         if (Double.isNaN(lat) || Double.isNaN(lon) || Math.abs(lat)>90 || Math.abs(lon)>180) return;
         boolean first = lastFix == null;
         lastFix = new LatLng(lat, lon);
-        if (center && !routeRequested) { followMap = true; mapQuery = ""; }
+        if (center) {
+            followMap=true;
+            if(!routeRequested)mapQuery="";
+        }
+        if (routeRequested && mapStarted && (expanded || inlineBounds!=null)) {
+            boolean moved=false;
+            if(lastWebFix!=null){
+                float[] distance=new float[1];
+                android.location.Location.distanceBetween(lastWebFix.latitude,lastWebFix.longitude,lat,lon,distance);
+                moved=distance[0]>=150 && android.os.SystemClock.elapsedRealtime()-lastWebAt>=30000;
+            }
+            if(center || lastWebFix==null || followMap && webReady && moved)loadWebMap();
+            return;
+        }
         if (nativeGoogleMap != null && !preferWeb) {
             if (usingPhone()) {
                 if (phoneMarker == null) phoneMarker = nativeGoogleMap.addMarker(new MarkerOptions().position(lastFix).title("GPS del celular"));
@@ -761,6 +774,11 @@ public class MainActivity extends Activity {
     }
 
     private class AndroidBridge {
+        @JavascriptInterface public boolean catalogCoversEnabled(){return getPreferences(MODE_PRIVATE).getBoolean("catalogCovers",false);}
+        @JavascriptInterface public void setCatalogCovers(boolean enabled){runOnUiThread(()->{
+            getPreferences(MODE_PRIVATE).edit().putBoolean("catalogCovers",enabled).apply();
+            mediaBridge.emit();
+        });}
         @JavascriptInterface public boolean sharedTurnsEnabled() {
             return getPreferences(MODE_PRIVATE).getBoolean("shareTurns", false);
         }
@@ -776,7 +794,7 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> {
                 mapQuery=destination.trim();
                 routeRequested=true;
-                followMap=false;
+                followMap=true;
                 preferWeb=true;
                 renderMap();
                 loadWebMap();

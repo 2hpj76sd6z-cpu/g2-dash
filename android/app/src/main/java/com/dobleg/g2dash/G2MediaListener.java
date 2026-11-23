@@ -13,6 +13,15 @@ public final class G2MediaListener extends NotificationListenerService
     private static volatile String source = "";
     private SharedPreferences preferences;
     private String currentKey;
+    private static volatile StatusBarNotification media;
+    static StatusBarNotification media(){return media;}
+    private boolean musicFromReceiver(StatusBarNotification entry) {
+        if(entry==null || preferences==null)return false;
+        String pkg=entry.getPackageName();
+        Notification note=entry.getNotification();
+        return (CARLINK.equals(pkg)||pkg.equals(preferences.getString("carlinkApp",""))||"com.android.bluetooth".equals(pkg))
+            && (Notification.CATEGORY_TRANSPORT.equals(note.category)||note.extras.containsKey(Notification.EXTRA_MEDIA_SESSION));
+    }
 
     static String instruction() { return instruction; }
     static String source() { return source; }
@@ -35,6 +44,7 @@ public final class G2MediaListener extends NotificationListenerService
     private void disconnect() {
         if (preferences != null) preferences.unregisterOnSharedPreferenceChangeListener(this);
         preferences = null;
+        media=null;
         clear();
     }
 
@@ -71,11 +81,13 @@ public final class G2MediaListener extends NotificationListenerService
 
     private void refresh() {
         clear();
-        if (preferences == null || !preferences.getBoolean("shareTurns", false)) return;
+        media=null;
+        if (preferences == null) return;
         try {
             StatusBarNotification[] entries = getActiveNotifications();
             if (entries == null) return;
             java.util.Arrays.sort(entries,(a,b) -> Long.compare(b.getPostTime(),a.getPostTime()));
+            for(StatusBarNotification entry:entries)if(musicFromReceiver(entry)){media=entry;break;}
             for (StatusBarNotification entry : entries) if (show(entry)) break;
         } catch (SecurityException | IllegalStateException unavailable) { clear(); }
     }
@@ -84,9 +96,11 @@ public final class G2MediaListener extends NotificationListenerService
         if ("shareTurns".equals(key) || "carlinkApp".equals(key)) refresh();
     }
     @Override public void onNotificationPosted(StatusBarNotification entry) {
+        if(musicFromReceiver(entry))media=entry;
+        else if(media!=null && entry!=null && entry.getKey().equals(media.getKey())){refresh();return;}
         if (!show(entry) && entry != null && entry.getKey().equals(currentKey)) refresh();
     }
     @Override public void onNotificationRemoved(StatusBarNotification entry) {
-        if (entry != null && entry.getKey().equals(currentKey)) refresh();
+        if (entry!=null && (entry.getKey().equals(currentKey) || media!=null && entry.getKey().equals(media.getKey()))) refresh();
     }
 }

@@ -35,13 +35,13 @@
      'com.amazon.mp3':'AMAZON MUSIC','com.samsung.android.app.music':'SAMSUNG MUSIC',
      'com.sec.android.app.music':'SAMSUNG MUSIC','com.pandora.android':'PANDORA',
      'com.soundcloud.android':'SOUNDCLOUD'};
-   const sourceName=preview?'EJEMPLO VISUAL':active?(data.carLink?'CARLINK 2.0':appNames[data.package]||'ANDROID AUDIO'):'MÚSICA LOCAL';
+   const sourceName=preview?'EJEMPLO VISUAL':active?(data.sourceLabel|| (data.carLink?'CARLINK 2.0':'') || appNames[data.package]||'ANDROID AUDIO'):'MÚSICA LOCAL';
    title.textContent=preview?'Pista de prueba':active?String(data.title||'Sin título').slice(0,160):granted?'Sin música activa':'Conecta tu música';
    artist.textContent=preview?'EJEMPLO · NO ES AUDIO REAL':active?String(data.artist||'Artista desconocido').slice(0,160):granted?'Reproduce música en el teléfono conectado':'Autoriza el acceso a música en Android';
    album.textContent=preview?'ÁLBUM DE PRUEBA':active?String(data.album||'Álbum no disponible').slice(0,160):'ÁLBUM NO DISPONIBLE';
    source.textContent=sourceName;
    source.dataset.source=String(data.package||'').toLowerCase();
-   mode.textContent=preview?'SIN REPRODUCCIÓN':playing?'REPRODUCIENDO':active?'EN PAUSA':granted?'SIN SESIÓN':'SIN PERMISO';
+   mode.textContent=preview?'SIN REPRODUCCIÓN':playing?'REPRODUCIENDO':active?(data.stateKnown===false?'COMPARTIDO':'EN PAUSA'):granted?'SIN SESIÓN':'SIN PERMISO';
    const validCover=active&&!preview&&typeof data.albumArt==='string'&&
      data.albumArt.startsWith('data:image/jpeg;base64,')&&data.albumArt.length<400000;
    if(validCover){if(cover.src!==data.albumArt)cover.src=data.albumArt;cover.hidden=false}

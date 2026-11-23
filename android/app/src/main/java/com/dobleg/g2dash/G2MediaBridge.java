@@ -35,6 +35,8 @@ final class G2MediaBridge {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final MediaSessionManager sessions;
     private final ComponentName listenerComponent;
+    private final StereoMusic stereo;
+    private final CoverCatalog catalog=new CoverCatalog();
     private boolean visible;
     private String lastSource = "";
     private String lastArtworkId = "";
@@ -53,12 +55,14 @@ final class G2MediaBridge {
 
     G2MediaBridge(Activity activity, WebView webView) {
         this.activity = activity;
+        stereo=new StereoMusic(activity);
         this.webView = webView;
         sessions = (MediaSessionManager) activity.getSystemService(Context.MEDIA_SESSION_SERVICE);
         listenerComponent = new ComponentName(activity, G2MediaListener.class);
     }
 
     void start() {
+        stereo.start();
         previousPayload = "";
         visible = true;
         handler.removeCallbacks(tick);
@@ -66,11 +70,14 @@ final class G2MediaBridge {
     }
 
     void stop() {
+        stereo.stop();
+        catalog.clear();
         visible = false;
         handler.removeCallbacks(tick);
     }
 
     void destroy() {
+        catalog.close();
         stop();
         previousPayload = "";
         lastArtworkData = "";
@@ -113,35 +120,28 @@ final class G2MediaBridge {
     }
 
     private MediaController preferredSession() {
-        List<MediaController> all = controllers();
-        MediaController fallback = null;
-        MediaController previous = null;
-        // AirPlay has priority when genuinely playing: other paused sessions
-        // must not steal the iPhone cover art or transport controls.
-        for (MediaController item : all) {
-            if (item == null) continue;
-            PlaybackState state = item.getPlaybackState();
-            if (("com.syu.carlink".equals(item.getPackageName()) || activity.getPreferences(0).getString("carlinkApp","").equals(item.getPackageName()))
-                    && state != null && state.getState() == PlaybackState.STATE_PLAYING) return item;
+        String selected=activity.getPreferences(0).getString("carlinkApp","");
+        List<MediaController> all = new java.util.ArrayList<>(controllers());
+        MediaController bluetooth=stereo.controller(selected);
+        if(bluetooth!=null)all.add(bluetooth);
+        MediaController best=null;
+        int bestScore=-1;
+        for(MediaController item:all){
+            if(item==null)continue;
+            MediaMetadata m=item.getMetadata();
+            boolean named=m!=null && !safeText(m.getDescription().getTitle(),"").trim().isEmpty();
+            PlaybackState state=item.getPlaybackState();
+            boolean playing=state!=null&&state.getState()==PlaybackState.STATE_PLAYING;
+            String pkg=item.getPackageName();
+            int score=(named?16:0)+(playing?8:0)+(pkg.equals(selected)||G2MediaListener.CARLINK.equals(pkg)?4:0)+(pkg.equals(lastSource)?2:0);
+            if(score>bestScore){best=item;bestScore=score;}
         }
-        for (MediaController item : all) {
-            if (item == null) continue;
-            PlaybackState state = item.getPlaybackState();
-            if (state != null && state.getState() == PlaybackState.STATE_PLAYING) return item;
-            if (item.getMetadata() != null) {
-                if (lastSource.equals(item.getPackageName())) previous=item;
-                if (fallback==null) fallback=item;
-            }
-        }
-        return previous!=null ? previous : fallback;
+        return best;
     }
 
     void control(String action) {
-        if (!accessGranted()) {
-            showAccessSettings();
-            return;
-        }
         MediaController item = preferredSession();
+        if (item==null && !accessGranted() && stereo.track()==null) { showAccessSettings(); return; }
         if (item == null) {
             android.media.AudioManager audio=(android.media.AudioManager)activity.getSystemService(Context.AUDIO_SERVICE);
             int key="toggle".equals(action)?android.view.KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
@@ -182,7 +182,7 @@ final class G2MediaBridge {
 
     /** Adelantar/retroceder solo cuando la MediaSession expone ACTION_SEEK_TO. */
     void seekTo(long positionMs) {
-        if (!accessGranted() || positionMs < 0) return;
+        if (positionMs < 0) return;
         MediaController item = preferredSession();
         if (item == null) return;
         PlaybackState state = item.getPlaybackState();
@@ -223,17 +223,37 @@ final class G2MediaBridge {
         } catch(Exception unavailable) { return null; }
     }
 
-    private String albumArt(MediaMetadata metadata, String key) {
-        if (key.equals(lastArtworkId) && !lastArtworkData.isEmpty()) return lastArtworkData;
-        lastArtworkId = key;
-        lastArtworkData = "";
-        if (metadata == null) return lastArtworkData;
-        Bitmap bitmap = metadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
-        if (bitmap == null) bitmap = metadata.getBitmap(MediaMetadata.METADATA_KEY_ART);
-        if (bitmap == null) bitmap = metadata.getBitmap(MediaMetadata.METADATA_KEY_DISPLAY_ICON);
-        if (bitmap == null) bitmap = metadata.getDescription().getIconBitmap();
-        if (bitmap == null) bitmap = readLocalCover(metadata);
-        if (bitmap == null || bitmap.getWidth() < 1 || bitmap.getHeight() < 1) return "";
+    private static Bitmap notificationArt(android.app.Notification n,Activity activity) {
+        if(n==null||n.getLargeIcon()==null)return null;
+        try{
+            android.graphics.drawable.Icon icon=n.getLargeIcon();
+            if(Build.VERSION.SDK_INT>=28 && icon.getType()!=android.graphics.drawable.Icon.TYPE_BITMAP
+                && icon.getType()!=android.graphics.drawable.Icon.TYPE_ADAPTIVE_BITMAP)return null;
+            android.graphics.drawable.Drawable drawable=icon.loadDrawable(activity);
+            if(drawable instanceof android.graphics.drawable.BitmapDrawable)
+                return ((android.graphics.drawable.BitmapDrawable)drawable).getBitmap();
+        }catch(RuntimeException ignored){}
+        return null;
+    }
+
+    private String albumArt(MediaMetadata meta,android.app.Notification note,String key) {
+        Bitmap bitmap=null;
+        if(meta!=null){
+            bitmap=meta.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
+            if(bitmap==null)bitmap=meta.getBitmap(MediaMetadata.METADATA_KEY_ART);
+            if(bitmap==null)bitmap=meta.getDescription().getIconBitmap();
+        }
+        if(bitmap==null)bitmap=notificationArt(note,activity);
+        if(bitmap!=null)key+="|"+bitmap.getGenerationId();
+        else if(meta!=null)key+="|"+meta.getDescription().getIconUri();
+        if(key.equals(lastArtworkId)&&!lastArtworkData.isEmpty())return lastArtworkData;
+        if(bitmap==null&&meta!=null)bitmap=readLocalCover(meta);
+        lastArtworkId=key;
+        lastArtworkData=bitmap==null?"":encode(bitmap);
+        return lastArtworkData;
+    }
+
+    static String encode(Bitmap bitmap) {
         try {
             int target = 320;
             float factor = Math.min(1f, Math.min((float) target / bitmap.getWidth(), (float) target / bitmap.getHeight()));
@@ -243,11 +263,10 @@ final class G2MediaBridge {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             small.compress(Bitmap.CompressFormat.JPEG, 82, output);
             if (small != bitmap) small.recycle();
-            lastArtworkData = "data:image/jpeg;base64," + Base64.encodeToString(output.toByteArray(), Base64.NO_WRAP);
+            return "data:image/jpeg;base64," + Base64.encodeToString(output.toByteArray(), Base64.NO_WRAP);
         } catch (Exception ex) {
-            lastArtworkData = "";
+            return "";
         }
-        return lastArtworkData;
     }
 
     void emit() {
@@ -260,64 +279,68 @@ final class G2MediaBridge {
             boolean share = granted && activity.getPreferences(0).getBoolean("shareTurns", false);
             data.put("turn", share ? G2MediaListener.instruction() : "");
             data.put("turnSource", share ? G2MediaListener.source() : "");
-            if (!granted) {
-                data.put("title", "Conecta tu música");
-                data.put("artist", "Autoriza el acceso en Android");
-                data.put("album", "Álbum no disponible");
-                data.put("playing", false);
-                data.put("albumArt", "");
-                data.put("durationMs", 0);
-                data.put("positionMs", 0);
-            } else {
-                MediaController current = preferredSession();
-                if (current == null) {
-                    data.put("title", "Sin música activa");
-                    data.put("artist", "Abre tu reproductor en este Android");
-                    data.put("album", "Álbum no disponible");
-                    data.put("playing", false);
-                    data.put("albumArt", "");
-                    data.put("durationMs", 0);
-                    data.put("positionMs", 0);
-                } else {
-                    lastSource=current.getPackageName();
-                    MediaMetadata meta = current.getMetadata();
-                    PlaybackState state = current.getPlaybackState();
-                    boolean playing = state != null && state.getState() == PlaybackState.STATE_PLAYING;
-                    String title = meta == null ? "Sin título" :
-                            safeText(meta.getText(MediaMetadata.METADATA_KEY_TITLE), "Sin título");
-                    String artist = meta == null ? "Artista no disponible" :
-                            safeText(meta.getText(MediaMetadata.METADATA_KEY_ARTIST), "Artista no disponible");
-                    String album = meta == null ? "Álbum no disponible" :
-                            safeText(meta.getText(MediaMetadata.METADATA_KEY_ALBUM), "Álbum no disponible");
-                    long duration = meta == null ? 0 : Math.max(0, meta.getLong(MediaMetadata.METADATA_KEY_DURATION));
-                    long position = state == null ? 0 : Math.max(0, state.getPosition());
-                    if (playing && state.getLastPositionUpdateTime() > 0) {
-                        long elapsed=android.os.SystemClock.elapsedRealtime()-state.getLastPositionUpdateTime();
-                        if (elapsed >= 0) position+=Math.round(elapsed*state.getPlaybackSpeed());
+            MediaController current=preferredSession();
+            MediaMetadata meta=current==null?null:current.getMetadata();
+            String pkg=current==null?"":current.getPackageName();
+            String title="",artist="",album="",channel="";
+            if(meta!=null){
+                title=safeText(meta.getText(MediaMetadata.METADATA_KEY_TITLE),safeText(meta.getDescription().getTitle(),""));
+                artist=safeText(meta.getText(MediaMetadata.METADATA_KEY_ARTIST),safeText(meta.getDescription().getSubtitle(),""));
+                album=safeText(meta.getText(MediaMetadata.METADATA_KEY_ALBUM),"");
+            }
+            if(!title.isEmpty())channel="Sesión multimedia";
+            android.service.notification.StatusBarNotification posted=granted?G2MediaListener.media():null;
+            android.app.Notification note=posted==null?null:posted.getNotification();
+            if(note!=null){
+                String name=safeText(note.extras.getCharSequence(android.app.Notification.EXTRA_TITLE),"");
+                boolean matches=(pkg.isEmpty()||pkg.equals(posted.getPackageName())||title.isEmpty())
+                    && (title.isEmpty()||title.equalsIgnoreCase(name));
+                if(!matches || name.isEmpty())note=null;
+                else{
+                    if(title.isEmpty()){
+                        if(!pkg.equals(posted.getPackageName())){current=null;meta=null;artist="";album="";}
+                        title=name;pkg=posted.getPackageName();channel="Notificación musical";
                     }
-                    if (duration > 0) position = Math.min(position, duration);
-                    data.put("title", title);
-                    data.put("artist", artist);
-                    data.put("album", album);
-                    data.put("playing", playing);
-                    long actions = state == null ? 0 : state.getActions();
-                    data.put("canSeek", duration > 0 &&
-                            (actions & PlaybackState.ACTION_SEEK_TO) != 0);
-                    data.put("canPrevious",
-                            (actions & PlaybackState.ACTION_SKIP_TO_PREVIOUS) != 0);
-                    data.put("canNext",
-                            (actions & PlaybackState.ACTION_SKIP_TO_NEXT) != 0);
-                    data.put("canPlay", playing
-                            ? (actions & (PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_PLAY_PAUSE)) != 0
-                            : (actions & (PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE)) != 0);
-                    data.put("package", current.getPackageName());
-                    data.put("carLink", "com.syu.carlink".equals(current.getPackageName())
-                            || current.getPackageName().equals(activity.getPreferences(0).getString("carlinkApp","")));
-                    data.put("albumArt", albumArt(meta, current.getPackageName() + "|" + title + "|" + artist + "|" + album));
-                    data.put("durationMs", duration);
-                    data.put("positionMs", position);
+                    if(artist.isEmpty())artist=safeText(note.extras.getCharSequence(android.app.Notification.EXTRA_TEXT),"");
                 }
             }
+            StereoMusic.Track track=stereo.track();
+            if(title.isEmpty() && track!=null){
+                title=track.title;artist=track.artist;album=track.album;channel="Bluetooth del estéreo";
+                current=null;meta=null;pkg="";note=null;
+            }
+            boolean active=!title.isEmpty();
+            PlaybackState state=current==null?null:current.getPlaybackState();
+            boolean playing=state!=null&&state.getState()==PlaybackState.STATE_PLAYING;
+            long actions=state==null?0:state.getActions();
+            long duration=meta==null?0:Math.max(0,meta.getLong(MediaMetadata.METADATA_KEY_DURATION));
+            long position=state==null?0:Math.max(0,state.getPosition());
+            if(playing && state.getLastPositionUpdateTime()>0)
+                position+=Math.round(Math.max(0,android.os.SystemClock.elapsedRealtime()-state.getLastPositionUpdateTime())*state.getPlaybackSpeed());
+            boolean isCar=G2MediaListener.CARLINK.equals(pkg)||!pkg.isEmpty()&&pkg.equals(activity.getPreferences(0).getString("carlinkApp",""));
+            String art=active?albumArt(meta,note,pkg+"|"+title+"|"+artist+"|"+album):"";
+            String cover=art.isEmpty()?"Sin imagen recibida":"Imagen recibida";
+            if(active&&art.isEmpty()&&activity.getPreferences(0).getBoolean("catalogCovers",false)){
+                art=catalog.find(title,artist,album,this::emit);
+                cover=!art.isEmpty()?"Portada de catálogo":catalog.searching()?"Buscando portada":"Sin portada de catálogo";
+            }else catalog.clear();
+            data.put("granted",granted||active);
+            data.put("access",granted);
+            data.put("channel",channel);
+            data.put("coverStatus",cover);
+            data.put("title",active?title:granted?"Sin música activa":"Conecta tu música");
+            data.put("artist",artist.isEmpty()?"Artista no disponible":artist);
+            data.put("album",album.isEmpty()?"Álbum no disponible":album);
+            data.put("albumArt",art);
+            data.put("playing",playing); data.put("stateKnown",state!=null);
+            data.put("package",pkg);data.put("carLink",isCar);
+            if(active)lastSource=pkg;
+            if(channel.equals("Bluetooth del estéreo") || pkg.contains("bluetooth"))data.put("sourceLabel","BLUETOOTH");
+            data.put("durationMs",duration);data.put("positionMs",duration>0?Math.min(duration,position):position);
+            data.put("canSeek",duration>0&&(actions&PlaybackState.ACTION_SEEK_TO)!=0);
+            data.put("canNext",(actions&PlaybackState.ACTION_SKIP_TO_NEXT)!=0);
+            data.put("canPrevious",(actions&PlaybackState.ACTION_SKIP_TO_PREVIOUS)!=0);
+            data.put("canPlay",(actions&(PlaybackState.ACTION_PLAY_PAUSE|(playing?PlaybackState.ACTION_PAUSE:PlaybackState.ACTION_PLAY)))!=0);
             String payload = data.toString();
             if (!payload.equals(previousPayload)) {
                 previousPayload = payload;

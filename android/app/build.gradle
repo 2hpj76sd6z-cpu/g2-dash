@@ -10,10 +10,10 @@ android {
     compileSdk 35
 
     defaultConfig {
-        applicationId 'com.dobleg.g2dash.prueba22'
+        applicationId 'com.dobleg.g2dash.prueba23'
         minSdk 23
         targetSdk 35
-        versionCode 22
+        versionCode 23
         versionName '0.5.8-dev'
         buildConfigField "String", "GOOGLE_MAPS_API_KEY", "\"${escapedGoogleMapsApiKey}\""
         manifestPlaceholders = [GOOGLE_MAPS_API_KEY: googleMapsApiKey]

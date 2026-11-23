@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application android:label="Receptor de prueba">
+        <service android:name=".ReceiverBrowser" android:exported="true">
+            <intent-filter><action android:name="android.media.browse.MediaBrowserService"/></intent-filter>
+        </service>
         <activity android:name=".ReceiverActivity" android:exported="true"/>
     </application>
 </manifest>

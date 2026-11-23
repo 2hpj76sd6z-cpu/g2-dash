@@ -27,7 +27,7 @@ async function verify(expression) {
 }
 function capture(filename){
     const activity=execFileSync('adb',['shell','dumpsys','activity','activities'],{encoding:'utf8'});
-    if(!activity.split('\n').some(line=>line.includes('mResumedActivity')&&line.includes('com.dobleg.g2dash.prueba22')))throw Error('Dash perdió el primer plano');
+    if(!activity.split('\n').some(line=>line.includes('mResumedActivity')&&line.includes('com.dobleg.g2dash.prueba23')))throw Error('Dash perdió el primer plano');
     writeFileSync(filename,execFileSync('adb',['exec-out','screencap','-p'],{maxBuffer:6e6}));
 }
 const click=id=>evaluate("document.getElementById("+JSON.stringify(id)+").click()");
@@ -60,6 +60,7 @@ try {
     writeFileSync('reproductor-compartido.png',Buffer.from(photo,'base64'));
     await click('musicDetailNext');
     await verify("document.getElementById('musicDetailTitle').textContent==='Segunda pista' && !document.querySelector('.mapPanel').classList.contains('hasTurn')");
+    await verify("document.getElementById('musicDetailCoverImage').hidden && document.getElementById('albumArt').hidden");
     await click('musicDetailPrev');
     await verify("document.getElementById('musicDetailTitle').textContent==='Primera pista'");
     await click('musicDetailPlay');
@@ -77,5 +78,13 @@ try {
     capture('ruta-en-dash.png');
     await evaluate("document.querySelector('.dashRoute').click()");
     await verify("document.querySelector('.dashRoute').textContent==='Trazar ruta'");
+    // Remove listener access: selected receiver's public MediaBrowser must still expose controls.
+    execFileSync('adb',['shell','cmd','notification','disallow_listener','com.dobleg.g2dash.prueba23/com.dobleg.g2dash.G2MediaListener']);
+    await verify("document.getElementById('albumArt').hidden && document.getElementById('songName').textContent==='Primera pista'");
+    await click('play');
+    await verify("document.querySelector('.musicPanel').dataset.media==='paused'");
+    execFileSync('adb',['shell','am','force-stop','com.dobleg.testreceiver']);
+    execFileSync('adb',['shell','am','broadcast','-a','com.syu.bt.music.id3','-p','com.dobleg.g2dash.prueba23','--es','title','Camino','--es','artist','Prueba']);
+    await verify("document.getElementById('songName').textContent==='Camino' && document.getElementById('songSource').textContent==='BLUETOOTH'");
     console.log('Portada, instrucciones, pausa, avance, pistas y ruta dentro de Dash verificados.');
 } finally {socket.close();}

@@ -12,12 +12,13 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent>
+        <intent><action android:name="android.media.browse.MediaBrowserService" /></intent>
         <!-- Únicamente comprobamos si el receptor elegido está instalado. -->
         <package android:name="io.github.jqssun.airplay" />
     </queries>
 
     <application
-        android:label="G² Dash 22"
+        android:label="G² Dash 23"
         android:allowBackup="false"
         android:supportsRtl="true"
         android:usesCleartextTraffic="false"
@@ -43,7 +44,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <!-- Optional access to active music sessions; never reads notifications. -->
+        <!-- Music and opt-in navigation from supported receivers. -->
         <service
             android:name=".G2MediaListener"
             android:label="G² Dash · Música"
