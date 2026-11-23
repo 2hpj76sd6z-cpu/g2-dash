@@ -546,7 +546,7 @@ public class MainActivity extends Activity {
 
     private void changeSource(String host, int port) {
         getPreferences(MODE_PRIVATE).edit().putString("gpsHost",host).putInt("gpsPort",port).apply();
-        lastFix = null; followMap = true; mapQuery = "";
+        lastFix = null; lastWebFix=null; followMap = true; if(!routeRequested)mapQuery = "";
         if (phoneMarker != null) { phoneMarker.remove(); phoneMarker = null; }
         if (nativeGoogleMap != null) nativeGoogleMap.setMyLocationEnabled(false);
         webView.evaluateJavascript("window.G2LiveMap?.sourceChanged()",null);

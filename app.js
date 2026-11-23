@@ -404,7 +404,7 @@
     $('#trackProgress').style.width=duration > 0 ? Math.min(100,position/duration*100)+'%' : '0%';
     $('#play .icon use').setAttribute('href',playing?'#i-pause':'#i-play');
     $('#play').setAttribute('aria-label',playing?'Pausar música':'Reproducir música');
-    const status = preview?'EJEMPLO VISUAL' : !granted?'Permiso pendiente' : !active?'Sin reproducción' : playing?'Reproduciendo':'En pausa';
+    const status = preview?'EJEMPLO VISUAL' : !granted?'Permiso pendiente' : !active?'Sin reproducción' : data.stateKnown===false?'Audio compartido' : playing?'Reproduciendo':'En pausa';
     $('#musicStatus').textContent=status;
     $('#musicSource').textContent=preview?'NO ES AUDIO REAL' : (active ? (data.sourceLabel|| (data.carLink?'CARLINK 2.0':'') || musicApps[data.package]||'ANDROID AUDIO') : (granted?'ANDROID':'SIN CONECTAR'));
     $('#deviceStatus').textContent = preview ? 'VISTA DE PRUEBA' : (granted?'ANDROID · MÚSICA':'ANDROID · v0.5.8');
@@ -418,7 +418,7 @@
     if(report && data.native){
       const music=data.channel?data.channel+' · '+data.coverStatus:(data.access?'El receptor aún no comparte la canción':'Falta autorizar acceso multimedia');
       const nav=data.turn?'Giro recibido':$('#shareTurns')?.checked?'Esperando indicaciones del receptor':'Indicaciones compartidas desactivadas';
-      report.textContent=music+' · '+nav;
+      report.textContent=music+' · '+nav+' · '+($('#speedLabel')?.textContent||'Esperando GPS');
     }
     window.G2LiveMap?.sharedTurn(data.turn,data.turnSource);
     window.G2MusicDetail?.update(data);

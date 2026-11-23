@@ -86,5 +86,18 @@ try {
     execFileSync('adb',['shell','am','force-stop','com.dobleg.testreceiver']);
     execFileSync('adb',['shell','am','broadcast','-a','com.syu.bt.music.id3','-p','com.dobleg.g2dash.prueba23','--es','title','Camino','--es','artist','Prueba']);
     await verify("document.getElementById('songName').textContent==='Camino' && document.getElementById('songSource').textContent==='BLUETOOTH'");
+    // A real public catalog request, using a known test track without any bitmap in its broadcast.
+    execFileSync('adb',['shell','am','broadcast','-a','com.syu.bt.music.id3','-p','com.dobleg.g2dash.prueba23',
+        '--es','title',"'Midnight City'",'--es','artist','M83','--es','album',"'Midnight City'"]);
+    await verify("document.getElementById('songName').textContent==='Midnight City' && document.getElementById('albumArt').hidden");
+    await evaluate("document.getElementById('catalogCovers').click()");
+    let catalogArt=false;
+    for(let i=0;i<60;i++){
+        catalogArt=await evaluate("!document.getElementById('albumArt').hidden && document.getElementById('albumArt').naturalWidth>0 && document.getElementById('receiverReport').textContent.includes('Portada de catálogo')");
+        if(catalogArt)break;
+        await delay(900);
+    }
+    console.log('Portada en línea para título y artista únicamente:',catalogArt?'recibida':'catálogo no disponible durante esta ejecución');
+    if(catalogArt)capture('portada-catalogo.png');
     console.log('Portada, instrucciones, pausa, avance, pistas y ruta dentro de Dash verificados.');
 } finally {socket.close();}

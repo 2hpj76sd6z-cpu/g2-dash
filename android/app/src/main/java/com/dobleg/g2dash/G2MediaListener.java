@@ -20,7 +20,8 @@ public final class G2MediaListener extends NotificationListenerService
         String pkg=entry.getPackageName();
         Notification note=entry.getNotification();
         return (CARLINK.equals(pkg)||pkg.equals(preferences.getString("carlinkApp",""))||"com.android.bluetooth".equals(pkg))
-            && (Notification.CATEGORY_TRANSPORT.equals(note.category)||note.extras.containsKey(Notification.EXTRA_MEDIA_SESSION));
+            && (Notification.CATEGORY_TRANSPORT.equals(note.category)||note.extras.containsKey(Notification.EXTRA_MEDIA_SESSION)
+                || "android.app.Notification$MediaStyle".equals(note.extras.getString(Notification.EXTRA_TEMPLATE)));
     }
 
     static String instruction() { return instruction; }

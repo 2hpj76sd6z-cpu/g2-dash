@@ -124,6 +124,14 @@ final class G2MediaBridge {
         List<MediaController> all = new java.util.ArrayList<>(controllers());
         MediaController bluetooth=stereo.controller(selected);
         if(bluetooth!=null)all.add(bluetooth);
+        android.service.notification.StatusBarNotification notice=accessGranted()?G2MediaListener.media():null;
+        if(notice!=null)try{
+            android.media.session.MediaSession.Token token=notice.getNotification().extras.getParcelable(android.app.Notification.EXTRA_MEDIA_SESSION);
+            if(token!=null){
+                MediaController attached=new MediaController(activity,token);
+                if(notice.getPackageName().equals(attached.getPackageName()))all.add(attached);
+            }
+        }catch(RuntimeException retired){/* Receiver replaced its session. */}
         MediaController best=null;
         int bestScore=-1;
         for(MediaController item:all){
@@ -142,7 +150,7 @@ final class G2MediaBridge {
     void control(String action) {
         MediaController item = preferredSession();
         if (item==null && !accessGranted() && stereo.track()==null) { showAccessSettings(); return; }
-        if (item == null) {
+        if (item == null || (stereo.track()!=null || G2MediaListener.media()!=null) && (item.getMetadata()==null || item.getMetadata().getDescription().getTitle()==null)) {
             android.media.AudioManager audio=(android.media.AudioManager)activity.getSystemService(Context.AUDIO_SERVICE);
             int key="toggle".equals(action)?android.view.KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
                     "next".equals(action)?android.view.KeyEvent.KEYCODE_MEDIA_NEXT:
@@ -338,9 +346,10 @@ final class G2MediaBridge {
             if(channel.equals("Bluetooth del estéreo") || pkg.contains("bluetooth"))data.put("sourceLabel","BLUETOOTH");
             data.put("durationMs",duration);data.put("positionMs",duration>0?Math.min(duration,position):position);
             data.put("canSeek",duration>0&&(actions&PlaybackState.ACTION_SEEK_TO)!=0);
-            data.put("canNext",(actions&PlaybackState.ACTION_SKIP_TO_NEXT)!=0);
-            data.put("canPrevious",(actions&PlaybackState.ACTION_SKIP_TO_PREVIOUS)!=0);
-            data.put("canPlay",(actions&(PlaybackState.ACTION_PLAY_PAUSE|(playing?PlaybackState.ACTION_PAUSE:PlaybackState.ACTION_PLAY)))!=0);
+            boolean mediaKeys=current==null && (note!=null || channel.equals("Bluetooth del estéreo"));
+            data.put("canNext",mediaKeys || (actions&PlaybackState.ACTION_SKIP_TO_NEXT)!=0);
+            data.put("canPrevious",mediaKeys || (actions&PlaybackState.ACTION_SKIP_TO_PREVIOUS)!=0);
+            data.put("canPlay",mediaKeys || (actions&(PlaybackState.ACTION_PLAY_PAUSE|(playing?PlaybackState.ACTION_PAUSE:PlaybackState.ACTION_PLAY)))!=0);
             String payload = data.toString();
             if (!payload.equals(previousPayload)) {
                 previousPayload = payload;
