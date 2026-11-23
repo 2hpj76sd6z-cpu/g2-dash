@@ -37,6 +37,7 @@ try {
     await click('miniAlbum');
     await verify("document.getElementById('musicDetailVeil').classList.contains('expanded') && document.getElementById('musicDetailCoverImage').naturalWidth>0");
     await verify("['musicDetailPlay','musicDetailCover','musicDetailClose'].every(id=>{const target=document.getElementById(id);const r=target.getBoundingClientRect();const hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return r.width>25 && r.height>25 && r.left>=0 && r.top>=0 && r.bottom<=innerHeight+1 && r.right<=innerWidth+1 && target.contains(hit);})");
+    await verify("document.getElementById('musicDetailCover').getBoundingClientRect().height >= innerHeight*0.32");
     await delay(850);
     capture('reproductor-compartido.png');
     await click('musicDetailPlay');

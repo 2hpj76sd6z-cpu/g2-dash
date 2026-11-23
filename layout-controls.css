@@ -201,7 +201,10 @@ body[data-live-map] .hasTurn .where strong {display:-webkit-box;-webkit-line-cla
 @media (orientation:landscape) {
  .musicDetailVeil.expanded .musicDetailModal {padding:clamp(12px,3vh,26px) 4vw;justify-content:space-between;gap:8px;}
  .musicDetailVeil.expanded .musicDetailBody {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);align-items:center;justify-items:center;flex:1;gap:4vw;width:100%;overflow:auto;}
- .musicDetailVeil.expanded .musicDetailCover {width:min(100%,50vh);height:auto;aspect-ratio:4/3;}
+ .musicDetailVeil.expanded .musicDetailCover {width:min(100%,57vh);max-width:none;height:min(43vh,29vw);}
+ .musicDetailVeil.expanded .musicSeek {width:90%;max-width:520px;}
+ .musicDetailVeil.expanded .musicSeek input {width:100%;}
+ .musicDetailVeil.expanded .musicDetailActions button+button {margin-left:8px;}
  .musicDetailVeil.expanded .musicDetailContent {width:100%;min-width:0;text-align:center;}
  .musicDetailVeil.expanded .musicDetailTitle {font-size:clamp(20px,3.3vw,40px);line-height:1.12;overflow-wrap:anywhere;}
  .musicDetailVeil.expanded .musicDetailActions button {width:48px;height:48px;}
