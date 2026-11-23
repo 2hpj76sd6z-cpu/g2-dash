@@ -215,3 +215,10 @@ body[data-live-map][data-mode="day"] .topline .iconButton,
 body[data-live-map][data-mode="day"] .topline .statusIcon,
 body[data-live-map][data-mode="day"] .topline .header-date {color:#213b39;}
 body[data-live-map][data-mode="day"] .topline .brandMark {color:#176d46;}
+
+body[data-live-map] .mapPanel .destination {background:#162230;color:#eef5fa;}
+body[data-live-map] .mapPanel .destination input {color:#f7f9fc;caret-color:#85e8af;}
+body[data-live-map] .mapPanel .destination input::placeholder {color:#bdcbd8;}
+@media(min-height:460px) {
+ body[data-live-map] .musicPanel:not(.shortCard):not(.tinyCard) .album {height:clamp(56px,14vh,126px);}
+}
