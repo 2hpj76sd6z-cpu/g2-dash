@@ -524,7 +524,8 @@ try {
     if(clipped) throw new Error('Reloj o fecha cortados en '+width+'×'+height);
   }
   await stereo.locator('.bottomDock [data-action="music"]').click();
-  if(!(await stereo.evaluate(()=>window.probe.actions.includes('music')))) throw new Error('Falta conexión con CarLink');
+  if (!(await stereo.locator('#musicDetailVeil').isVisible()) || (await stereo.evaluate(()=>window.probe.actions.length))) throw new Error('Música salió de Dash sin sesión');
+  await stereo.locator('#musicDetailClose').click();
   await stereo.evaluate(()=>window.G2MusicUpdate({granted:true,playing:true,title:'Prueba de controles',
     package:'com.syu.carlink',canSeek:true,durationMs:180000,positionMs:10000}));
   await stereo.locator('#miniSeek').fill('80000');

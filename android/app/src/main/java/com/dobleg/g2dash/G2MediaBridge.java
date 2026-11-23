@@ -26,7 +26,7 @@ import java.util.List;
 
 /**
  * Solo observa sesiones de música de ESTE Android, con permiso explícito.
- * NO escucha el audio de otro teléfono por Wi-Fi ni lee notificaciones.
+ * Las indicaciones de navegación se comparten solo cuando el usuario las habilita.
  * Los metadatos y las portadas no salen del equipo.
  */
 final class G2MediaBridge {
@@ -36,6 +36,7 @@ final class G2MediaBridge {
     private final MediaSessionManager sessions;
     private final ComponentName listenerComponent;
     private boolean visible;
+    private String lastSource = "";
     private String lastArtworkId = "";
     private String lastArtworkData = "";
     private String previousPayload = "";
@@ -89,7 +90,7 @@ final class G2MediaBridge {
         // Notification access is broad; explain it before asking the user to enable it.
         new android.app.AlertDialog.Builder(activity)
             .setTitle("Conectar reproductor de música")
-            .setMessage("Android requiere acceso a notificaciones para compartir las sesiones de música con G² Dash. Es un permiso amplio: esta app solo consultará títulos, artistas, portadas y controles de reproducción. Puedes revocarlo en Ajustes.")
+            .setMessage("Android requiere acceso a notificaciones para compartir las sesiones de música con G² Dash. Es un permiso amplio: Dash consulta títulos, artistas, portadas y controles. Si activas Indicaciones compartidas, también muestra las maniobras publicadas por Google Maps o el receptor seleccionado. Puedes revocarlo en Ajustes.")
             .setNegativeButton("Cancelar", null)
             .setPositiveButton("Continuar", (d, which) -> {
                 try {
@@ -113,6 +114,7 @@ final class G2MediaBridge {
     private MediaController preferredSession() {
         List<MediaController> all = controllers();
         MediaController fallback = null;
+        MediaController previous = null;
         // AirPlay has priority when genuinely playing: other paused sessions
         // must not steal the iPhone cover art or transport controls.
         for (MediaController item : all) {
@@ -125,9 +127,12 @@ final class G2MediaBridge {
             if (item == null) continue;
             PlaybackState state = item.getPlaybackState();
             if (state != null && state.getState() == PlaybackState.STATE_PLAYING) return item;
-            if (fallback == null && item.getMetadata() != null) fallback = item;
+            if (item.getMetadata() != null) {
+                if (lastSource.equals(item.getPackageName())) previous=item;
+                if (fallback==null) fallback=item;
+            }
         }
-        return fallback;
+        return previous!=null ? previous : fallback;
     }
 
     void control(String action) {
@@ -194,7 +199,7 @@ final class G2MediaBridge {
     }
 
     private static String safeText(CharSequence value, String fallback) {
-        if (value == null || value.length() == 0) return fallback;
+        if (value == null || value.length() == 0) return previous!=null ? previous : fallback;
         return value.toString();
     }
 
@@ -251,6 +256,9 @@ final class G2MediaBridge {
         try {
             data.put("granted", granted);
             data.put("native", true);
+            boolean share = granted && activity.getPreferences(0).getBoolean("shareTurns", false);
+            data.put("turn", share ? G2MediaListener.instruction() : "");
+            data.put("turnSource", share ? G2MediaListener.source() : "");
             if (!granted) {
                 data.put("title", "Conecta tu música");
                 data.put("artist", "Autoriza el acceso en Android");
@@ -270,6 +278,7 @@ final class G2MediaBridge {
                     data.put("durationMs", 0);
                     data.put("positionMs", 0);
                 } else {
+                    lastSource=current.getPackageName();
                     MediaMetadata meta = current.getMetadata();
                     PlaybackState state = current.getPlaybackState();
                     boolean playing = state != null && state.getState() == PlaybackState.STATE_PLAYING;
@@ -303,7 +312,7 @@ final class G2MediaBridge {
                     data.put("package", current.getPackageName());
                     data.put("carLink", "com.syu.carlink".equals(current.getPackageName())
                             || current.getPackageName().equals(activity.getPreferences(0).getString("carlinkApp","")));
-                    data.put("albumArt", albumArt(meta, current.getPackageName() + "|" + title + "|" + artist));
+                    data.put("albumArt", albumArt(meta, current.getPackageName() + "|" + title + "|" + artist + "|" + album));
                     data.put("durationMs", duration);
                     data.put("positionMs", position);
                 }

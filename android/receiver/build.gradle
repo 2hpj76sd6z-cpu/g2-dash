@@ -1,0 +1,11 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'com.dobleg.testreceiver'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'com.dobleg.testreceiver'
+        minSdk 26
+        targetSdk 30
+    }
+}

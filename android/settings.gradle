@@ -7,3 +7,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = 'G2DashAndroid'
 include ':app'
+
+if (System.getenv('G2_TEST_RECEIVER') == '1') include ':receiver'

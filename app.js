@@ -376,7 +376,7 @@
       (active ? musicText(data.title,'Sin título') : (granted?'Sin música activa':'Conecta tu música'));
     $('#songArtist').textContent = preview ? 'EJEMPLO VISUAL · NO REPRODUCE AUDIO' :
       (active ? musicText(data.artist,'Artista desconocido') :
-       (granted?'Abre CarLink y reproduce una canción':'Autoriza música en Ajustes'));
+       (granted?'Reproduce música en tu iPhone':'Autoriza música en Ajustes'));
     if(source){
       const sourceName=preview?'EJEMPLO VISUAL':active?(data.carLink?'CARLINK 2.0':musicApps[data.package]||'ANDROID AUDIO'):'MÚSICA LOCAL';
       source.textContent=sourceName;
@@ -385,7 +385,8 @@
     const art = $('#albumArt');
     if (active && !preview && typeof data.albumArt === 'string' &&
         data.albumArt.startsWith('data:image/jpeg;base64,') && data.albumArt.length < 400000) {
-      art.src = data.albumArt; art.hidden = false;
+      if (art.getAttribute('src') !== data.albumArt) art.src = data.albumArt;
+      art.hidden = false;
     } else {
       art.hidden = true; art.removeAttribute('src');
     }
@@ -407,6 +408,12 @@
     $('#musicSource').textContent=preview?'NO ES AUDIO REAL' : (active ? (data.carLink?'CARLINK 2.0':musicApps[data.package]||'ANDROID AUDIO') : (granted?'ANDROID':'SIN CONECTAR'));
     $('#deviceStatus').textContent = preview ? 'VISTA DE PRUEBA' : (granted?'ANDROID · MÚSICA':'ANDROID · v0.5.8');
     $('.musicPanel').dataset.media=preview?'preview':(!granted?'permission':(!active?'idle':(playing?'playing':'paused')));
+    if (window.G2Android) {
+      $('.musicControls [data-action="demo-prev"]').disabled=!active || data.canPrevious===false;
+      $('.musicControls [data-action="demo-next"]').disabled=!active || data.canNext===false;
+      $('#play').disabled=active && data.canPlay===false;
+    }
+    window.G2LiveMap?.sharedTurn(data.turn,data.turnSource);
     window.G2MusicDetail?.update(data);
     window.G2AirPlay?.updateMedia(data);
   };
@@ -443,8 +450,7 @@
       case 'car-cutout':photoChange(0);break;
       case 'car-prev':photoChange(currentPhoto-1);break;
       case 'car-next':photoChange(currentPhoto+1);break;
-      case 'carlink':window.G2Android?.openTarget('music');break;
-      case 'music':if(window.G2Android){if(['playing','paused'].includes($('.musicPanel').dataset.media))window.G2MusicDetail?.open(true);else window.G2Android.openTarget('music');}else window.G2MusicDetail?.open();break;
+      case 'music':window.G2MusicDetail?.open(true);break;
       case 'choose-carlink':window.G2Android?.openTarget('choose-carlink');break;
       case 'choose-gps':window.G2Android?.chooseLocationSource();break;
       case 'gps':if(window.G2LiveMap)window.G2LiveMap.locate();else activateGps();break;

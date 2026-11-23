@@ -26,24 +26,40 @@
   byId('mapApiStatus').textContent = 'Google Maps interactivo dentro del tablero. En Fuente de ubicación puedes elegir el GPS del celular o el del estéreo.';
   const disclaimer=byId('mapApiStatus').parentElement;
   for (const node of disclaimer.childNodes) if(node.nodeType===3) node.textContent=node.textContent.replace('El mapa es ilustrativo. ','');
-  document.querySelectorAll('[data-action="airplay-setup"]').forEach(btn => {
-    if (!btn.closest('.musicPanel,.musicDetailFooter')) return;
-    btn.dataset.action='carlink'; btn.title='Conectar con CarLink 2.0'; btn.setAttribute('aria-label',btn.title);
-    if (!btn.querySelector('svg')) btn.textContent='Abrir CarLink';
+  for (const control of document.querySelectorAll('.musicPanel [data-action="airplay-setup"],.musicPanel .smallAction,.musicPanel .musicExpand,.musicDetailFooter .airplayShortcut')) control.hidden=true;
+  document.querySelector('.musicDetailFooter > span').textContent='Audio del teléfono compartido con este estéreo';
+  const destination=byId('destination');
+  const route=document.createElement('button');
+  route.type='button';
+  route.className='dashRoute';
+  route.textContent='Trazar ruta';
+  panel.querySelector('.mapBottom').insertBefore(route,gps);
+  let routeActive=false, turn='', turnSource='';
+  function stopRoute(){
+    routeActive=false;
+    route.textContent='Trazar ruta';
+    bridge.endDashRoute();
+  }
+  route.addEventListener('click',()=>{
+    if(routeActive){stopRoute();return;}
+    if(!destination.value.trim()){destination.focus();return;}
+    bridge.routeInDash(destination.value.trim());
+    routeActive=true;
+    route.textContent='Cerrar ruta';
   });
-  document.querySelector('.musicPanel .trackRow > .smallAction').dataset.action='carlink';
-  const phoneRoute=document.createElement('button');
-  phoneRoute.type='button'; phoneRoute.dataset.action='carlink'; phoneRoute.textContent='Ruta del celular';
-  phoneRoute.title='Ver la navegación del teléfono en CarLink';
-  panel.querySelector('.mapBottom').insertBefore(phoneRoute,gps);
-  const footer=document.querySelector('.musicDetailFooter > span');
-  if(footer) footer.textContent='Música del teléfono mediante CarLink y sesiones multimedia del estéreo';
-
+  destination.addEventListener('input',()=>{if(routeActive)stopRoute();});
+  const turns=byId('shareTurns');
+  turns.checked=bridge.sharedTurnsEnabled?.()===true;
+  turns.addEventListener('change',()=>{
+    bridge.setSharedTurns?.(turns.checked);
+    if(!turns.checked){turn='';turnSource='';refreshLabel();}
+  });
   let lastBounds='', frame=0, watch=null, sourceEpoch=0, staleTimer, lastFix=null, firstShow=true;
   let detail='', mapError=false, phone=false;
   function refreshLabel() {
-    byId('mapStateTitle').textContent=mapError?'Mapa pendiente':'Google Maps';
-    byId('mapStateDetail').textContent=mapError?'Toca centrar para reintentar':detail;
+    panel.classList.toggle('hasTurn',Boolean(turn));
+    byId('mapStateTitle').textContent=turn?turn:mapError?'Mapa pendiente':'Google Maps';
+    byId('mapStateDetail').textContent=turn?turnSource:mapError?'Toca centrar para reintentar':detail;
   }
   function status(text, kmh=-1) {
     detail=text;
@@ -100,7 +116,7 @@
   window.addEventListener('resize',schedule);
   window.addEventListener('g2-layout',schedule);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stopWatch();else if(!firstShow)sourceChanged();schedule();});
-  window.G2LiveMap={locate,refreshLabel,sourceChanged,mapError(){mapError=true;refreshLabel();},
+  window.G2LiveMap={sharedTurn(text,source){turn=String(text||'');turnSource=String(source||'');refreshLabel();},locate,refreshLabel,sourceChanged,mapError(){mapError=true;refreshLabel();},
     mapLoaded(){mapError=false;refreshLabel();},
     phoneUpdate(valid,speed,label){if(!phone)return;if(valid)fresh(label,speed);else status(label);}
   };

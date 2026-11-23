@@ -75,7 +75,13 @@ jobs:
           javac -cp "$androidjar" -d "$RUNNER_TEMP/nmea" android/app/src/main/java/com/dobleg/g2dash/PhoneGps.java scripts/CheckPhoneGps.java
           java -cp "$RUNNER_TEMP/nmea:$androidjar" com.dobleg.g2dash.CheckPhoneGps
       - name: Build debug APK
-        run: gradle -p android --no-daemon :app:assembleDebug
+        env:
+          G2_TEST_RECEIVER: '1'
+        run: gradle -p android --no-daemon :app:assembleDebug :receiver:assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: receptor-solo-para-pruebas
+          path: android/receiver/build/outputs/apk/debug/receiver-debug.apk
       - name: Verificar firma, launcher y recursos empacados
         shell: bash
         run: |
@@ -83,7 +89,7 @@ jobs:
           build_tools="$ANDROID_HOME/build-tools/35.0.0"
           "$build_tools/apksigner" verify --verbose "$apk"
           "$build_tools/aapt" dump badging "$apk" > "$RUNNER_TEMP/g2-package.txt"
-          grep -F "package: name='com.dobleg.g2dash.prueba21' versionCode='21'" "$RUNNER_TEMP/g2-package.txt"
+          grep -F "package: name='com.dobleg.g2dash.prueba22' versionCode='22'" "$RUNNER_TEMP/g2-package.txt"
           grep -F "launchable-activity: name='com.dobleg.g2dash.MainActivity'" "$RUNNER_TEMP/g2-package.txt"
           for asset in index.html layout-controls.css map-widget.js app.js assets/ibiza_frente_sin_fondo.webp assets/ibiza_trasera_sin_fondo.png assets/seat_emblema_oficial.svg; do
             unzip -p "$apk" "assets/www/$asset" | cmp - "$asset"
@@ -104,6 +110,9 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: G2-Dash-v0.5.8-Android-debug
+      - uses: actions/download-artifact@v4
+        with:
+          name: receptor-solo-para-pruebas
       - uses: android-actions/setup-android@v4
       - name: Arrancar el launcher en Android e instalar la APK entregada
         shell: bash
@@ -124,21 +133,28 @@ jobs:
           adb shell wm dismiss-keyguard
           adb install -g app-debug.apk
           python3 -u scripts/gps-emulator.py >"$RUNNER_TEMP/gps.log" 2>&1 &
-          pkg=com.dobleg.g2dash.prueba21
+          pkg=com.dobleg.g2dash.prueba22
           adb shell run-as "$pkg" mkdir -p shared_prefs
-          printf '%s' '<map><string name="gpsHost">10.0.2.2</string><int name="gpsPort" value="31123"/></map>' > "$RUNNER_TEMP/gps.xml"
+          printf '%s' '<map><boolean name="shareTurns" value="true"/><string name="carlinkApp">com.dobleg.testreceiver</string><string name="gpsHost">10.0.2.2</string><int name="gpsPort" value="31123"/></map>' > "$RUNNER_TEMP/gps.xml"
           adb shell "run-as $pkg sh -c 'cat > shared_prefs/com.dobleg.g2dash.MainActivity.xml'" < "$RUNNER_TEMP/gps.xml"
-          adb shell am start -W -n com.dobleg.g2dash.prueba21/com.dobleg.g2dash.MainActivity
+          adb install receiver-debug.apk
+          adb shell cmd notification allow_listener "$pkg/com.dobleg.g2dash.G2MediaListener"
+          adb shell am start -W -n com.dobleg.testreceiver/.ReceiverActivity
+          adb shell am start -W -n com.dobleg.g2dash.prueba22/com.dobleg.g2dash.MainActivity
           adb emu geo fix -99.1332 19.4326
           sleep 42
-          adb shell pidof com.dobleg.g2dash.prueba21
-          adb shell dumpsys activity activities | grep -E 'mResumedActivity.*com.dobleg.g2dash.prueba21'
-          pid=$(adb shell pidof com.dobleg.g2dash.prueba21 | tr -d '\r')
+          adb shell pidof com.dobleg.g2dash.prueba22
+          adb shell dumpsys activity activities | grep -E 'mResumedActivity.*com.dobleg.g2dash.prueba22'
+          pid=$(adb shell pidof com.dobleg.g2dash.prueba22 | tr -d '\r')
           adb forward tcp:9222 localabstract:webview_devtools_remote_$pid
           adb exec-out screencap -p > inicio-android.png
           node scripts/check-android-view.mjs
+          node scripts/check-shared-media.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: G2-Dash-inicio-Android
-          path: inicio-android.png
+          path: |
+            inicio-android.png
+            tablero-compartido.png
+            reproductor-compartido.png

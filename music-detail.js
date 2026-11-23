@@ -37,7 +37,7 @@
      'com.soundcloud.android':'SOUNDCLOUD'};
    const sourceName=preview?'EJEMPLO VISUAL':active?(data.carLink?'CARLINK 2.0':appNames[data.package]||'ANDROID AUDIO'):'MÚSICA LOCAL';
    title.textContent=preview?'Pista de prueba':active?String(data.title||'Sin título').slice(0,160):granted?'Sin música activa':'Conecta tu música';
-   artist.textContent=preview?'EJEMPLO · NO ES AUDIO REAL':active?String(data.artist||'Artista desconocido').slice(0,160):granted?'Abre el reproductor en este Android':'Autoriza el acceso a música en Android';
+   artist.textContent=preview?'EJEMPLO · NO ES AUDIO REAL':active?String(data.artist||'Artista desconocido').slice(0,160):granted?'Reproduce música en el teléfono conectado':'Autoriza el acceso a música en Android';
    album.textContent=preview?'ÁLBUM DE PRUEBA':active?String(data.album||'Álbum no disponible').slice(0,160):'ÁLBUM NO DISPONIBLE';
    source.textContent=sourceName;
    source.dataset.source=String(data.package||'').toLowerCase();
@@ -50,7 +50,7 @@
    prev.disabled=!active||!native||preview||data.canPrevious===false;
    next.disabled=!active||!native||preview||data.canNext===false;
    action.disabled=!canPlay;
-   action.textContent=playing?'Ⅱ':'▶';
+   action.querySelector('use').setAttribute('href',playing?'#i-pause':'#i-play');
    action.setAttribute('aria-label',playing?'Pausar':'Reproducir');
    canSeek=active&&native&&!preview&&data.canSeek===true&&duration>0;
    seek.disabled=!canSeek;
@@ -62,9 +62,9 @@
    status.textContent=preview?'Vista de integración: no se reproduce sonido real':
      !native?'El reproductor real se conecta desde el APK Android':
      !granted?'Autoriza el acceso multimedia desde este estéreo':
-     !active?'Abre una app de música en el estéreo':
+     !active?'Esperando una sesión musical del teléfono o del estéreo':
      !canSeek?'La app de música no permite cambiar el punto de reproducción':
-     'Controlando el reproductor activo de este Android';
+     'Controles disponibles en G² Dash';
  }
  function setExpanded(expanded){
    veil.classList.toggle('expanded',Boolean(expanded));

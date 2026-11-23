@@ -88,6 +88,7 @@ public class MainActivity extends Activity {
 
     private com.google.android.gms.maps.model.Marker phoneMarker;
     private String mapQuery = "";
+    private boolean routeRequested;
     private FrameLayout.LayoutParams inlineBounds;
     private boolean nativeLocationPending = false;
 
@@ -282,9 +283,7 @@ public class MainActivity extends Activity {
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) {
                 Uri u = req.getUrl();
                 if (isMapUrl(u)) return false;
-                if ("https".equalsIgnoreCase(u.getScheme()) || "http".equalsIgnoreCase(u.getScheme())) {
-                    openExternal(new Intent(Intent.ACTION_VIEW, u));
-                }
+                if (req.isForMainFrame()) Toast.makeText(MainActivity.this, "Este enlace sale de Google Maps", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -402,7 +401,7 @@ public class MainActivity extends Activity {
     private void markWebFailure() {
         webFailed = true;
         webReady = false;
-        webMapStatus.setText("Google Maps no cargó.\nToca para reintentar o usa Ruta del celular.");
+        webMapStatus.setText("Google Maps no cargó.\nToca para volver a cargar el mapa.");
         webMapStatus.setVisibility(mapWebView.getVisibility());
         webView.evaluateJavascript("window.G2LiveMap?.mapError()",null);
     }
@@ -436,7 +435,10 @@ public class MainActivity extends Activity {
         }
         root.postDelayed(() -> { if (id==webLoadId && !webReady && !isDestroyed()) markWebFailure(); },16500);
         String url = "https://www.google.com/maps/@?api=1&map_action=map";
-        if (!mapQuery.isEmpty()) url = "https://www.google.com/maps/search/?api=1&query=" + Uri.encode(mapQuery);
+        if (routeRequested && !mapQuery.isEmpty()) {
+            url = "https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=" + Uri.encode(mapQuery);
+            if (lastFix != null) url += "&origin=" + lastFix.latitude + "," + lastFix.longitude;
+        } else if (!mapQuery.isEmpty()) url = "https://www.google.com/maps/search/?api=1&query=" + Uri.encode(mapQuery);
         else if (lastFix != null) url += "&zoom=16&center=" + lastFix.latitude + "," + lastFix.longitude;
         lastWebFix = lastFix;
         lastWebAt = android.os.SystemClock.elapsedRealtime();
@@ -448,7 +450,7 @@ public class MainActivity extends Activity {
         if (Double.isNaN(lat) || Double.isNaN(lon) || Math.abs(lat)>90 || Math.abs(lon)>180) return;
         boolean first = lastFix == null;
         lastFix = new LatLng(lat, lon);
-        if (center) { followMap = true; mapQuery = ""; }
+        if (center && !routeRequested) { followMap = true; mapQuery = ""; }
         if (nativeGoogleMap != null && !preferWeb) {
             if (usingPhone()) {
                 if (phoneMarker == null) phoneMarker = nativeGoogleMap.addMarker(new MarkerOptions().position(lastFix).title("GPS del celular"));
@@ -471,7 +473,7 @@ public class MainActivity extends Activity {
     private void showMapOverlay(String destination) {
         String query = destination == null ? "" : destination.trim();
         if (query.isEmpty()) expanded = true;
-        else { mapQuery = query; followMap = false; }
+        else { routeRequested=false; mapQuery = query; followMap = false; }
         renderMap();
         if (!query.isEmpty()) {
             if (nativeGoogleMap != null && !preferWeb) centerNativeMap(query);
@@ -580,10 +582,10 @@ public class MainActivity extends Activity {
                 openExternal(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
                 break;
             case "music":
-                openCarLink(false);
+                webView.evaluateJavascript("window.G2MusicDetail?.open(true)",null);
                 break;
             case "choose-carlink":
-                openCarLink(true);
+                chooseCarLink();
                 break;
             case "radio":
             case "apps":
@@ -595,31 +597,21 @@ public class MainActivity extends Activity {
     }
 
 
-    private void openCarLink(boolean choose) {
+    private void chooseCarLink() {
         Intent query = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
         PackageManager pm = getPackageManager();
         List<ResolveInfo> apps = new ArrayList<>(pm.queryIntentActivities(query, 0));
-        java.util.Iterator<ResolveInfo> iterator = apps.iterator();
-        while (iterator.hasNext()) {
-            ResolveInfo a = iterator.next();
-            if (a.activityInfo == null || a.activityInfo.packageName.equals(getPackageName())) iterator.remove();
+        for (int i=apps.size()-1;i>=0;i--) {
+            ResolveInfo info=apps.get(i);
+            if (info.activityInfo==null || getPackageName().equals(info.activityInfo.packageName)) apps.remove(i);
         }
-        String saved = getPreferences(MODE_PRIVATE).getString("carlinkApp", "");
-        ResolveInfo known = null;
-        for (ResolveInfo info : apps) {
-            String pkg = info.activityInfo.packageName;
-            if (!choose && pkg.equals(saved)) { launchValidatedApp(pkg,info.activityInfo.name); return; }
-            String label = info.loadLabel(pm).toString().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]","");
-            if (pkg.equals("com.syu.carlink") || (known == null && label.matches("carlink(20|2)?"))) known = info;
-        }
-        if (!choose && known != null) { launchValidatedApp(known.activityInfo.packageName,known.activityInfo.name); return; }
         apps.sort(Comparator.comparing(a -> a.loadLabel(pm).toString()));
         CharSequence[] labels = new CharSequence[apps.size()];
         for (int i=0;i<apps.size();i++) labels[i]=apps.get(i).loadLabel(pm);
         new AlertDialog.Builder(this).setTitle("Elige la app CarLink de tu estéreo").setItems(labels,(d,index)->{
             ResolveInfo a=apps.get(index);
             getPreferences(MODE_PRIVATE).edit().putString("carlinkApp",a.activityInfo.packageName).apply();
-            launchValidatedApp(a.activityInfo.packageName,a.activityInfo.name);
+            Toast.makeText(this, "Receptor guardado", Toast.LENGTH_SHORT).show();
         }).setNegativeButton("Cancelar",null).show();
     }
 
@@ -761,6 +753,36 @@ public class MainActivity extends Activity {
     }
 
     private class AndroidBridge {
+        @JavascriptInterface public boolean sharedTurnsEnabled() {
+            return getPreferences(MODE_PRIVATE).getBoolean("shareTurns", false);
+        }
+        @JavascriptInterface public void setSharedTurns(boolean enabled) {
+            runOnUiThread(() -> {
+                getPreferences(MODE_PRIVATE).edit().putBoolean("shareTurns", enabled).apply();
+                if (enabled && !mediaBridge.accessGranted()) mediaBridge.showAccessSettings();
+                mediaBridge.emit();
+            });
+        }
+        @JavascriptInterface public void routeInDash(String destination) {
+            if (destination == null || destination.trim().isEmpty()) return;
+            runOnUiThread(() -> {
+                mapQuery=destination.trim();
+                routeRequested=true;
+                followMap=false;
+                preferWeb=true;
+                renderMap();
+                loadWebMap();
+            });
+        }
+        @JavascriptInterface public void endDashRoute() { runOnUiThread(() -> {
+            routeRequested=false;
+            mapQuery="";
+            followMap=true;
+            if (nativeMapView != null && tilesReady) preferWeb=false;
+            renderMap();
+            if (nativeMapView == null || preferWeb) loadWebMap();
+            else if (lastFix != null) position(lastFix.latitude,lastFix.longitude,true);
+        }); }
         @JavascriptInterface public void retryWidgetMap() {runOnUiThread(() -> {
             if (nativeMapView == null || preferWeb) loadWebMap();
         });}
