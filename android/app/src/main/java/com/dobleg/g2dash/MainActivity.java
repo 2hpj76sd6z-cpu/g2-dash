@@ -774,11 +774,6 @@ public class MainActivity extends Activity {
     }
 
     private class AndroidBridge {
-        @JavascriptInterface public boolean catalogCoversEnabled(){return getPreferences(MODE_PRIVATE).getBoolean("catalogCovers",false);}
-        @JavascriptInterface public void setCatalogCovers(boolean enabled){runOnUiThread(()->{
-            getPreferences(MODE_PRIVATE).edit().putBoolean("catalogCovers",enabled).apply();
-            mediaBridge.emit();
-        });}
         @JavascriptInterface public boolean sharedTurnsEnabled() {
             return getPreferences(MODE_PRIVATE).getBoolean("shareTurns", false);
         }

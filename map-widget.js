@@ -55,9 +55,6 @@
   go.setAttribute('aria-label',go.title);
   go.addEventListener('click',startRoute);
   destination.addEventListener('input',()=>{if(routeActive)stopRoute();});
-  const catalog=byId('catalogCovers');
-  catalog.checked=bridge.catalogCoversEnabled?.()===true;
-  catalog.addEventListener('change',()=>bridge.setCatalogCovers?.(catalog.checked));
   const turns=byId('shareTurns');
   turns.checked=bridge.sharedTurnsEnabled?.()===true;
   turns.addEventListener('change',()=>{

@@ -12,7 +12,8 @@ import java.util.*;
 final class StereoMusic {
     static final class Track {
         final String title,artist,album;
-        Track(String t,String a,String l){title=t;artist=a;album=l;}
+        final android.graphics.Bitmap art;
+        Track(String t,String a,String l,android.graphics.Bitmap image){title=t;artist=a;album=l;art=image;}
     }
     private final Activity activity;
     private MediaBrowser browser;
@@ -22,7 +23,7 @@ final class StereoMusic {
     private Track broadcast;
     private boolean listening;
     private final String[] actions={"com.syu.bt.music.id3","com.syu.ms.bt.id3","com.microntek.bt.report",
-        "com.android.bluetooth.a2dpsink.action.METADATA_CHANGED","com.android.music.bluetooth.metachanged","com.clw.intent.MEDIA_INFO"};
+        "com.android.bluetooth.a2dpsink.action.METADATA_CHANGED","com.android.music.bluetooth.metachanged"};
     StereoMusic(Activity activity){this.activity=activity;}
     private static String field(Bundle b,String...keys){
         for(String key:keys){Object v=b.get(key);if(v instanceof CharSequence){String text=v.toString().trim();if(!text.isEmpty())return text.substring(0,Math.min(text.length(),180));}}
@@ -35,8 +36,13 @@ final class StereoMusic {
                 if(b==null)return;
                 String title=field(b,"title","track","song","id3_title","music_title","Media_Title","TITLE","name");
                 if(title.isEmpty())return;
+                android.graphics.Bitmap art=null;
+                for(String key:new String[]{"android.media.metadata.ALBUM_ART","albumArt","artwork","android.media.metadata.ART"}){
+                    Object value=b.get(key);
+                    if(value instanceof android.graphics.Bitmap){art=(android.graphics.Bitmap)value;break;}
+                }
                 broadcast=new Track(title,field(b,"artist","singer","id3_artist","music_artist","Media_Artist","ARTIST"),
-                    field(b,"album","id3_album","albumname","Media_Album","ALBUM"));
+                    field(b,"album","id3_album","albumname","Media_Album","ALBUM"),art);
                 received=SystemClock.elapsedRealtime();
             } catch(RuntimeException invalid){ /* A manufacturer's payload may be unreadable on this firmware. */ }
         }

@@ -379,7 +379,7 @@
       (active ? musicText(data.artist,'Artista desconocido') :
        (granted?'Reproduce música en tu iPhone':'Autoriza música en Ajustes'));
     if(source){
-      const sourceName=preview?'EJEMPLO VISUAL':active?(data.sourceLabel|| (data.carLink?'CARLINK 2.0':'') || musicApps[data.package]||'ANDROID AUDIO'):'MÚSICA LOCAL';
+      const sourceName=preview?'EJEMPLO VISUAL':active?(data.sourceLabel|| (data.carLink?'CARLINK 2.0':'') || musicApps[data.package]||'ANDROID AUDIO'):(window.G2Android?'AUDIO DEL CELULAR':'MÚSICA LOCAL');
       source.textContent=sourceName;
       source.dataset.source=String(data.package||'').toLowerCase();
     }
@@ -413,7 +413,7 @@
     if (window.G2Android) {
       $('.musicControls [data-action="demo-prev"]').disabled=!active || data.canPrevious===false;
       $('.musicControls [data-action="demo-next"]').disabled=!active || data.canNext===false;
-      $('#play').disabled=active && data.canPlay===false;
+      $('#play').disabled=!active || data.canPlay===false;
     }
     const report=$('#receiverReport');
     if(report && data.native){
