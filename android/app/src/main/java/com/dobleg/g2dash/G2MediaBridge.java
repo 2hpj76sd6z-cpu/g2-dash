@@ -199,7 +199,7 @@ final class G2MediaBridge {
     }
 
     private static String safeText(CharSequence value, String fallback) {
-        if (value == null || value.length() == 0) return previous!=null ? previous : fallback;
+        if (value == null || value.length() == 0) return fallback;
         return value.toString();
     }
 
