@@ -222,3 +222,8 @@ body[data-live-map] .mapPanel .destination input::placeholder {color:#bdcbd8;}
 @media(min-height:460px) {
  body[data-live-map] .musicPanel:not(.shortCard):not(.tinyCard) .album {height:clamp(56px,14vh,126px);}
 }
+
+/* Older head-unit WebViews ignore the inset shorthand for fixed dialogs. */
+.screenveil {top:0;right:0;bottom:0;left:0;}
+.musicDetailVeil.expanded {padding:0;}
+.musicDetailCover > img {top:0;left:0;right:0;bottom:0;}
