@@ -79,7 +79,9 @@ public class MainActivity extends Activity {
     private final PhoneGps phoneGps = new PhoneGps();
     private boolean foreground, expanded, mapStarted, preferWeb, tilesReady;
     private boolean followMap = true;
-    private boolean webFailed;
+    private boolean webFailed, webReady;
+    private int webLoadId;
+    private android.widget.TextView webMapStatus;
     private LatLng lastFix, lastWebFix;
     private long lastWebAt;
     private long phoneAt;
@@ -143,6 +145,16 @@ public class MainActivity extends Activity {
                 }
             });
         }
+
+        webMapStatus = new android.widget.TextView(this);
+        webMapStatus.setGravity(Gravity.CENTER);
+        webMapStatus.setTextSize(15);
+        webMapStatus.setTextColor(Color.WHITE);
+        webMapStatus.setBackgroundColor(Color.rgb(25,42,51));
+        webMapStatus.setPadding(16,8,16,8);
+        webMapStatus.setVisibility(View.GONE);
+        webMapStatus.setOnClickListener(v -> { if (webFailed) loadWebMap(); });
+        root.addView(webMapStatus, new FrameLayout.LayoutParams(-1,-1));
 
         closeMapButton = new Button(this);
         closeMapButton.setText("×  Cerrar mapa");
@@ -211,8 +223,7 @@ public class MainActivity extends Activity {
                     callback.invoke(origin, false, false);
                     return;
                 }
-                if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
+                if (hasMapLocation()) {
                     callback.invoke(origin, true, false);
                 } else {
                     pendingGeo = callback;
@@ -259,13 +270,12 @@ public class MainActivity extends Activity {
         });
         mapWebView.setWebViewClient(new WebViewClient() {
             @Override public void onPageFinished(WebView view,String url) {
-                if (!webFailed) webView.evaluateJavascript("window.G2LiveMap?.mapLoaded()",null);
+                inspectGooglePage(webLoadId);
             }
             @Override public void onReceivedError(WebView view, WebResourceRequest req,
                     android.webkit.WebResourceError error) {
                 if (!req.isForMainFrame()) return;
-                webFailed = true;
-                webView.evaluateJavascript("window.G2LiveMap?.mapError()", null);
+                markWebFailure();
             }
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) {
@@ -285,8 +295,7 @@ public class MainActivity extends Activity {
                     callback.invoke(origin, false, false);
                     return;
                 }
-                if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
+                if (hasMapLocation()) {
                     callback.invoke(origin, true, false);
                 } else {
                     pendingGeo = callback;
@@ -356,6 +365,11 @@ public class MainActivity extends Activity {
                 && isMapHost(uri.getHost());
     }
 
+    private boolean hasMapLocation() {
+        return checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED
+            || checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED;
+    }
+
     private boolean usingPhone() {
         return !getPreferences(MODE_PRIVATE).getString("gpsHost", "").isEmpty();
     }
@@ -367,9 +381,11 @@ public class MainActivity extends Activity {
         if (nativeMapView != null && !nativeMode) nativeMapView.setVisibility(View.GONE);
         if (nativeMode) mapWebView.setVisibility(View.GONE);
         closeMapButton.setVisibility(expanded ? View.VISIBLE : View.GONE);
-        if (!visible) { surface.setVisibility(View.GONE); return; }
+        if (!visible) { surface.setVisibility(View.GONE); webMapStatus.setVisibility(View.GONE); return; }
         surface.setLayoutParams(expanded ? new FrameLayout.LayoutParams(-1, -1) : inlineBounds);
         surface.setVisibility(View.VISIBLE);
+        webMapStatus.setLayoutParams(surface.getLayoutParams());
+        webMapStatus.setVisibility(!nativeMode && !webReady ? View.VISIBLE : View.GONE);
         if (mapStarted) return;
         mapStarted = true;
         if (!nativeMode) loadWebMap();
@@ -382,7 +398,37 @@ public class MainActivity extends Activity {
         }, 12000);
     }
 
+    private void markWebFailure() {
+        webFailed = true;
+        webReady = false;
+        webMapStatus.setText("Google Maps no cargó.\\nToca para reintentar o usa Ruta del celular.");
+        webMapStatus.setVisibility(mapWebView.getVisibility());
+        webView.evaluateJavascript("window.G2LiveMap?.mapError()",null);
+    }
+
+    private void inspectGooglePage(int id) {
+        if (id!=webLoadId || isFinishing() || isDestroyed()) return;
+        String probe="(function(){var c=document.querySelectorAll('canvas,img[src*=tile],img[src*=mapsvt],img[src*=khms],"
+                + "[role=application],#scene,[aria-label*=Zoom],form[action*=consent]');"
+                + "for(var i=0;i<c.length;i++){var b=c[i].getBoundingClientRect();if(b.width>8&&b.height>8)return true;}"
+                + "return location.hostname==='consent.google.com';})()";
+        mapWebView.evaluateJavascript(probe, result -> {
+            if (id!=webLoadId || isDestroyed() || !"true".equals(result)) return;
+            webReady=true; webFailed=false;
+            webMapStatus.setVisibility(View.GONE);
+            webView.evaluateJavascript("window.G2LiveMap?.mapLoaded()",null);
+        });
+    }
+
     private void loadWebMap() {
+        final int id=++webLoadId;
+        webReady=false;
+        webMapStatus.setText("Cargando Google Maps…");
+        webMapStatus.setVisibility(mapWebView.getVisibility());
+        for(int delay:new int[]{1500,4000,8500,14000,22000,35000}) {
+            root.postDelayed(() -> { if (id==webLoadId && !webReady) inspectGooglePage(id); },delay);
+        }
+        root.postDelayed(() -> { if (id==webLoadId && !webReady && !isDestroyed()) markWebFailure(); },16500);
         String url = "https://www.google.com/maps/@?api=1&map_action=map";
         if (!mapQuery.isEmpty()) url = "https://www.google.com/maps/search/?api=1&query=" + Uri.encode(mapQuery);
         else if (lastFix != null) url += "&zoom=16&center=" + lastFix.latitude + "," + lastFix.longitude;
@@ -791,7 +837,7 @@ public class MainActivity extends Activity {
     public void onRequestPermissionsResult(int requestCode, String[] perms, int[] results) {
         super.onRequestPermissionsResult(requestCode, perms, results);
         if (requestCode == LOCATION_REQUEST) {
-            boolean granted = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+            boolean granted = hasMapLocation();
             if (pendingGeo != null) {
                 pendingGeo.invoke(pendingGeoOrigin, granted, false);
                 pendingGeo = null;

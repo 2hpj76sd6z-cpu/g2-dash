@@ -111,7 +111,8 @@
 .clockPanel .calendarRow .icon { width:1em; height:1em; }
 .clockPanel .underLine { margin:0; flex:none; }
 body[data-live-map] .mapPanel { display:flex; flex-direction:column; gap:4px; }
-body[data-live-map] .mapPanel :is(.mapArtwork,.zoomStack,.demoStamp,.mapsLaunch) { display:none; }
+body[data-live-map] .mapArtwork, body[data-live-map] .zoomStack,
+body[data-live-map] .demoStamp, body[data-live-map] .mapsLaunch { display:none; }
 body[data-live-map] .mapPanel .mapBar, body[data-live-map] .mapPanel .mapBottom { position:static; flex:none; }
 body[data-live-map] #liveMapSlot { order:1; flex:1; min-height:0; background:#1c2c37; }
 body[data-live-map] .mapPanel .mapBottom { order:2; }

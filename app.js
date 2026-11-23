@@ -489,6 +489,6 @@
   $('#destination').addEventListener('input',updateMapDestinationState);
   $('#destination').addEventListener('keydown',(event)=>{if(event.key==='Enter'){event.preventDefault();launchNavigation()}});
   document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeScreen('#settingsVeil');closeScreen('#vehicleVeil');window.G2Concept?.close();window.G2Apps?.close();window.G2MusicDetail?.close();window.G2AirPlay?.close()}});
-  if(window.G2Android){const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.8';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
+  if(window.G2Android){$('#musicSource').textContent='ANDROID';const tag=$('#deviceStatus');if(tag)tag.textContent='ANDROID · v0.5.8';$('#musicPermission').hidden=false;$('#homeConfig').hidden=false;}
   photoChange(0);updateMapDestinationState();applySettings();updateClock();setInterval(updateClock,20000);
 })();

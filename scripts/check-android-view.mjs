@@ -1,7 +1,8 @@
 // Read the actual app WebView over the emulator's local ADB forward.
 const targets = await (await fetch('http://127.0.0.1:9222/json')).json();
+console.log('Páginas del emulador', targets.map(t => {try{return new URL(t.url).origin}catch{return ''}}));
 const dashboard = targets.find(t => t.url.includes('appassets.androidplatform.net/assets/www/index.html'));
-if (!dashboard) throw Error('No se cargÃ³ la pÃ¡gina local del launcher');
+if (!dashboard) throw Error('No se cargÃƒÂ³ la pÃƒÂ¡gina local del launcher');
 const ws = new WebSocket(dashboard.webSocketDebuggerUrl);
 await new Promise((resolve,reject)=>{ws.onopen=resolve;ws.onerror=reject;});
 const expression = `(() => {
@@ -23,5 +24,19 @@ try {
  const data=response?.result?.value;
  console.log(data||response);
  if(!data?.ibiza || !data.splash || !data.live || !data.centered || data.layoutButtons<5 ||
-    data.mapWidth<50 || data.mapHeight<50)throw Error('FallÃ³ el arranque o la geometrÃ­a del tablero en Android');
+    data.mapWidth<50 || data.mapHeight<50)throw Error('FallÃƒÂ³ el arranque o la geometrÃƒÂ­a del tablero en Android');
 } finally {ws.close();}
+
+for (const t of targets.filter(t => t !== dashboard && /^https:/.test(t.url))) {
+  const remote=new WebSocket(t.webSocketDebuggerUrl);
+  await new Promise((resolve,reject)=>{remote.onopen=resolve;remote.onerror=reject;});
+  try {
+    const report=new Promise((resolve,reject)=>{
+      const timer=setTimeout(()=>reject(Error('Tiempo de espera del mapa web')),5000);
+      remote.onmessage=e=>{const m=JSON.parse(e.data);if(m.id===2){clearTimeout(timer);resolve(m.result);}};
+    });
+    remote.send(JSON.stringify({id:2,method:'Runtime.evaluate',params:{returnByValue:true,
+      expression:"({state:document.readyState,canvases:document.querySelectorAll('canvas').length,images:document.images.length,forms:document.forms.length,characters:document.body?.innerText.length,title:document.title.slice(0,100)})"}}));
+    console.log('Estado de la página pública de Maps', (await report)?.result?.value);
+  } finally {remote.close();}
+}

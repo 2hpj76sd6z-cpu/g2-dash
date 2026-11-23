@@ -68,7 +68,7 @@ jobs:
           test -s layout-controls.css
           test -s android/app/build.gradle
           grep -q "versionName '0.5.8-dev'" android/app/build.gradle
-      - name: Verificar recepciÃ³n de GPS del telÃ©fono
+      - name: Verificar recepciÃƒÂ³n de GPS del telÃƒÂ©fono
         run: |
           mkdir -p "$RUNNER_TEMP/nmea"
           androidjar="$ANDROID_HOME/platforms/android-35/android.jar"
@@ -105,7 +105,7 @@ jobs:
         with:
           name: G2-Dash-v0.5.8-Android-debug
       - uses: android-actions/setup-android@v4
-      - name: Arrancar un estÃ©reo Android virtual e instalar la APK entregada
+      - name: Arrancar un estÃƒÂ©reo Android virtual e instalar la APK entregada
         shell: bash
         run: |
           sudo chmod 666 /dev/kvm
@@ -124,7 +124,8 @@ jobs:
           adb shell wm dismiss-keyguard
           adb install -g app-debug.apk
           adb shell am start -W -n com.dobleg.g2dash.prueba20/com.dobleg.g2dash.MainActivity
-          sleep 20
+          adb emu geo fix -99.1332 19.4326
+          sleep 42
           adb shell pidof com.dobleg.g2dash.prueba20
           adb shell dumpsys activity activities | grep -E 'mResumedActivity.*com.dobleg.g2dash.prueba20'
           pid=$(adb shell pidof com.dobleg.g2dash.prueba20 | tr -d '\r')
